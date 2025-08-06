@@ -48,9 +48,9 @@ dependencies {
     implementation(libs.androidx.constraintlayout)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
-
+    
     // Glide for image loading
     implementation(libs.glide)
     ksp(libs.ksp)
+    
 }

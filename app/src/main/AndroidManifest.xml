@@ -14,6 +14,7 @@
         android:theme="@style/Theme.MovieDB">
         <activity
             android:name=".screen.MainActivity"
+            android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
