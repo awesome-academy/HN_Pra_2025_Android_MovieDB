@@ -5,9 +5,9 @@ import org.json.JSONObject
 
 fun parseBreadCrumb(json: JSONObject): BreadCrumb {
     return BreadCrumb(
-        name = json.optString("name"),
+        name = if (json.has("name")) json.optString("name") else null,
         slug = if (json.has("slug")) json.optString("slug") else null,
-        isCurrent = json.optBoolean("isCurrent"),
+        isCurrent = if (json.has("isCurrent")) json.optBoolean("isCurrent") else null,
         position = if (json.has("position")) json.optInt("position") else null
     )
 }

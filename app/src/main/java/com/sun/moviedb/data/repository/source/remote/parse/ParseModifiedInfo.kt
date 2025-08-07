@@ -5,6 +5,6 @@ import org.json.JSONObject
 
 fun parseModifiedInfo(json: JSONObject): ModifiedInfo {
     return ModifiedInfo(
-        time = json.optString("time")
+        time = if (json.has("time")) json.optString("time") else null
     )
 }

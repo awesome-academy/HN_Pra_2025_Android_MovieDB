@@ -9,23 +9,23 @@ data class SeoOnPage(
 )
 
 data class BreadCrumb(
-    val name: String?,
+    val name: String? = null,
     val slug: String? = null,
-    val isCurrent: Boolean?,
-    val position: Int?
+    val isCurrent: Boolean? = null,
+    val position: Int? = null
 )
 
 data class Params(
-    val type_slug: String?,
+    val type_slug: String? = null,
     val slug: String? = null,
     val keyword: String? = null,
-    val filterCategory: List<String>?,
-    val filterCountry: List<String>?,
-    val filterYear: List<String>?,
-    val filterType: List<String>?,
-    val sortField: String?,
-    val sortType: String?,
-    val pagination: Pagination?
+    val filterCategory: List<String>? = null,
+    val filterCountry: List<String>? = null,
+    val filterYear: List<String>? = null,
+    val filterType: List<String>? = null,
+    val sortField: String? = null,
+    val sortType: String? = null,
+    val pagination: Pagination? = null
 )
 
 data class MovieByTypeListData(
@@ -44,4 +44,3 @@ data class MovieByTypeListResponse(
     val msg: String?,
     val data: MovieByTypeListData?
 )
-

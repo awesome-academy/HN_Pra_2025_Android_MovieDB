@@ -5,6 +5,6 @@ import org.json.JSONObject
 
 fun parseImdbInfo(json: JSONObject): ImdbInfo {
     return ImdbInfo(
-        id = json.optString("id", "")
+        id = if (json.has("id")) json.optString("id") else null
     )
 }

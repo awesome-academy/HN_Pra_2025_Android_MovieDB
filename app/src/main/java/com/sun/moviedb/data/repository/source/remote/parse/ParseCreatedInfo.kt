@@ -5,6 +5,6 @@ import org.json.JSONObject
 
 fun parseCreatedInfo(json: JSONObject): CreatedInfo {
     return CreatedInfo(
-        time = json.optString("time")
+        time = if (json.has("time")) json.optString("time") else null
     )
 }

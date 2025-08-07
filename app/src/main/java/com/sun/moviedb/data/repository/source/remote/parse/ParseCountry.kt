@@ -5,8 +5,8 @@ import org.json.JSONObject
 
 fun parseCountry(json: JSONObject): Country {
     return Country(
-        id = json.optString("id"),
-        name = json.optString("name"),
-        slug = json.optString("slug")
+        id = if (json.has("id")) json.optString("id") else null,
+        name = if (json.has("name")) json.optString("name") else null,
+        slug = if (json.has("slug")) json.optString("slug") else null
     )
 }

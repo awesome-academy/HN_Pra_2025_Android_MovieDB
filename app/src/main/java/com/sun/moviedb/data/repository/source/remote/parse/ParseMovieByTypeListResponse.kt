@@ -5,7 +5,7 @@ import org.json.JSONObject
 
 fun parseMovieByTypeListResponse(json: JSONObject): MovieByTypeListResponse {
     val status = json.opt("status")
-    val msg = json.optString("msg", "")
+    val msg = if (json.has("msg")) json.optString("msg") else null
     val data = json.optJSONObject("data")?.let { parseMovieByTypeListData(it) }
     return MovieByTypeListResponse(status, msg, data)
 }
