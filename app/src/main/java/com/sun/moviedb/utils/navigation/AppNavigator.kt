@@ -4,8 +4,10 @@ import android.view.View
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.sun.moviedb.screen.detail.MovieDetailFragment
+import com.sun.moviedb.screen.filter.FilterFragment
 import com.sun.moviedb.screen.home.HomeFragment
 import com.sun.moviedb.screen.notification.NotificationFragment
+import com.sun.moviedb.screen.settings.SettingsFragment
 
 object AppNavigator {
     private var fragmentManager: FragmentManager? = null
@@ -27,6 +29,14 @@ object AppNavigator {
             is NavDestination.HomeScreen -> HomeFragment()
             is NavDestination.NotificationScreen -> NotificationFragment()
             is NavDestination.MovieDetailScreen -> MovieDetailFragment.newInstance(destination.slug)
+            is NavDestination.SettingsScreen -> SettingsFragment()
+            is NavDestination.FilterScreen -> FilterFragment()
+
+            /* *
+            * More fragments can be added here as needed.
+            * */
+
+            else -> throw IllegalArgumentException("Unknown destination: $destination")
         }
 
         val tag = destination::class.simpleName
@@ -36,13 +46,17 @@ object AppNavigator {
             if (addToBackStack) addToBackStack(tag)
             commit()
         }
+
     }
 
     fun attachNavVisibilityListener() {
         fragmentManager?.addOnBackStackChangedListener {
             val currentFragment = fragmentManager?.findFragmentById(containerId)
-            val showNav = currentFragment is HomeFragment || currentFragment is NotificationFragment
-            bottomNavView?.visibility = if (showNav) View.VISIBLE else View.GONE
+            val isVisibleBottomBar = currentFragment is HomeFragment ||
+                        currentFragment is NotificationFragment ||
+                        currentFragment is SettingsFragment ||
+                        currentFragment is FilterFragment
+            bottomNavView?.visibility = if (isVisibleBottomBar) View.VISIBLE else View.GONE
         }
     }
 }
