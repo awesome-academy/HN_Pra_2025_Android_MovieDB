@@ -17,7 +17,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>() {
     override fun initView() {
         super.initView()
         val slug = arguments?.getString(KEY_SLUG) ?: ""
-        binding.slug.text = slug
+        binding.tvDetail.text = slug
     }
 
     override fun initData() {
