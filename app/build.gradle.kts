@@ -40,6 +40,7 @@ android {
 }
 
 dependencies {
+    testImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

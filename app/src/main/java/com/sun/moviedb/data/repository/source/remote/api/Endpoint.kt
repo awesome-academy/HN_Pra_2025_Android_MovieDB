@@ -2,7 +2,7 @@ package com.sun.moviedb.data.repository.source.remote.api
 
 import com.sun.moviedb.utils.Constants
 
-object ApiEndpoint {
+object Endpoint {
     const val GET_NEWEST_MOVIE = "${Constants.BASE_URL}/danh-sach/phim-moi-cap-nhat-v3"
     const val GET_MOVIE_DETAIL = "${Constants.BASE_URL}/phim/" // + {slug}
     const val GET_MOVIE_BY_TYPE_LIST = "${Constants.BASE_URL}/v1/api/danh-sach/" // + {type-list}
