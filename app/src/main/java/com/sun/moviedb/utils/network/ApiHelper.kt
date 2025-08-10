@@ -60,18 +60,43 @@ object ApiHelper {
 
             if (code in 200..299 && body != null) {
                 val objectModel = parser(body)
-                NetworkResult.onSuccess(objectModel)
+                NetworkResult.OnSuccess(objectModel)
             } else {
-                NetworkResult.onError(code, "HTTP $code: $body")
+                NetworkResult.OnError(code, "HTTP $code: $body")
             }
         } catch (e: ApiLogicalException) {
-            NetworkResult.onError(
+            NetworkResult.OnError(
                 200,
                 e.message ?: "API logical error"
 
             )
         } catch (e: Exception) {
-            NetworkResult.onError(null, "Network/Parse error: ${e.message}")
+            NetworkResult.OnError(null, "Network/Parse error: ${e.message}")
+        }
+    }
+
+    fun <T> getListFromUrl(
+        urlString: String,
+        parser: (String) -> List<T>
+    ): NetworkResult<List<T>> {
+        return try {
+            val raw = getRawDataFromURL(urlString)
+            val code = raw.code
+            val body = raw.body
+
+            if (code in 200..299 && body != null) {
+                val list = parser(body)
+                NetworkResult.OnSuccess(list)
+            } else {
+                NetworkResult.OnError(code, "HTTP $code: $body")
+            }
+        } catch (e: ApiLogicalException) {
+            NetworkResult.OnError(
+                200,
+                e.message ?: "API logical error"
+            )
+        } catch (e: Exception) {
+            NetworkResult.OnError(null, "Network/Parse error: ${e.message}")
         }
     }
 }
