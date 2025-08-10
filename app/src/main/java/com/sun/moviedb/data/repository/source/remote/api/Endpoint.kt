@@ -11,3 +11,4 @@ object Endpoint {
     const val GET_GENRES = "${Constants.BASE_URL}/the-loai"
     const val GET_COUNTRIES = "${Constants.BASE_URL}/quoc-gia"
 }
+
