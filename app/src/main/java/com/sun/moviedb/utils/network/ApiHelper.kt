@@ -15,6 +15,7 @@ import java.net.URL
 object ApiHelper {
     private const val TIME_OUT = 15000
     private const val METHOD_GET = "GET"
+
     data class RawData(val code: Int, val body: String?)
 
     @Throws(Exception::class)

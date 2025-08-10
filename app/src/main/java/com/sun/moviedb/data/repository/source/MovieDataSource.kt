@@ -6,15 +6,15 @@ import java.util.concurrent.Future
 
 interface MovieDataSource {
 
-    interface Local{
+    interface Local {
 
     }
 
-    interface Remote{
+    interface Remote {
         fun getDetailMovie(
             slug: String,
-            callback: (NetworkResult<DetailMovieResponse>) ->Unit,
-        ) : Future<*>
+            callback: (NetworkResult<DetailMovieResponse>) -> Unit,
+        ): Future<*>
     }
 }
 

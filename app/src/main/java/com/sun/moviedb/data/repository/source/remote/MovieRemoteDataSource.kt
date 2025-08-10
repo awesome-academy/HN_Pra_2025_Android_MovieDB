@@ -19,15 +19,14 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         slug: String,
         callback: (NetworkResult<DetailMovieResponse>) -> Unit
     ): Future<*> {
-        val url_string = Endpoint.GET_MOVIE_DETAIL + slug
+        val urlString = Endpoint.GET_MOVIE_DETAIL + slug
 
         return executor.submit {
-            val result : NetworkResult<DetailMovieResponse> = try{
+            val result: NetworkResult<DetailMovieResponse> = try {
                 ApiHelper.getObjectFromUrl(
-                    url_string,
-                    {body -> body.toDetailMovieResponse()}
-                )
-            } catch (e: Exception){
+                    urlString
+                ) { body -> body.toDetailMovieResponse() }
+            } catch (e: Exception) {
                 NetworkResult.onError(9999, e.message ?: "Unknown error")
             }
 
@@ -38,7 +37,7 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         }
     }
 
-    companion object{
+    companion object {
         private var instance: MovieRemoteDataSource? = null
 
         fun getInstance() = synchronized(this) {

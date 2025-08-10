@@ -18,8 +18,7 @@ private inline fun <T> JSONArray.mapObjects(mapper: (JSONObject) -> T): List<T> 
 }
 
 private fun JSONObject.optBooleanCoerce(key: String, default: Boolean = false): Boolean {
-    val v = opt(key)
-    return when (v) {
+    return when (val v = opt(key)) {
         is Boolean -> v
         is String  -> v.equals("true", true) || v == "1"
         is Number  -> v.toInt() != 0
@@ -29,8 +28,7 @@ private fun JSONObject.optBooleanCoerce(key: String, default: Boolean = false): 
 
 fun JSONObject.optStringMulti(vararg keys: String, default: String = ""): String {
     for (k in keys) {
-        val v = this.opt(k)
-        when (v) {
+        when (val v = this.opt(k)) {
             is String -> if (v.isNotBlank()) return v
             is Number -> return v.toString()
             is Boolean -> return v.toString()
@@ -122,8 +120,7 @@ fun String.toDetailMovieResponse(strict: Boolean = false): DetailMovieResponse {
     val status = root.optBooleanCoerce("status", false)
     val msg = root.optString("msg")
 
-    val movieAny = root.opt("movie")
-    val movie = when (movieAny) {
+    val movie = when (val movieAny = root.opt("movie")) {
         is JSONObject -> movieAny.toMovie()
         null, JSONObject.NULL, is String -> if (strict) {
             throw IllegalArgumentException("Invalid schema: movie")
@@ -131,8 +128,7 @@ fun String.toDetailMovieResponse(strict: Boolean = false): DetailMovieResponse {
         else -> if (strict) throw IllegalArgumentException("Invalid schema: movie(type)") else Movie()
     }
 
-    val epsAny = root.opt("episodes")
-    val episodes = when (epsAny) {
+    val episodes = when (val epsAny = root.opt("episodes")) {
         is JSONArray -> epsAny.toEpisodeList()
         null, JSONObject.NULL, is String -> if (strict) {
             throw IllegalArgumentException("Invalid schema: episodes")
