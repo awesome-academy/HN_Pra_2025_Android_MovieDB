@@ -3,6 +3,7 @@ package com.sun.moviedb.data.repository.source.remote
 import android.os.Handler
 import android.os.Looper
 import com.sun.moviedb.data.model.Category
+import com.sun.moviedb.data.model.Country
 import com.sun.moviedb.data.repository.source.MovieDataSource
 import com.sun.moviedb.data.repository.source.remote.api.Endpoint
 import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
@@ -173,10 +174,10 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         }
     }
 
-    override fun getCountries(callback: (NetworkResult<List<com.sun.moviedb.data.model.Country>>) -> Unit): Future<*> {
+    override fun getCountries(callback: (NetworkResult<List<Country>>) -> Unit): Future<*> {
         val urlString = Endpoint.GET_COUNTRIES
         return executor.submit {
-            val result: NetworkResult<List<com.sun.moviedb.data.model.Country>> = try {
+            val result: NetworkResult<List<Country>> = try {
                 ApiHelper.getListFromUrl(urlString) { body ->
                     val arr = org.json.JSONArray(body)
                     (0 until arr.length()).map { i ->
