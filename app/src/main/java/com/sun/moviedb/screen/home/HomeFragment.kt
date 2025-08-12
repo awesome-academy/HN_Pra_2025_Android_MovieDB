@@ -2,7 +2,6 @@ package com.sun.moviedb.screen.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentHomeBinding
 

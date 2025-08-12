@@ -1,23 +1,18 @@
 package com.sun.moviedb.data.model
 
-/*
-* used in APIs: phim-moi, theloai
-*               is a attribute of "Data" Model
-* */
 data class Item(
-    val _id: String = "",
+    val id: String = "",
     val category: List<Category> = emptyList(),
     val chieurap: Boolean = false,
     val country: List<Country> = emptyList(),
-    val episode_current: String = "",
+    val episodeCurrent: String = "",
     val lang: String = "",
     val name: String = "",
-    val origin_name: String = "",
-    val poster_url: String = "",
+    val originName: String = "",
+    val posterUrl: String = "",
     val quality: String = "",
     val slug: String = "",
-    val sub_docquyen: Boolean = false,
-    val thumb_url: String = "",
+    val thumbUrl: String = "",
     val time: String = "",
     val type: String = "",
     val year: Int = 0

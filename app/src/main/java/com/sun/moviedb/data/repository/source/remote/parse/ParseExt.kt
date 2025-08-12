@@ -67,8 +67,8 @@ fun JSONArray.toStringList(): List<String> {
 
 fun JSONObject.toServerData(): ServerData = ServerData(
     filename = optString("filename"),
-    link_embed = optString("link_embed"),
-    link_m3u8 = optString("link_m3u8"),
+    linkEmbed = optString("link_embed"),
+    linkM3u8 = optString("link_m3u8"),
     name = optString("name"),
     slug = optString("slug")
 )
@@ -76,36 +76,32 @@ fun JSONObject.toServerData(): ServerData = ServerData(
 fun JSONArray.toServerDataList(): List<ServerData> = mapObjects { it.toServerData() }
 
 fun JSONObject.toEpisode(): Episode = Episode(
-    server_name = optString("server_name"),
-    server_data = optJSONArray("server_data")?.toServerDataList() ?: emptyList()
+    serverName = optString("server_name"),
+    serverData = optJSONArray("server_data")?.toServerDataList() ?: emptyList()
 )
 
 fun JSONArray.toEpisodeList(): List<Episode> = mapObjects { it.toEpisode() }
 
 fun JSONObject.toMovie(): Movie = Movie(
-    _id = optString("_id"),
+    id = optString("_id"),
     actor = optJSONArray("actor")?.toStringList() ?: emptyList(),
     category = optJSONArray("category")?.toCategoryList() ?: emptyList(),
     chieurap = optBoolean("chieurap", false),
     content = optString("content"),
     country = optJSONArray("country")?.toCountryList() ?: emptyList(),
     director = optJSONArray("director")?.toStringList() ?: emptyList(),
-    episode_current = optString("episode_current"),
-    episode_total = optString("episode_total"),
-//    is_copyright    = optBoolean("is_copyright", false),
+    episodeCurrent = optString("episode_current"),
+    episodeTotal = optString("episode_total"),
     lang = optString("lang"),
     name = optString("name"),
-//    notify          = optString("notify"),
-    origin_name = optString("origin_name"),
-    poster_url = optString("poster_url"),
+    originName = optString("origin_name"),
+    posterUrl = optString("poster_url"),
     quality = optString("quality"),
-//    showtimes       = optString("showtimes"),
     slug = optString("slug"),
     status = optString("status"),
-//    sub_docquyen    = optBoolean("sub_docquyen", false),
-    thumb_url = optString("thumb_url"),
+    thumbUrl = optString("thumb_url"),
     time = optString("time"),
-//    trailer_url     = optString("trailer_url"),
+    trailerUrl = optString("trailer_url"),
     type = optString("type"),
     view = optInt("view", 0),
     year = optInt("year", 0)
@@ -118,19 +114,18 @@ private fun String.toFullImageUrl(domain: String): String {
 }
 
 fun JSONObject.toItem(): Item = Item(
-    _id = optStringMulti("_id", "id"),
+    id = optStringMulti("_id", "id"),
     category = optJSONArray("category")?.toCategoryList() ?: emptyList(),
     chieurap = optBoolean("chieurap", false),
     country = optJSONArray("country")?.toCountryList() ?: emptyList(),
-    episode_current = optString("episode_current"),
+    episodeCurrent = optString("episode_current"),
     lang = optString("lang"),
     name = optString("name"),
-    origin_name = optString("origin_name"),
-    poster_url = optString("poster_url").toFullImageUrl(Constants.APP_DOMAIN_CDN_IMAGE),
+    originName = optString("origin_name"),
+    posterUrl = optString("poster_url").toFullImageUrl(Constants.APP_DOMAIN_CDN_IMAGE),
     quality = optString("quality"),
     slug = optString("slug"),
-    sub_docquyen = optBoolean("sub_docquyen", false),
-    thumb_url = optString("thumb_url").toFullImageUrl(Constants.APP_DOMAIN_CDN_IMAGE),
+    thumbUrl = optString("thumb_url").toFullImageUrl(Constants.APP_DOMAIN_CDN_IMAGE),
     time = optString("time"),
     type = optString("type"),
     year = optInt("year", 0)

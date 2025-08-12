@@ -1,44 +1,31 @@
 package com.sun.moviedb.data.repository.source.remote
 
-import android.os.Handler
-import android.os.Looper
+import android.util.Log
 import com.sun.moviedb.data.model.Category
 import com.sun.moviedb.data.model.Country
 import com.sun.moviedb.data.repository.source.MovieDataSource
 import com.sun.moviedb.data.repository.source.remote.api.Endpoint
 import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
 import com.sun.moviedb.data.repository.source.remote.dto.MovieListResponse
-import com.sun.moviedb.data.repository.source.remote.parse.toCategory
-import com.sun.moviedb.data.repository.source.remote.parse.toCountry
+import com.sun.moviedb.data.repository.source.remote.parse.toCategoryList
+import com.sun.moviedb.data.repository.source.remote.parse.toCountryList
 import com.sun.moviedb.data.repository.source.remote.parse.toDetailMovieResponse
 import com.sun.moviedb.data.repository.source.remote.parse.toMovieListResponse
 import com.sun.moviedb.utils.network.ApiHelper
-import java.util.concurrent.Executors
 import java.util.concurrent.Future
 
 class MovieRemoteDataSource : MovieDataSource.Remote {
-    private val executor = Executors.newSingleThreadExecutor()
-    private val mainThread = Handler(Looper.getMainLooper())
 
     override fun getDetailMovie(
         slug: String,
         callback: (NetworkResult<MovieDetailResponse>) -> Unit
     ): Future<*> {
         val urlString = Endpoint.GET_MOVIE_DETAIL + slug
-
-        return executor.submit {
-            val result: NetworkResult<MovieDetailResponse> = try {
-                ApiHelper.getObjectFromUrl(
-                    urlString
-                ) { body -> body.toDetailMovieResponse() }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toDetailMovieResponse() },
+            callback
+        )
     }
 
     override fun getNewestMovie(
@@ -46,18 +33,11 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         callback: (NetworkResult<MovieListResponse>) -> Unit
     ): Future<*> {
         val urlString = Endpoint.GET_NEWEST_MOVIE + "?page=$page"
-        return executor.submit {
-            val result: NetworkResult<MovieListResponse> = try {
-                ApiHelper.getObjectFromUrl(
-                    urlString
-                ) { body -> body.toMovieListResponse() }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toMovieListResponse() },
+            callback
+        )
     }
 
     override fun getSeriesMovie(
@@ -67,20 +47,12 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         callback: (NetworkResult<MovieListResponse>) -> Unit
     ): Future<*> {
         val urlString = Endpoint.GET_SERIES_MOVIE + typeList + "/?page=$page&limit=$limit"
-        return executor.submit {
-            val result: NetworkResult<MovieListResponse> = try {
-                ApiHelper.getObjectFromUrl(
-                    urlString
-                ) { body -> body.toMovieListResponse() }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toMovieListResponse() },
+            callback
+        )
     }
-
 
     override fun getFilterMovie(
         typeList: String,
@@ -103,18 +75,11 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         country?.let { if (it.isNotBlank()) params.add("country=$it") }
         year?.let { if (it.isNotBlank()) params.add("year=$it") }
         val urlString = Endpoint.GET_FILTER_MOVIE + typeList + "?" + params.joinToString("&")
-        return executor.submit {
-            val result: NetworkResult<MovieListResponse> = try {
-                ApiHelper.getObjectFromUrl(
-                    urlString
-                ) { body -> body.toMovieListResponse() }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toMovieListResponse() },
+            callback
+        )
     }
 
     override fun searchMovie(
@@ -141,58 +106,28 @@ class MovieRemoteDataSource : MovieDataSource.Remote {
         country?.let { if (it.isNotBlank()) params.add("country=$it") }
         year?.let { if (it.isNotBlank()) params.add("year=$it") }
         val urlString = Endpoint.SEARCH_MOVIE + "?" + params.joinToString("&")
-        return executor.submit {
-            val result: NetworkResult<MovieListResponse> = try {
-                ApiHelper.getObjectFromUrl(
-                    urlString
-                ) { body -> body.toMovieListResponse() }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toMovieListResponse() },
+            callback
+        )
     }
 
     override fun getCategories(callback: (NetworkResult<List<Category>>) -> Unit): Future<*> {
         val urlString = Endpoint.GET_CATEGORIES
-        return executor.submit {
-            val result: NetworkResult<List<Category>> = try {
-                ApiHelper.getListFromUrl(urlString) { body ->
-                    val arr = org.json.JSONArray(body)
-                    (0 until arr.length()).map { i ->
-                        arr.getJSONObject(i).toCategory()
-                    }
-                }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(urlString, { body ->
+            body.toCategoryList()
+        }, callback)
     }
 
     override fun getCountries(callback: (NetworkResult<List<Country>>) -> Unit): Future<*> {
         val urlString = Endpoint.GET_COUNTRIES
-        return executor.submit {
-            val result: NetworkResult<List<Country>> = try {
-                ApiHelper.getListFromUrl(urlString) { body ->
-                    val arr = org.json.JSONArray(body)
-                    (0 until arr.length()).map { i ->
-                        arr.getJSONObject(i).toCountry()
-                    }
-                }
-            } catch (e: Exception) {
-                NetworkResult.OnError(9999, e.message ?: "Unknown error")
-            }
-            mainThread.post {
-                callback(result)
-            }
-        }
+        return ApiHelper.getResultFromUrlAsync(
+            urlString,
+            { body -> body.toCountryList() },
+            callback
+        )
     }
-
 
     companion object {
         private var instance: MovieRemoteDataSource? = null
