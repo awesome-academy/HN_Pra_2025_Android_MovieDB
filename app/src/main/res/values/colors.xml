@@ -6,4 +6,6 @@
     <color name="selected_item">#FF755BAE</color>
     <color name="blue">#FF1BB9F6</color>
     <color name="purple">#FF241B47</color>
+    <color name="deep_purple">#6A1B9A</color>
+    <color name="gray">#FF808080</color>
 </resources>
