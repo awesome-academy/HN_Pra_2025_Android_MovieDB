@@ -9,7 +9,7 @@ import java.util.concurrent.Future
 
 class MovieRepository private constructor(
     private val remote: MovieDataSource.Remote,
-    private val local: MovieDataSource.Local
+    private val local: MovieDataSource.Local? = null
 ) : MovieDataSource.Local, MovieDataSource.Remote {
 
     /* *
@@ -84,7 +84,7 @@ class MovieRepository private constructor(
     companion object {
         private var instance: MovieRepository? = null
 
-        fun getInstance(remote: MovieDataSource.Remote, local: MovieDataSource.Local) =
+        fun getInstance(remote: MovieDataSource.Remote, local: MovieDataSource.Local? = null) =
             synchronized(this) {
                 instance ?: MovieRepository(remote, local).also { instance = it }
             }
