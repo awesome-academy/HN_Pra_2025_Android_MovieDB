@@ -20,7 +20,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>() {
     }
 
     override fun initData() {
-      
+
     }
 }
 
