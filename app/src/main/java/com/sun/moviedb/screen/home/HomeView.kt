@@ -9,4 +9,3 @@ interface HomeView : BaseView {
     fun showNewestMovies(items: List<Item>)
     fun showSeriesMovies(items: List<Item>, currentPage: Int, totalPage: Int)
 }
-
