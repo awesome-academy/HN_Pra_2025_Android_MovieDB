@@ -2,4 +2,6 @@
     <string name="app_name">Movie DB</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="phim_moi_nhat">● Phim mới nhất</string>
+    <string name="newest_loading_tv">Đang load phim mới nhất cho bạn...\n Hãy đợi trong giây lát</string>
 </resources>
