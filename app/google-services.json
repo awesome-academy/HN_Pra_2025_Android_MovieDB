@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "920162681966",
+    "project_id": "sun-movieapp",
+    "storage_bucket": "sun-movieapp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:920162681966:android:42713c64cf0efe127e527f",
+        "android_client_info": {
+          "package_name": "com.example.siginwithgg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "920162681966-9beq9tjj3dfsha2o8tp9gjceb70fjdam.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.siginwithgg",
+            "certificate_hash": "f1d26b564f535c0e64577fe87354a257a5cb6f9b"
+          }
+        },
+        {
+          "client_id": "920162681966-e7jjukj83d36gg1gcikmnao8a1p2uiua.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD3O2a8LwMnqm8pt78tsbQh1TylBf1ZOz8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "920162681966-e7jjukj83d36gg1gcikmnao8a1p2uiua.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
