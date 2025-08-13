@@ -19,8 +19,7 @@ import java.util.concurrent.Future
 object ApiHelper {
     private const val TIME_OUT = 15000
     private const val METHOD_GET = "GET"
-    // asynchronous executor 4 threads
-    private val executor = Executors.newFixedThreadPool(4)
+    private val executor = Executors.newSingleThreadExecutor()
     private val mainThread = Handler(Looper.getMainLooper())
 
     data class RawData(val code: Int, val body: String?)
