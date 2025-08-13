@@ -1,6 +1,5 @@
 package com.sun.moviedb.data.repository.source.remote
 
-import android.util.Log
 import com.sun.moviedb.data.model.Category
 import com.sun.moviedb.data.model.Country
 import com.sun.moviedb.data.repository.source.MovieDataSource
