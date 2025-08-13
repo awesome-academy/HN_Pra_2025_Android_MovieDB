@@ -4,4 +4,15 @@
     <string name="hello_blank_fragment">Hello blank fragment</string>
     <string name="phim_moi_nhat">● Phim mới nhất</string>
     <string name="newest_loading_tv">Đang load phim mới nhất cho bạn...\n Hãy đợi trong giây lát</string>
+
+    <string name="all">Tất cả</string>
+    <string name="filter_hint">Chọn tiêu chí lọc và nhấn "Áp dụng bộ lọc" để tìm kiếm phim</string>
+    <string name="ready_to_search">Sẵn sàng tìm kiếm</string>
+    <string name="movie_count">%1$d phim</string>
+    <string name="filter_empty">Chọn bộ lọc để tìm kiếm phim</string>
+    <string name="apply_filter">Áp dụng bộ lọc</string>
+    <string name="zero_movie">0 phim</string>
+    <string name="vietsub">Vietsub</string>
+    <string name="thuyet_minh">Thuyết Minh</string>
+    <string name="long_tieng">Lồng Tiếng</string>
 </resources>
