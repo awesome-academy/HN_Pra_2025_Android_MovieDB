@@ -9,4 +9,3 @@ data class MovieListResponse(
     val pagination: Pagination,
     val status: Boolean
 )
-
