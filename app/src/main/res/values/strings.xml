@@ -2,6 +2,28 @@
     <string name="app_name">Movie DB</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="phim_moi_nhat">● Phim mới nhất</string>
+    <string name="newest_film">● Phim mới nhất</string>
     <string name="newest_loading_tv">Đang load phim mới nhất cho bạn...\n Hãy đợi trong giây lát</string>
+
+    <string name="all">Tất cả</string>
+    <string name="filter_hint">Chọn tiêu chí lọc và nhấn "Áp dụng bộ lọc" để tìm kiếm phim</string>
+    <string name="ready_to_search">Sẵn sàng tìm kiếm</string>
+    <string name="movie_count">%1$d phim</string>
+    <string name="filter_empty">Chọn bộ lọc để tìm kiếm phim</string>
+    <string name="apply_filter">Áp dụng bộ lọc</string>
+    <string name="zero_movie">0 phim</string>
+    <string name="watch_now">WATCH NOW</string>
+
+    <string name="filter_title">Bộ lọc phim</string>
+    <string name="filter_subtitle">Tìm phim yêu thích</string>
+    <string name="filter_criteria">Tiêu chí lọc</string>
+    <string name="filter_type">Loại phim</string>
+    <string name="filter_language">Ngôn ngữ</string>
+    <string name="filter_country">Quốc gia</string>
+    <string name="filter_year">Năm phát hành</string>
+    <string name="clear_filter">Xóa bộ lọc</string>
+    <string name="search_result">Kết quả tìm kiếm</string>
+    <string name="loading_more_movies">Đang tải thêm phim...</string>
+    <string name="no_result">Không tìm thấy kết quả phù hợp</string>
+    <string name="loading">Đang tải...</string>
 </resources>
