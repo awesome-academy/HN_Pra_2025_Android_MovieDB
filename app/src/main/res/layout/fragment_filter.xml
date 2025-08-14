@@ -9,22 +9,22 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
-        android:paddingHorizontal="16dp"
-        android:paddingTop="16dp"
-        android:paddingBottom="8dp">
+        android:paddingHorizontal="@dimen/dp_16"
+        android:paddingTop="@dimen/dp_16"
+        android:paddingBottom="@dimen/dp_8">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="20dp"
+            android:layout_marginBottom="@dimen/dp_20"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
             <ImageView
                 android:layout_width="24dp"
                 android:layout_height="24dp"
-                android:layout_marginEnd="12dp"
-                android:contentDescription="Filter icon"
+                android:layout_marginEnd="@dimen/dp_12"
+                android:contentDescription="@string/filter_title"
                 android:src="@drawable/ic_filter_alt_24"
                 app:tint="@color/deep_purple" />
 
@@ -32,32 +32,32 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Bộ lọc phim"
+                android:text="@string/filter_title"
                 android:textColor="@color/deep_purple"
-                android:textSize="20sp"
+                android:textSize="@dimen/sp_20"
                 android:textStyle="bold" />
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Tìm phim yêu thích"
+                android:text="@string/filter_subtitle"
                 android:textColor="@color/selected_item"
-                android:textSize="12sp" />
+                android:textSize="@dimen/sp_12" />
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="16dp"
+            android:layout_marginBottom="@dimen/dp_16"
             android:background="@drawable/bg_transparent_card"
             android:orientation="vertical"
-            android:padding="20dp">
+            android:padding="@dimen/dp_20">
 
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:text="Tiêu chí lọc"
+                android:layout_marginBottom="@dimen/dp_16"
+                android:text="@string/filter_criteria"
                 android:textColor="@color/white"
                 android:textSize="16sp"
                 android:textStyle="bold" />
@@ -65,116 +65,116 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="20dp"
+                android:layout_marginBottom="@dimen/dp_20"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="@dimen/dp_10"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Loại phim"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:text="@string/filter_type"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/sp_13"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinnerTypeList"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/dp_48"
                         android:background="@drawable/bg_spinner"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="8dp" />
+                        android:paddingHorizontal="@dimen/dp_12"
+                        android:paddingVertical="@dimen/dp_8" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/dp_10"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Ngôn ngữ"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:text="@string/filter_language"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/sp_13"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinnerSortLang"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/dp_48"
                         android:background="@drawable/bg_spinner"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="8dp" />
+                        android:paddingHorizontal="@dimen/dp_12"
+                        android:paddingVertical="@dimen/dp_8" />
                 </LinearLayout>
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="24dp"
+                android:layout_marginBottom="@dimen/dp_24"
                 android:baselineAligned="false"
                 android:orientation="horizontal">
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="10dp"
+                    android:layout_marginEnd="@dimen/dp_10"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Quốc gia"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:text="@string/filter_country"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/sp_13"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinnerCountry"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/dp_48"
                         android:background="@drawable/bg_spinner"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="8dp" />
+                        android:paddingHorizontal="@dimen/dp_12"
+                        android:paddingVertical="@dimen/dp_8" />
                 </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="10dp"
+                    android:layout_marginStart="@dimen/dp_10"
                     android:layout_weight="1"
                     android:orientation="vertical">
 
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="8dp"
-                        android:text="Năm phát hành"
+                        android:layout_marginBottom="@dimen/dp_8"
+                        android:text="@string/filter_year"
                         android:textColor="@color/white"
-                        android:textSize="13sp"
+                        android:textSize="@dimen/sp_13"
                         android:textStyle="bold" />
 
                     <Spinner
                         android:id="@+id/spinnerYear"
                         android:layout_width="match_parent"
-                        android:layout_height="48dp"
+                        android:layout_height="@dimen/dp_48"
                         android:background="@drawable/bg_spinner"
-                        android:paddingHorizontal="12dp"
-                        android:paddingVertical="8dp" />
+                        android:paddingHorizontal="@dimen/dp_12"
+                        android:paddingVertical="@dimen/dp_8" />
                 </LinearLayout>
             </LinearLayout>
 
@@ -189,26 +189,26 @@
                     android:id="@+id/btnClearFilter"
                     style="?android:attr/buttonBarButtonStyle"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginEnd="8dp"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginEnd="@dimen/dp_8"
                     android:layout_weight="1"
                     android:background="@android:color/transparent"
-                    android:text="Xóa bộ lọc"
+                    android:text="@string/clear_filter"
                     android:textAllCaps="false"
                     android:textColor="@color/deep_purple"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/sp_14" />
 
                 <Button
                     android:id="@+id/btnFilter"
                     android:layout_width="0dp"
-                    android:layout_height="48dp"
-                    android:layout_marginStart="8dp"
+                    android:layout_height="@dimen/dp_48"
+                    android:layout_marginStart="@dimen/dp_8"
                     android:layout_weight="2"
                     android:background="@drawable/bg_filter_button"
-                    android:text="Áp dụng bộ lọc"
+                    android:text="@string/apply_filter"
                     android:textAllCaps="false"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
+                    android:textSize="@dimen/sp_14"
                     android:textStyle="bold"
                     app:backgroundTint="@color/deep_purple" />
             </LinearLayout>
@@ -217,7 +217,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="12dp"
+            android:layout_marginBottom="@dimen/dp_12"
             android:gravity="center_vertical"
             android:orientation="horizontal">
 
@@ -225,9 +225,9 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Kết quả tìm kiếm"
+                android:text="@string/search_result"
                 android:textColor="@color/deep_purple"
-                android:textSize="16sp"
+                android:textSize="@dimen/sp_16"
                 android:textStyle="bold" />
 
             <TextView
@@ -235,11 +235,11 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:background="@drawable/bg_rounded_tag"
-                android:paddingHorizontal="8dp"
-                android:paddingVertical="4dp"
-                android:text="0 phim"
+                android:paddingHorizontal="@dimen/dp_8"
+                android:paddingVertical="@dimen/dp_4"
+                android:text="@string/zero_movie"
                 android:textColor="@color/selected_item"
-                android:textSize="12sp" />
+                android:textSize="@dimen/sp_12" />
         </LinearLayout>
 
         <LinearLayout
@@ -248,7 +248,7 @@
             android:layout_weight="1"
             android:background="@drawable/bg_transparent_card"
             android:orientation="vertical"
-            android:padding="12dp">
+            android:padding="@dimen/dp_12">
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvMovies"
@@ -265,7 +265,7 @@
                 android:layout_height="wrap_content"
                 android:gravity="center"
                 android:orientation="vertical"
-                android:padding="16dp"
+                android:padding="@dimen/dp_16"
                 android:visibility="gone">
 
                 <com.sun.moviedb.utils.custom_view.VisualizerLoadingView
@@ -276,10 +276,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Đang tải thêm phim..."
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:text="@string/loading_more_movies"
                     android:textColor="@color/deep_purple"
-                    android:textSize="14sp" />
+                    android:textSize="@dimen/sp_14" />
 
             </LinearLayout>
 
@@ -288,11 +288,11 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:drawableTop="@android:drawable/ic_menu_search"
-                android:drawablePadding="16dp"
+                android:drawablePadding="@dimen/dp_16"
                 android:gravity="center"
-                android:text="Không tìm thấy kết quả phù hợp"
+                android:text="@string/no_result"
                 android:textColor="@color/gray"
-                android:textSize="16sp"
+                android:textSize="@dimen/sp_16"
                 android:visibility="gone" />
 
             <LinearLayout
@@ -311,10 +311,10 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="16dp"
-                    android:text="Đang tải..."
+                    android:layout_marginTop="@dimen/dp_16"
+                    android:text="@string/loading"
                     android:textColor="@color/deep_purple"
-                    android:textSize="16sp" />
+                    android:textSize="@dimen/sp_16" />
 
             </LinearLayout>
 

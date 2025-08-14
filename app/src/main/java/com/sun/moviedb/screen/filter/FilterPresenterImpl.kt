@@ -4,9 +4,10 @@ import com.sun.moviedb.data.model.Item
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
 import com.sun.moviedb.data.repository.source.remote.dto.MovieListResponse
+import com.sun.moviedb.utils.LanguageMapper
 
 class FilterPresenterImpl(
-    private val repository: MovieRepository
+    private val repository: MovieRepository,
 ) : FilterPresenter {
 
     private var view: FilterView? = null
@@ -62,7 +63,7 @@ class FilterPresenterImpl(
     }
 
     override fun loadLanguages() {
-        val languages = listOf("vietsub", "thuyet-minh", "long-tieng")
+        val languages = LanguageMapper.getLanguageCodes()
         view?.showLanguages(languages)
     }
 
@@ -81,9 +82,9 @@ class FilterPresenterImpl(
         repository.getFilterMovie(
             typeList = typeList,
             page = page,
-            limit = 20,
-            sortField = "time",
-            sortType = "desc",
+            limit = DEFAULT_PAGE_SIZE,
+            sortField = DEFAULT_SORT_FIELD,
+            sortType = DEFAULT_SORT_TYPE,
             sortLang = sortLang,
             country = country,
             year = year
@@ -110,7 +111,7 @@ class FilterPresenterImpl(
 
         currentMovies.addAll(newMovies)
 
-        _hasMoreData = newMovies.size >= 20
+        _hasMoreData = newMovies.size >= DEFAULT_PAGE_SIZE
         _currentPage = page
 
         view?.showFilterResults(
@@ -149,4 +150,10 @@ class FilterPresenterImpl(
     private data class FilterCriteria(
         val typeList: String, val sortLang: String?, val country: String?, val year: String?
     )
+
+    companion object {
+        private const val DEFAULT_SORT_FIELD = "time"
+        private const val DEFAULT_SORT_TYPE = "desc"
+        private const val DEFAULT_PAGE_SIZE = 20
+    }
 }

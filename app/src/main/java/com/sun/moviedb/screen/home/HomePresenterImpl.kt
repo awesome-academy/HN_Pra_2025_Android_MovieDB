@@ -2,31 +2,20 @@ package com.sun.moviedb.screen.home
 
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
+import com.sun.moviedb.utils.SeriesMapper
 import java.util.concurrent.Future
 
 class HomePresenterImpl(
     private val movieRepository: MovieRepository
 ) : HomePresenter {
 
-    override val seriesList = listOf(
-        "phim-bo",
-        "phim-le",
-        "hoat-hinh",
-        "phim-vietsub",
-        "phim-thuyet-minh",
-        "phim-long-tieng"
-    )
-
+    override val seriesList = SeriesMapper.getSeriesCodes()
 
     private var currentSeries: String = seriesList.first()
     private var currentPage: Int = 1
     private var view: HomeView? = null
     private var newestMovieFuture: Future<*>? = null
     private var seriesMovieFuture: Future<*>? = null
-
-    companion object {
-        private const val PAGE_SIZE = 20
-    }
 
     override fun attachView(view: HomeView) {
         this.view = view
@@ -55,7 +44,7 @@ class HomePresenterImpl(
     override fun loadSeriesMovies(series: String?, page: Int) {
         val mSeries = series ?: currentSeries
         view?.showSeriesMoviesLoading(true)
-        seriesMovieFuture = movieRepository.getSeriesMovie(mSeries, page, PAGE_SIZE) { result ->
+        seriesMovieFuture = movieRepository.getSeriesMovie(mSeries, page, DEFAULT_PAGE_SIZE) { result ->
             view?.showSeriesMoviesLoading(false)
             when (result) {
                 is NetworkResult.OnSuccess -> view?.showSeriesMovies(
@@ -79,4 +68,9 @@ class HomePresenterImpl(
         currentPage = page
         loadSeriesMovies(currentSeries, currentPage)
     }
+
+    companion object {
+        private const val DEFAULT_PAGE_SIZE = 20
+    }
+
 }

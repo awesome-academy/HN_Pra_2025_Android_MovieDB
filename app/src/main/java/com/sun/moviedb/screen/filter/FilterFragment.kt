@@ -17,6 +17,7 @@ import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.databinding.FragmentFilterBinding
 import com.sun.moviedb.screen.filter.adapter.FilterMovieAdapter
 import com.sun.moviedb.utils.base.BaseFragment
+import com.sun.moviedb.utils.LanguageMapper
 
 class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
 
@@ -172,6 +173,7 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
         if (movies.isEmpty()) {
             binding.rvMovies.visibility = android.view.View.GONE
             binding.tvEmptyResult.visibility = android.view.View.VISIBLE
+            binding.tvEmptyResult.text = getString(R.string.no_result)
         } else {
             binding.rvMovies.visibility = android.view.View.VISIBLE
             binding.tvEmptyResult.visibility = android.view.View.GONE
@@ -198,7 +200,8 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
 
     override fun showLanguages(languages: List<String>) {
         this.languages = languages
-        val languageNames = listOf(getString(R.string.all)) + languages.map { getLanguageName(it) }
+        val languageNames =
+            listOf(getString(R.string.all)) + languages.map { LanguageMapper.getDisplayName(it) }
         setupSpinner(binding.spinnerSortLang, languageNames)
     }
 
@@ -242,15 +245,6 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
 
     private fun onMovieClick(item: Item) {
         Toast.makeText(requireContext(), "Clicked on: ${item.name}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun getLanguageName(code: String): String {
-        return when (code) {
-            "vietsub" -> getString(R.string.vietsub)
-            "thuyet-minh" -> getString(R.string.thuyet_minh)
-            "long-tieng" -> getString(R.string.long_tieng)
-            else -> code
-        }
     }
 
     override fun onDestroy() {
