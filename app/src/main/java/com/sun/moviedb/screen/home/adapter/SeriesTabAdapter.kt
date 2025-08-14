@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.moviedb.R
+import com.sun.moviedb.utils.SeriesMapper
 
 class SeriesTabAdapter(
     private val onTabSelected: ((String) -> Unit)? = null
@@ -49,7 +50,7 @@ class SeriesTabAdapter(
     inner class SeriesTabViewHolder(itemView: ViewGroup) : RecyclerView.ViewHolder(itemView) {
         private val tvTabTitle: TextView = itemView.findViewById(R.id.tvTabTitle)
         fun bind(title: String, selected: Boolean) {
-            tvTabTitle.text = title
+            tvTabTitle.text = SeriesMapper.getDisplayName(title)
             tvTabTitle.isSelected = selected
         }
     }

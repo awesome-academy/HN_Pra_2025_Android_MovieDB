@@ -12,8 +12,4 @@
     <string name="filter_empty">Chọn bộ lọc để tìm kiếm phim</string>
     <string name="apply_filter">Áp dụng bộ lọc</string>
     <string name="zero_movie">0 phim</string>
-    <string name="vietsub">Vietsub</string>
-    <string name="thuyet_minh">Thuyết Minh</string>
-    <string name="long_tieng">Lồng Tiếng</string>
-
 </resources>
