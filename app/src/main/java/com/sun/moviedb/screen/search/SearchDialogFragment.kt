@@ -78,7 +78,7 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
                 val layoutManager = recyclerView.layoutManager as? LinearLayoutManager ?: return
                 val totalItemCount = layoutManager.itemCount
                 val lastVisible = layoutManager.findLastVisibleItemPosition()
-                if (lastVisible >= totalItemCount) {
+                if (lastVisible >= totalItemCount - 1) {
                     presenter.loadMoreResults()
                 }
             }
@@ -132,7 +132,8 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
     override fun onStart() {
         super.onStart()
         val dialog = dialog as? BottomSheetDialog
-        val bottomSheet = dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
+        val bottomSheet =
+            dialog?.findViewById<FrameLayout>(com.google.android.material.R.id.design_bottom_sheet)
         bottomSheet?.let {
             val layoutParams = it.layoutParams
             layoutParams.height = ViewGroup.LayoutParams.MATCH_PARENT
