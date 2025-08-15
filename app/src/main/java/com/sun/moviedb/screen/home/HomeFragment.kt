@@ -13,6 +13,7 @@ import com.sun.moviedb.data.model.Item
 import com.sun.moviedb.screen.home.adapter.NewestMoviePagerAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesMovieAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesTabAdapter
+import com.sun.moviedb.screen.search.SearchDialogFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
     private lateinit var presenter: HomePresenter
@@ -31,6 +32,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
         setupNewestMovieAdapter()
         setupSeriesTabAdapter()
         setupSeriesMovieAdapter()
+        setupSearchClick()
     }
 
     private fun setupNewestMovieAdapter() {
@@ -62,6 +64,13 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
             setHasFixedSize(true)
             layoutManager = GridLayoutManager(context, 2)
             adapter = seriesMovieAdapter
+        }
+    }
+
+    private fun setupSearchClick() {
+        binding.btnSearch.setOnClickListener {
+            val dialog = SearchDialogFragment()
+            dialog.show(parentFragmentManager, "SearchDialogFragment")
         }
     }
 
@@ -110,7 +119,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
     }
 
     private fun onMovieClick(item: Item) {
-        Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
+        Toast.makeText(requireContext(), "Click to ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     private fun onFavouriteClick(item: Item) {
