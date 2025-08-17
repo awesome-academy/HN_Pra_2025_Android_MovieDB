@@ -53,11 +53,6 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         showLoading(true)
         presenter.getDetail(arguments?.getString(KEY_SLUG) ?: "")
-
-        onStartFromBeginningButtonClicked()
-        onFavoriteButtonClicked()
-        onWatchNowButtonClicked()
-        onChillWithFriendButtonClicked()
     }
 
     override fun showLoading(isLoading: Boolean) {
@@ -82,6 +77,10 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         setUI()
         setEpsListView()
+        onStartFromBeginningButtonClicked()
+        onFavoriteButtonClicked()
+        onWatchNowButtonClicked()
+        onChillWithFriendButtonClicked()
     }
 
     override fun onGetDetailError(message: String) {
