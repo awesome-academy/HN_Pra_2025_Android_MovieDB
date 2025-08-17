@@ -1,5 +1,6 @@
 package com.sun.moviedb.screen.detail
 
+import com.sun.moviedb.data.model.Movie
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
 import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
@@ -32,4 +33,14 @@ class MovieDetailPresenter
             }
         }
     }
+
+    override fun onFavClicked(movie: Movie, isFavourite: Boolean) {
+        if (isFavourite){
+            //add to favourite list
+        }else {
+            //remove from favourite list
+        }
+    }
 }
+
+
