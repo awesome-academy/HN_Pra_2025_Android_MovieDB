@@ -18,7 +18,7 @@
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/newest_movie_view_pager"
                 android:layout_width="match_parent"
-                android:layout_height="400dp"
+                android:layout_height="@dimen/dp_400"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -26,16 +26,27 @@
             <TextView
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="80dp"
+                android:layout_marginTop="@dimen/dp_80"
                 android:background="@drawable/bg_newest_tag"
-                android:paddingHorizontal="15dp"
-                android:paddingVertical="5dp"
-                android:text="@string/phim_moi_nhat"
+                android:paddingHorizontal="@dimen/dp_15"
+                android:paddingVertical="@dimen/dp_5"
+                android:text="@string/newest_film"
                 android:textAlignment="center"
                 android:textColor="@color/white"
-                android:textSize="14sp"
+                android:textSize="@dimen/sp_14"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
+
+            <ImageView
+                android:id="@+id/btn_search"
+                android:layout_width="@dimen/dp_30"
+                android:layout_height="@dimen/dp_30"
+                app:tint="@color/white"
+                android:src="@drawable/ic_search"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                android:layout_marginTop="@dimen/dp_60"
+                android:layout_marginEnd="@dimen/dp_60"/>
 
 
             <LinearLayout
@@ -52,7 +63,7 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="10dp"
+                    android:layout_marginBottom="@dimen/dp_10"
                     android:text="@string/newest_loading_tv"
                     android:textAlignment="center"
                     android:textColor="@color/white" />
@@ -76,11 +87,11 @@
             android:id="@+id/series_tab_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="15dp"
+            android:layout_marginTop="@dimen/dp_15"
             android:clipToPadding="false"
             android:orientation="horizontal"
             android:overScrollMode="never"
-            android:paddingHorizontal="4dp"
+            android:paddingHorizontal="@dimen/dp_4"
             android:scrollbars="none"
             app:layoutManager="androidx.recyclerview.widget.LinearLayoutManager"
             tools:listitem="@layout/item_series_tab" />
@@ -89,17 +100,17 @@
             android:id="@+id/series_movie_loading_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="20dp" />
+            android:layout_marginTop="@dimen/dp_20" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/series_movie_recycler"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="12dp"
-            android:paddingHorizontal="4dp"
+            android:layout_marginTop="@dimen/dp_12"
             android:clipToPadding="false"
             android:nestedScrollingEnabled="false"
             android:overScrollMode="never"
+            android:paddingHorizontal="@dimen/dp_4"
             android:scrollbars="none" />
 
 
@@ -107,8 +118,8 @@
             android:id="@+id/series_movie_pagination_view"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginVertical="20dp"
-            android:visibility="gone"/>
+            android:layout_marginVertical="@dimen/dp_20"
+            android:visibility="gone" />
 
     </LinearLayout>
 </androidx.core.widget.NestedScrollView>
