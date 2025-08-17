@@ -30,7 +30,8 @@
                 <ImageView
                     android:id="@+id/img_thumb"
                     android:layout_width="wrap_content"
-                    android:layout_height="400dp"
+                    android:layout_height="@dimen/dp_400"
+                    android:contentDescription="@string/loading_image"
                     android:foreground="@drawable/vignette_overlay"
                     android:scaleType="centerCrop"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -43,8 +44,8 @@
                     android:id="@+id/ConstraintLayout2"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginHorizontal="24dp"
-                    android:layout_marginTop="48dp"
+                    android:layout_marginHorizontal="@dimen/dp_24"
+                    android:layout_marginTop="@dimen/dp_48"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="@id/img_thumb">
@@ -53,6 +54,7 @@
                         android:id="@+id/btn_back"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:contentDescription="@string/loading_image"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_arrow_back_24" />
@@ -61,6 +63,7 @@
                         android:id="@+id/btn_share"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:contentDescription="@string/loading_image"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintTop_toTopOf="parent"
                         app:srcCompat="@drawable/ic_share_24" />
@@ -70,7 +73,7 @@
                 <androidx.constraintlayout.widget.ConstraintLayout
                     android:id="@+id/ConstraintLayout3"
                     android:layout_width="match_parent"
-                    android:layout_height="150dp"
+                    android:layout_height="@dimen/dp_150"
                     android:background="@drawable/bg_shadow"
                     app:layout_constraintBottom_toBottomOf="@id/img_thumb"
                     app:layout_constraintEnd_toEndOf="parent"
@@ -79,7 +82,8 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="75dp"
-                        android:layout_marginBottom="16dp"
+                        android:layout_marginBottom="@dimen/dp_16"
+                        android:baselineAligned="false"
                         android:gravity="center_vertical"
                         android:orientation="horizontal"
                         app:layout_constraintBottom_toBottomOf="parent"
@@ -87,7 +91,7 @@
                         app:layout_constraintStart_toStartOf="parent">
 
                         <LinearLayout
-                            android:layout_width="50dp"
+                            android:layout_width="@dimen/dp_50"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
@@ -96,6 +100,7 @@
                                 android:id="@+id/btn_fav"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/loading_image"
                                 app:srcCompat="@drawable/ic_favorite_24" />
 
                         </LinearLayout>
@@ -111,38 +116,36 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:maxLines="2"
-                                android:text="Emilie in Paris"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-                                android:textSize="20sp"
-                                android:textStyle="bold" />
+                                android:textSize="@dimen/sp_20"
+                                android:textStyle="bold"
+                                tools:text="Emilie in Paris" />
 
                             <TextView
                                 android:id="@+id/tv_origin_name"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="S1, E4"
+                                android:layout_marginTop="@dimen/dp_4"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-
-                                android:textSize="14sp" />
+                                android:textSize="@dimen/sp_14"
+                                tools:text="S1, E4" />
 
                             <TextView
                                 android:id="@+id/tv_status"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginTop="4dp"
-                                android:text="Completed"
+                                android:layout_marginTop="@dimen/dp_4"
                                 android:textAlignment="center"
                                 android:textColor="@color/white"
-
-                                android:textSize="14sp"
-                                android:textStyle="italic" />
+                                android:textSize="@dimen/sp_14"
+                                android:textStyle="italic"
+                                tools:text="Completed" />
                         </LinearLayout>
 
                         <LinearLayout
-                            android:layout_width="80dp"
+                            android:layout_width="@dimen/dp_80"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
@@ -151,16 +154,17 @@
                                 android:id="@+id/imageView3"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:contentDescription="@string/loading_image"
                                 app:srcCompat="@drawable/ic_access_time_24" />
 
                             <TextView
                                 android:id="@+id/tv_time"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:text="3 Hrs"
                                 android:textColor="@color/white"
-                                android:textSize="12sp"
-                                android:textStyle="italic" />
+                                android:textSize="@dimen/sp_12"
+                                android:textStyle="italic"
+                                tools:text="3 Hrs" />
                         </LinearLayout>
 
                     </LinearLayout>
@@ -171,25 +175,25 @@
                 android:id="@+id/tv_descrption"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="36dp"
-                android:text="Tuy nhiên, số phận thật trớ trêu với những bà mẹ đơn thân mạnh mẽ, dám bước tiếp nhưng lại liên tiếp đón nhận sự phản bội. Cuộc sống của hot mom nổi tiếng Singapore - Kim Lim cũng nhiều trái ngang như thế, đem đến cho cô và con trai không ít đau khổ."
+                android:layout_marginHorizontal="@dimen/dp_36"
                 android:textAlignment="center"
-                android:textColor="@color/white" />
+                android:textColor="@color/white"
+                tools:text="Tuy nhiên, số phận thật trớ trêu với những bà mẹ đơn thân mạnh mẽ, dám bước tiếp nhưng lại liên tiếp đón nhận sự phản bội. Cuộc sống của hot mom nổi tiếng Singapore - Kim Lim cũng nhiều trái ngang như thế, đem đến cho cô và con trai không ít đau khổ." />
 
             <TextView
                 android:id="@+id/tv_cate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_8"
                 android:layout_weight="1"
-                android:text="Dram - Comic"
                 android:textAlignment="center"
-                android:textColor="@color/blue" />
+                android:textColor="@color/blue"
+                tools:text="Dram - Comic" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="24dp"
+                android:layout_marginTop="@dimen/dp_24"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -198,46 +202,46 @@
                     android:id="@+id/tv_year"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="@dimen/dp_12"
                     android:background="@drawable/btn_tag_outline"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:text="2025"
+                    android:paddingHorizontal="@dimen/dp_16"
+                    android:paddingVertical="@dimen/dp_8"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    tools:text="2025" />
 
                 <TextView
                     android:id="@+id/tv_lang"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="12dp"
+                    android:layout_marginEnd="@dimen/dp_12"
                     android:background="@drawable/btn_tag_outline"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:text="Vietsub"
+                    android:paddingHorizontal="@dimen/dp_16"
+                    android:paddingVertical="@dimen/dp_8"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    tools:text="Vietsub" />
 
                 <TextView
                     android:id="@+id/tv_quality"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/btn_tag_outline"
-                    android:paddingHorizontal="16dp"
-                    android:paddingVertical="8dp"
-                    android:text="4K FHD"
+                    android:paddingHorizontal="@dimen/dp_16"
+                    android:paddingVertical="@dimen/dp_8"
                     android:textColor="@color/white"
-                    android:textSize="14sp"
-                    android:textStyle="bold" />
+                    android:textSize="@dimen/sp_14"
+                    android:textStyle="bold"
+                    tools:text="4K FHD" />
             </LinearLayout>
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="36dp"
+                android:layout_marginHorizontal="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_36"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -245,14 +249,15 @@
                     android:id="@+id/ic_previous"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/loading_image"
                     app:srcCompat="@drawable/ic_skip_previous_24" />
 
                 <TextView
                     android:id="@+id/btn_start_zero"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Play from begining "
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:text="@string/play_from_begining"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -260,7 +265,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="8dp"
+                android:layout_marginTop="@dimen/dp_8"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
@@ -268,14 +273,15 @@
                     android:id="@+id/imageView"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:contentDescription="@string/loading_image"
                     app:srcCompat="@drawable/ic_episode_24" />
 
                 <TextView
                     android:id="@+id/btn_show_eps"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="12dp"
-                    android:text="Session and Episodes "
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:text="@string/session_and_episodes"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -284,7 +290,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="16dp"
+                android:layout_marginTop="@dimen/dp_16"
                 android:nestedScrollingEnabled="false">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -292,7 +298,7 @@
             <androidx.constraintlayout.widget.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp">
+                android:layout_marginTop="@dimen/dp_8">
 
                 <androidx.recyclerview.widget.RecyclerView
                     android:id="@+id/rv_list_server_data"
@@ -331,10 +337,10 @@
                     android:id="@+id/btn_watch_now"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginEnd="16dp"
+                    android:layout_marginEnd="@dimen/dp_16"
                     android:background="@drawable/bg_btn_watch"
-                    android:paddingHorizontal="24dp"
-                    android:text="Watch now"
+                    android:paddingHorizontal="@dimen/dp_24"
+                    android:text="@string/watch_now"
                     android:textColor="@color/white" />
 
                 <androidx.appcompat.widget.AppCompatButton
@@ -342,8 +348,8 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="@drawable/bg_btn_watch2"
-                    android:paddingHorizontal="24dp"
-                    android:text="Chill with friends"
+                    android:paddingHorizontal="@dimen/dp_24"
+                    android:text="@string/watch_with_friends"
                     android:textColor="@color/white" />
             </LinearLayout>
 
@@ -366,12 +372,12 @@
         <ProgressBar
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
-            android:layout_width="48dp"
-            android:layout_height="48dp"
+            android:layout_width="@dimen/dp_48"
+            android:layout_height="@dimen/dp_48"
             android:layout_gravity="center"
             android:indeterminate="true"
-            app:indicatorSize="48dp"
-            app:trackThickness="4dp" />
+            app:indicatorSize="@dimen/dp_48"
+            app:trackThickness="@dimen/dp_4" />
     </FrameLayout>
 
 </androidx.constraintlayout.widget.ConstraintLayout>
