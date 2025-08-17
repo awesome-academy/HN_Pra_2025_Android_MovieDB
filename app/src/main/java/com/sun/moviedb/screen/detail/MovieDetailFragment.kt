@@ -171,11 +171,15 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     private fun onWatchNowButtonClicked(){
-        Toast.makeText(requireContext(), "watch from current episode + position", Toast.LENGTH_SHORT).show()
+        binding.btnWatchNow.setOnClickListener {
+            Toast.makeText(requireContext(), "watch from current episode + position", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onChillWithFriendButtonClicked(){
-        Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
+        binding.btnWatchWithFriends.setOnClickListener {
+            Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun onBackButtonClicked(){
