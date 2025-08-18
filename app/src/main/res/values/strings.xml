@@ -29,4 +29,16 @@
     <string name="top_search">Top tìm kiếm</string>
     <string name="please_enter_search_keyword">Vui lòng nhập từ khóa tìm kiếm</string>
     <string name="search">Search...</string>
+
+    <string name="default_web_client_id">150266753810-jr9i7iq2s50ko3br9l7ehu12bsqvdfld.apps.googleusercontent.com</string>
+    <string name="login_with_google">Login with Google</string>
+    <string name="login">Login</string>
+    <string name="movie_db">Movie DB</string>
+    <string name="invite_to_watch_party">Invite to Watch Party</string>
+    <string name="search_for_people">Search for People</string>
+    <string name="invite">Invite</string>
+    <string name="no_users_found">No User Found</string>
+    <string name="choose_a_friend">Choose A Friend</string>
+    <string name="dummy_button">Dummy Button</string>
+    <string name="dummy_content">DUMMY\nCONTENT</string>
 </resources>

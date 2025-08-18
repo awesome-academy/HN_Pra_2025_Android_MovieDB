@@ -42,8 +42,11 @@ android {
 
 dependencies {
     // Import the Firebase BoM
-    implementation(libs.firebase.bom)
-
+    implementation(platform(libs.firebase.bom))
+    implementation (libs.google.firebase.database)
+    implementation (libs.firebase.auth)
+    implementation (libs.firebase.firestore)
+    implementation (libs.play.services.auth)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
@@ -57,6 +60,9 @@ dependencies {
     // Glide for image loading
     implementation(libs.glide)
     ksp(libs.ksp)
-    
+
+    implementation(libs.androidx.media3.exoplayer)
+    implementation(libs.androidx.media3.ui)
+    implementation(libs.androidx.media3.exoplayer.hls)
 }
 
