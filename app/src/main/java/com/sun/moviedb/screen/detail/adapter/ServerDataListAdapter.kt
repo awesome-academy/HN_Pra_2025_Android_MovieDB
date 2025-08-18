@@ -7,17 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.sun.moviedb.data.model.ServerData
 import com.sun.moviedb.databinding.ViewholderEpsItemBinding
 
-class ServerDataListApdater(
+class ServerDataListAdapter(
     private val items: List<ServerData>,
     private val onClick: (String) -> Unit
-) : RecyclerView.Adapter<ServerDataListApdater.ViewHolder>() {
+) : RecyclerView.Adapter<ServerDataListAdapter.ViewHolder>() {
 
     private lateinit var context: Context
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
         viewType: Int
-    ): ServerDataListApdater.ViewHolder {
+    ): ServerDataListAdapter.ViewHolder {
         context = parent.context
         val binding = ViewholderEpsItemBinding.inflate(
             LayoutInflater.from(context),
@@ -27,7 +27,7 @@ class ServerDataListApdater(
         return ViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: ServerDataListApdater.ViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: ServerDataListAdapter.ViewHolder, position: Int) {
         val item = items[position]
         holder.binding.tvEpsItem.text = item.name
         holder.binding.tvEpsItem.setOnClickListener {

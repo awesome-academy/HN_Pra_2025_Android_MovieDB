@@ -5,7 +5,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.constraintlayout.helper.widget.Grid
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -19,11 +18,11 @@ import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
-import com.sun.moviedb.screen.detail.adapter.ServerDataListApdater
+import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
-    private lateinit var serverDataListApdater: ServerDataListApdater
+    private lateinit var serverDataListApdater: ServerDataListAdapter
     private lateinit var presenter: MovieDetailPresenter
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
@@ -88,7 +87,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             .into(binding.imgThumb)
         binding.tvTitle.text = movieInfo.name
         binding.tvOriginName.text = movieInfo.originName
-        binding.tvDescrption.text = movieInfo.content
+        binding.tvDescription.text = movieInfo.content
         binding.tvTime.text = movieInfo.time
         binding.tvCate.text = getListCate(movieInfo.category)
         binding.tvQuality.text = movieInfo.quality
@@ -121,7 +120,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         //delay to simulate loading
         binding.rvListServerData.postDelayed({
-            serverDataListApdater = ServerDataListApdater(serverData) { item ->
+            serverDataListApdater = ServerDataListAdapter(serverData) { item ->
                 // Handle click on server data
                 Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
             }
@@ -169,7 +168,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         binding.btnWatchNow.setOnClickListener {
             Toast.makeText(
                 requireContext(),
-                "watch from current episode + position",
+                "Watch from current episode + position",
                 Toast.LENGTH_SHORT
             ).show()
         }
