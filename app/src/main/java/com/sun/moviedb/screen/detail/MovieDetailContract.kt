@@ -8,7 +8,6 @@ import com.sun.moviedb.utils.base.BaseView
 interface MovieDetailContract {
     interface View : BaseView {
         fun onGetDetailSuccess(movie: Movie, episodes: List<Episode>)
-        fun onGetDetailError(message: String)
     }
 
     interface Presenter : BasePresenter<View> {

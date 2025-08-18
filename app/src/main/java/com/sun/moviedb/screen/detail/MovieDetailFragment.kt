@@ -28,17 +28,13 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
     private var isFavourite = false
+    private var slug: String = ""
 
     override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentMovieDetailBinding {
         return FragmentMovieDetailBinding.inflate(inflater, container, false)
-    }
-
-    override fun initView() {
-        super.initView()
-        val slug = arguments?.getString(KEY_SLUG) ?: ""
     }
 
     override fun initData() {
@@ -52,7 +48,8 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         presenter.attachView(this)
 
         showLoading(true)
-        presenter.getDetail(arguments?.getString(KEY_SLUG) ?: "")
+        slug = arguments?.getString(KEY_SLUG) ?: ""
+        presenter.getDetail(slug)
     }
 
     override fun showLoading(isLoading: Boolean) {
@@ -62,6 +59,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     override fun showError(message: String) {
         showLoading(false)
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
     override fun onGetDetailSuccess(
@@ -81,10 +79,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onFavoriteButtonClicked()
         onWatchNowButtonClicked()
         onChillWithFriendButtonClicked()
-    }
-
-    override fun onGetDetailError(message: String) {
-        Toast.makeText(requireContext(), "Error: $message", Toast.LENGTH_SHORT).show()
+        onBackButtonClicked()
     }
 
     private fun setUI() {
@@ -138,7 +133,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             binding.rvListServerData.adapter = serverDataListApdater
 
             binding.progressBar2.visibility = ViewGroup.GONE
-        }, 500)
+        }, 1000)
     }
 
     private fun onStartFromBeginningButtonClicked() {
@@ -170,20 +165,26 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         }
     }
 
-    private fun onWatchNowButtonClicked(){
+    private fun onWatchNowButtonClicked() {
         binding.btnWatchNow.setOnClickListener {
-            Toast.makeText(requireContext(), "watch from current episode + position", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "watch from current episode + position",
+                Toast.LENGTH_SHORT
+            ).show()
         }
     }
 
-    private fun onChillWithFriendButtonClicked(){
+    private fun onChillWithFriendButtonClicked() {
         binding.btnWatchWithFriends.setOnClickListener {
             Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun onBackButtonClicked(){
-
+    private fun onBackButtonClicked() {
+        binding.btnBack.setOnClickListener {
+            requireActivity().supportFragmentManager.popBackStackImmediate()
+        }
     }
 
 

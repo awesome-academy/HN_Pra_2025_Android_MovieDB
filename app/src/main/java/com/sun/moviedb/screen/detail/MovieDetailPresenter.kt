@@ -28,7 +28,8 @@ class MovieDetailPresenter
                     mView?.onGetDetailSuccess(movie, episodes)
                 }
                 is NetworkResult.OnError -> {
-                    //todo
+                    val errorMessage = result.message
+                    mView?.showError(errorMessage)
                 }
             }
         }
