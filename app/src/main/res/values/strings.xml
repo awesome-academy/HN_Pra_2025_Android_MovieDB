@@ -41,4 +41,9 @@
     <string name="choose_a_friend">Choose A Friend</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
+    <string name="watch_with_friends">Chill with friends</string>
+    <string name="loading_image">Loading Image</string>
+    <string name="play_from_beginning">Play from beginning</string>
+    <string name="session_and_episodes">Session and Episodes</string>
+    <string name="ex_tap_1">Tap 1</string>
 </resources>

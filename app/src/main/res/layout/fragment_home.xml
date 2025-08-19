@@ -15,7 +15,6 @@
         <androidx.constraintlayout.widget.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
-
             <androidx.viewpager2.widget.ViewPager2
                 android:id="@+id/newest_movie_view_pager"
                 android:layout_width="match_parent"
