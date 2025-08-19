@@ -119,7 +119,10 @@ class WatchMoviePresenterImpl(
                     fun onPlaybackStateChanged(playbackState: Int, playWhenReady: Boolean) {
                         super.onPlaybackStateChanged(playbackState)
                         if (playbackState == Player.STATE_READY) isPlayerPrepared = true
-                        this.onPlaybackStateChanged(playbackState, activePlayer.playWhenReady)
+                    override fun onPlaybackStateChanged(playbackState: Int) {
+                        super.onPlaybackStateChanged(playbackState)
+                        if (playbackState == Player.STATE_READY) isPlayerPrepared = true
+                        this@WatchMoviePresenterImpl.onPlaybackStateChanged(playbackState, activePlayer.playWhenReady)
                     }
                 })
                 activePlayer.prepare()
