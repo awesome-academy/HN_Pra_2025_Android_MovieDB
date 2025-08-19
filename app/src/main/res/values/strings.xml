@@ -29,4 +29,9 @@
     <string name="top_search">Top tìm kiếm</string>
     <string name="please_enter_search_keyword">Vui lòng nhập từ khóa tìm kiếm</string>
     <string name="search">Search...</string>
+    <string name="watch_with_friends">Chill with friends</string>
+    <string name="loading_image">Loading Image</string>
+    <string name="play_from_beginning">Play from beginning</string>
+    <string name="session_and_episodes">Session and Episodes</string>
+    <string name="ex_tap_1">Tap 1</string>
 </resources>

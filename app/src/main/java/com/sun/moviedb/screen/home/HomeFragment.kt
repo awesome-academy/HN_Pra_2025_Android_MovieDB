@@ -13,6 +13,8 @@ import com.sun.moviedb.data.model.Item
 import com.sun.moviedb.screen.home.adapter.NewestMoviePagerAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesMovieAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesTabAdapter
+import com.sun.moviedb.utils.navigation.AppNavigator
+import com.sun.moviedb.utils.navigation.NavDestination
 import com.sun.moviedb.screen.search.SearchDialogFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
@@ -119,7 +121,8 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
     }
 
     private fun onMovieClick(item: Item) {
-        Toast.makeText(requireContext(), "Click to ${item.name}", Toast.LENGTH_SHORT).show()
+        AppNavigator.navigateTo(NavDestination.MovieDetailScreen(item.slug), addToBackStack = true)
+        Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     private fun onFavouriteClick(item: Item) {
