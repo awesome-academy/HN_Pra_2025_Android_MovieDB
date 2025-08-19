@@ -21,7 +21,7 @@ interface WatchMovieContract {
     interface Presenter {
         fun attachView(view: View)
         fun detachView()
-        fun onFragmentViewCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean)
+        fun onActivityCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean)
         fun onStart()
         fun onResume()
         fun onPause(currentPosition: Long, currentPlayWhenReady: Boolean)

@@ -37,7 +37,7 @@ class WatchMoviePresenterImpl(
         this.view = null
     }
 
-    override fun onFragmentViewCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean) {
+    override fun onActivityCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean) {
         currentM3u8Link = m3u8Link
         playbackPosition = savedPlaybackPosition
         playWhenReady = savedPlayWhenReady

@@ -22,7 +22,7 @@
         android:layout_weight="1"
         android:layout_marginStart="16dp"
         android:textSize="16sp"
-        android:textColor="@android:color/black"
+        android:textColor="@color/white"
         tools:text="Username Example" />
 
 </LinearLayout>

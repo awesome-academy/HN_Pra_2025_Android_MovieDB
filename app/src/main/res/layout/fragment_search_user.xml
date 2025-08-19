@@ -3,8 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:id="@+id/searchUserBackground"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    tools:context=".presentation.searchUser.SearchUserFragment">
+    tools:context=".screen.searchUser.SearchUserFragment">
 
     <ImageView
         android:layout_width="match_parent"
@@ -25,49 +26,73 @@
         android:paddingTop="@dimen/dp_50"
         android:text="@string/invite_to_watch_party"/>
 
-    <com.google.android.material.search.SearchBar
+    <com.google.android.material.textfield.TextInputLayout
+        android:id="@+id/searchTextInputLayout"
+        style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="@dimen/dp_50"
-        android:backgroundTint="@color/gray_50"
-        android:id="@+id/searchBarWatchParty"
+        android:layout_marginStart="@dimen/dp_16"
+        android:layout_marginEnd="@dimen/dp_16"
+        android:layout_below="@id/titleTextViewWatchParty"
         android:hint="@string/search_for_people"
-        app:titleTextColor="@color/white"
-        style="@style/Widget.App.SearchBar"
-        android:layout_below="@id/titleTextViewWatchParty"/>
+        android:textColorHint="@color/white"
+        app:endIconMode="clear_text"
+        app:boxCornerRadiusTopStart="@dimen/dp_30"
+        app:boxCornerRadiusTopEnd="@dimen/dp_30"
+        app:boxCornerRadiusBottomStart="@dimen/dp_30"
+        app:boxCornerRadiusBottomEnd="@dimen/dp_30"
+        app:boxBackgroundColor="@color/gray">
+
+        <com.google.android.material.textfield.TextInputEditText
+            android:id="@+id/searchEditText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:imeOptions="actionSearch"
+            android:inputType="text"
+            android:maxLines="1"
+            android:drawableStart="@drawable/baseline_search_24"
+            android:drawablePadding="@dimen/dp_10"
+            android:drawableTint="@color/white"
+            android:textColor="@color/white" />
+    </com.google.android.material.textfield.TextInputLayout>
+
 
     <androidx.recyclerview.widget.RecyclerView
         android:layout_width="match_parent"
-        android:layout_height="@dimen/dp_50"
+        android:layout_height="@dimen/dp_80"
         android:id="@+id/recyclerViewWatchPartyChosen"
-        android:layout_below="@id/searchBarWatchParty"
+        android:layout_below="@id/searchTextInputLayout"
         android:scrollbars="horizontal"
         android:orientation="horizontal"
+        android:padding="@dimen/dp_10"
         android:scrollbarThumbVertical="@color/purple"
-        android:scrollbarTrackVertical="@color/gray_50"
-        android:paddingBottom="@dimen/dp_50"/>
+        android:scrollbarTrackVertical="@color/gray_50" />
 
     <TextView
         android:id="@+id/textViewEmptyStateChosen"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
-        android:layout_below="@id/searchBarWatchParty"
+        android:layout_below="@id/searchTextInputLayout"
         android:text="@string/choose_a_friend"
         android:textSize="@dimen/sp_20"
+        android:layout_above="@id/recyclerViewWatchParty"
+        android:gravity="center"
         android:textColor="@color/gray_50"
-        android:visibility="gone"
+        android:visibility="visible"
         tools:visibility="visible"/>
 
     <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerViewWatchParty"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:id="@+id/recyclerViewWatchParty"
         android:layout_below="@id/recyclerViewWatchPartyChosen"
-        android:scrollbars="vertical"
+        android:layout_marginTop="4dp"
         android:orientation="vertical"
+        android:paddingBottom="@dimen/dp_50"
         android:scrollbarThumbVertical="@color/purple"
         android:scrollbarTrackVertical="@color/gray_50"
-        android:paddingBottom="@dimen/dp_50"/>
+        android:scrollbars="vertical" />
 
     <ProgressBar
         android:id="@+id/progressBarSearch"

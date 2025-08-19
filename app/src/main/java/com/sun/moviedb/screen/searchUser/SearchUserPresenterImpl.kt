@@ -1,136 +1,155 @@
 package com.sun.moviedb.screen.searchUser
 
+import android.util.Log
 import com.sun.moviedb.data.model.User
+import com.sun.moviedb.data.repository.firestore.UserRepository
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.SupervisorJob
-import kotlinx.coroutines.cancel
-import kotlinx.coroutines.delay
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 
-class SearchUserPresenterImpl : SearchUserContract.Presenter {
+class SearchUserPresenterImpl(
+    private val userRepository: UserRepository,
+    private val mainScope: CoroutineScope = CoroutineScope(Dispatchers.Main + Job())
+) : SearchUserContract.Presenter {
 
     private var view: SearchUserContract.View? = null
-    private val presenterScope = CoroutineScope(Dispatchers.Main + SupervisorJob())
+    private val TAG = "SearchUserPresenter"
 
-    private val allFetchedUsersForCurrentQuery = mutableListOf<User>()
-    private val searchableUsersList = mutableListOf<User>()
-    private val chosenUsersList = mutableListOf<User>()
-    private val persistedChosenUserIds = mutableSetOf<String>()
+    private val currentSearchableUsers = mutableListOf<User>()
+    private val currentChosenUsers = mutableListOf<User>()
 
     override fun attachView(view: SearchUserContract.View) {
         this.view = view
-        view.displayChosenUsers(ArrayList(chosenUsersList))
-        updateInviteButtonStatus()
-        updateEmptyStates()
+        loadInitialUsers()
     }
 
     override fun detachView() {
         this.view = null
-        presenterScope.cancel()
     }
 
-    override fun getInitialChosenUsers() {
-        view?.displayChosenUsers(ArrayList(chosenUsersList))
-        updateInviteButtonStatus()
-        updateEmptyStates()
+    override fun loadInitialUsers() {
+        view?.showLoading()
+        mainScope.launch {
+            val result = userRepository.getAllUsers()
+            withContext(Dispatchers.Main) {
+                view?.hideLoading()
+                result.fold(
+                    onSuccess = { users ->
+                        currentSearchableUsers.clear()
+                        currentSearchableUsers.addAll(users.filter { initialUser ->
+                            currentChosenUsers.none { chosenUser -> chosenUser.id == initialUser.id }
+                        })
+
+                        if (currentSearchableUsers.isEmpty()) {
+                            view?.showSearchableUsersEmpty("No users found.")
+                        } else {
+                            view?.hideSearchableUsersEmpty()
+                        }
+                        view?.displaySearchableUsers(ArrayList(currentSearchableUsers))
+                    },
+                    onFailure = { exception ->
+                        Log.e(TAG, "Error fetching initial users", exception)
+                        view?.displayError("Failed to load users: ${exception.localizedMessage}")
+                        view?.showSearchableUsersEmpty("Error loading users. Please try again.")
+                    }
+                )
+            }
+        }
     }
 
     override fun searchUsers(query: String) {
         if (query.isBlank()) {
-            allFetchedUsersForCurrentQuery.clear()
-            searchableUsersList.clear()
+            loadInitialUsers()
+            return
+        }
+        if (query.length < 2 && query.isNotEmpty()) {
             view?.displaySearchableUsers(emptyList())
-            updateEmptyStates()
+            view?.showSearchableUsersEmpty("Enter at least 2 characters to search.")
             return
         }
 
         view?.showLoading()
-        presenterScope.launch {
-            delay(500)
+        mainScope.launch {
+            val result = userRepository.searchUsers(query)
+            // ... (rest of searchUsers logic remains the same)
+            withContext(Dispatchers.Main) {
+                view?.hideLoading()
+                result.fold(
+                    onSuccess = { users ->
+                        currentSearchableUsers.clear()
+                        currentSearchableUsers.addAll(users.filter { searchableUser ->
+                            currentChosenUsers.none { chosenUser -> chosenUser.id == searchableUser.id }
+                        })
 
-            val dummyResultsFromApi = mutableListOf<User>()
-            if (query.equals("test", ignoreCase = true)) {
-                dummyResultsFromApi.add(User("1", "Test User One", null))
-                dummyResultsFromApi.add(User("2", "Another Test", null))
-                dummyResultsFromApi.add(User("3", "Test User Three", null))
-                dummyResultsFromApi.add(User("common1", "Common User A", null))
-            } else if (query.contains("alice", ignoreCase = true)) {
-                dummyResultsFromApi.add(User("4", "Alice Wonderland", "url_to_alice_image"))
-            } else if (query.contains("bob", ignoreCase = true)) {
-                dummyResultsFromApi.add(User("5", "Bob The Builder", null))
-                dummyResultsFromApi.add(User("common1", "Common User A", null))
+                        if (currentSearchableUsers.isEmpty()) {
+                            view?.showSearchableUsersEmpty("No users found matching '$query'.")
+                        } else {
+                            view?.hideSearchableUsersEmpty()
+                        }
+                        view?.displaySearchableUsers(ArrayList(currentSearchableUsers))
+                    },
+                    onFailure = { exception ->
+                        Log.e(TAG, "Error searching users", exception)
+                        view?.displayError("Failed to search users: ${exception.localizedMessage}")
+                        view?.showSearchableUsersEmpty("Error searching. Please try again.")
+                    }
+                )
             }
-            allFetchedUsersForCurrentQuery.clear()
-            allFetchedUsersForCurrentQuery.addAll(dummyResultsFromApi)
-
-            searchableUsersList.addAll(allFetchedUsersForCurrentQuery.filterNot { apiUser ->
-                chosenUsersList.any { chosenUser -> chosenUser.id == apiUser.id }
-            })
-
-            view?.hideLoading()
-            view?.displaySearchableUsers(ArrayList(searchableUsersList))
-            updateEmptyStates()
         }
     }
 
     override fun selectUser(user: User) {
-        if (chosenUsersList.any { it.id == user.id }) return
+        if (currentChosenUsers.any { it.id == user.id }) return
 
-        searchableUsersList.remove(user)
-        view?.displaySearchableUsers(ArrayList(searchableUsersList))
+        currentChosenUsers.add(user)
 
-        chosenUsersList.add(user)
-        persistedChosenUserIds.add(user.id)
-        view?.displayChosenUsers(ArrayList(chosenUsersList))
+        view?.addUserToChosenList(user)
+        view?.displayChosenUsers(ArrayList(currentChosenUsers))
 
-        updateInviteButtonStatus()
-        updateEmptyStates()
-    }
 
-    override fun deselectUser(user: User) {
-        if (!chosenUsersList.any { it.id == user.id }) return
-
-        chosenUsersList.remove(user)
-        persistedChosenUserIds.remove(user.id)
-        view?.displayChosenUsers(ArrayList(chosenUsersList))
-        if (allFetchedUsersForCurrentQuery.any { it.id == user.id } &&
-            !searchableUsersList.any { it.id == user.id }) {
-            searchableUsersList.add(user)
-        }
-        view?.displaySearchableUsers(ArrayList(searchableUsersList))
-
-        updateInviteButtonStatus()
-        updateEmptyStates()
-    }
-
-    private fun updateInviteButtonStatus() {
-        view?.updateInviteButton(chosenUsersList.size, chosenUsersList.isNotEmpty())
-    }
-
-    private fun updateEmptyStates() {
-        if (searchableUsersList.isEmpty()) {
-            val query = ""
-            if (query.isBlank() && allFetchedUsersForCurrentQuery.isEmpty()) {
-                view?.showSearchableUsersEmpty("Start searching to find users.")
-            } else {
-                view?.showSearchableUsersEmpty("No users found.")
-            }
-        } else {
-            view?.hideSearchableUsersEmpty()
-        }
-
-        if (chosenUsersList.isEmpty()) {
-            view?.showChosenUsersEmpty("No users chosen yet.")
+        if (currentChosenUsers.isEmpty()) {
+            view?.showChosenUsersEmpty("No users selected.")
         } else {
             view?.hideChosenUsersEmpty()
         }
+        updateInviteButtonState()
     }
 
-    override fun onInviteClicked() {
-        if (chosenUsersList.isNotEmpty()) {
-            println("Inviting users: ${chosenUsersList.joinToString { it.username }}")
-        } else {
+    override fun deselectUser(user: User) {
+        val removedFromChosen = currentChosenUsers.removeAll { it.id == user.id }
+        if (removedFromChosen) {
+            if (!currentSearchableUsers.any { it.id == user.id}) {
+                currentSearchableUsers.add(0, user)
+            }
+
+
+            view?.removeUserFromChosenList(user)
+
+            view?.displayChosenUsers(ArrayList(currentChosenUsers))
+            view?.displaySearchableUsers(ArrayList(currentSearchableUsers))
+
+            if (currentChosenUsers.isEmpty()) {
+                view?.showChosenUsersEmpty("No users selected.")
+            } else {
+                view?.hideChosenUsersEmpty()
+            }
+            updateInviteButtonState()
         }
+    }
+
+
+    override fun onInviteClicked() {
+        if (currentChosenUsers.isNotEmpty()) {
+            val userDisplayNames = currentChosenUsers.joinToString { it.username ?: it.email ?: it.id }
+            Log.i(TAG, "Invite button clicked. Chosen users: $userDisplayNames")
+            view?.showError("Invite functionality for: $userDisplayNames (Not implemented yet)")
+        }
+    }
+
+    private fun updateInviteButtonState() {
+        val count = currentChosenUsers.size
+        view?.updateInviteButton(count, count > 0)
     }
 }

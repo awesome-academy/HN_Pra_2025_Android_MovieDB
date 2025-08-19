@@ -3,6 +3,7 @@ package com.sun.moviedb.screen.splash
 import android.content.Intent
 import android.media.MediaPlayer
 import android.os.Bundle
+import android.util.Log
 import android.view.animation.AnimationUtils
 import android.widget.TextView
 import androidx.activity.enableEdgeToEdge
@@ -45,6 +46,7 @@ class SplashActivity : AppCompatActivity() {
                 if (auth.currentUser == null) {
                     intent = Intent(this, LoginActivity::class.java)
                 } else {
+                    Log.e("check", auth.currentUser!!.email.toString())
                     intent = Intent(this, MainActivity::class.java)
                 }
                 startActivity(intent)

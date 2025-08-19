@@ -1,80 +1,104 @@
 package com.sun.moviedb.screen.login
 
 import android.content.Intent
-import android.os.Bundle
-import android.widget.LinearLayout
+import android.util.Log
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
+import androidx.activity.result.ActivityResultLauncher
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import com.google.android.gms.auth.api.signin.GoogleSignIn
-import com.google.android.gms.auth.api.signin.GoogleSignInClient
-import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.GoogleAuthProvider
-import com.sun.moviedb.R
+import com.google.firebase.auth.FirebaseUser
+import com.sun.moviedb.data.repository.auth.AuthRepositoryImpl
+import com.sun.moviedb.databinding.ActivityLoginBinding
 import com.sun.moviedb.screen.MainActivity
+import com.sun.moviedb.utils.base.BaseActivity
 
-class LoginActivity : AppCompatActivity() {
+class LoginActivity : BaseActivity<ActivityLoginBinding>(), LoginContract.View {
 
-    var loginButton: LinearLayout? = null
+    private lateinit var presenter: LoginContract.Presenter
+    private lateinit var googleSignInLauncher: ActivityResultLauncher<Intent>
 
-    private lateinit var auth: FirebaseAuth
-    private lateinit var googleSignInClient: GoogleSignInClient
+    private val TAG = "LoginActivity"
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContentView(R.layout.activity_login)
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
+    override fun getViewBinding(): ActivityLoginBinding {
+        return ActivityLoginBinding.inflate(layoutInflater)
+    }
+
+    override fun initView() {
+        super.initView()
+        ViewCompat.setOnApplyWindowInsetsListener(binding.main) { v, insets ->
             val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
             v.setPadding(systemBars.left, 0, systemBars.right, 0)
             insets
         }
 
-        auth = FirebaseAuth.getInstance()
-
-        val gso = GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-            .requestIdToken(getString(R.string.default_web_client_id))
-            .requestEmail()
-            .build()
-        googleSignInClient = GoogleSignIn.getClient(this, gso)
-
-        loginButton = findViewById(R.id.loginButton)
-        loginButton?.setOnClickListener {
-            launcher.launch(googleSignInClient.signInIntent)
+        binding.loginButton.setOnClickListener {
+            presenter.onLoginButtonClicked()
         }
     }
 
-    private val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-        if (result.resultCode == RESULT_OK) {
-            val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
-            try {
-                val account = task.getResult(ApiException::class.java)!!
-                firebaseAuthWithGoogle(account.idToken!!)
-            } catch (e: ApiException) {
-                Toast.makeText(this, "Google Sign In Failed: ${e.message}", Toast.LENGTH_SHORT).show()
-            }
-        }
-    }
+    override fun initData() {
+        super.initData()
+        val authRepository = AuthRepositoryImpl(applicationContext)
+        presenter = LoginPresenterImpl(authRepository)
+        presenter.attachView(this)
 
-    private fun firebaseAuthWithGoogle(idToken: String) {
-        val credential = GoogleAuthProvider.getCredential(idToken, null)
-        auth.signInWithCredential(credential)
-            .addOnCompleteListener(this) { task ->
-                if (task.isSuccessful) {
-                    val user = auth.currentUser
-                    Toast.makeText(this, "Authentication Successful. User ID: ${user?.uid}", Toast.LENGTH_SHORT).show()
-                    val intent = Intent(this, MainActivity::class.java)
-//                    intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
-                    startActivity(intent)
-                    finish()
-                } else {
-                    Toast.makeText(this, "Authentication Failed: ${task.exception?.message}", Toast.LENGTH_SHORT).show()
+        googleSignInLauncher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
+            if (result.resultCode == RESULT_OK) {
+                val task = GoogleSignIn.getSignedInAccountFromIntent(result.data)
+                try {
+                    val account = task.getResult(ApiException::class.java)
+                    presenter.handleGoogleSignInResult(account, null)
+                } catch (e: ApiException) {
+                    presenter.handleGoogleSignInResult(null, e)
                 }
+            } else {
+                Log.w(TAG, "Google Sign In Canceled or Failed, Result Code: ${result.resultCode}")
+                showGoogleSignInFailed("Google Sign-In was cancelled or failed.")
             }
+        }
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        presenter.detachView()
+    }
+
+    override fun showLoading(isLoading: Boolean) {
+    }
+
+    override fun showError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun showLoginSuccess(firebaseUser: FirebaseUser) {
+        Toast.makeText(this, "Authentication Successful. User: ${firebaseUser.displayName}", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showLoginError(message: String) {
+        Toast.makeText(this, message, Toast.LENGTH_LONG).show()
+    }
+
+    override fun navigateToMain() {
+        val intent = Intent(this, MainActivity::class.java)
+        intent.flags = Intent.FLAG_ACTIVITY_NEW_TASK or Intent.FLAG_ACTIVITY_CLEAR_TASK
+        startActivity(intent)
+        finish()
+    }
+
+    override fun launchGoogleSignInActivity(signInIntent: Intent) {
+        if (::googleSignInLauncher.isInitialized) {
+            googleSignInLauncher.launch(signInIntent)
+            Log.d(TAG, "Google Sign-In Intent launched by Activity.")
+        } else {
+            Log.e(TAG, "googleSignInLauncher not initialized in Activity!")
+            showLoginError("Error initiating login. Please try again.")
+        }
+    }
+
+    override fun showGoogleSignInFailed(message: String) {
+        Toast.makeText(this, "Google Sign In Failed: $message", Toast.LENGTH_SHORT).show()
     }
 }
