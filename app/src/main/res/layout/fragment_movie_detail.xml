@@ -257,7 +257,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_12"
-                    android:text="@string/play_from_begining"
+                    android:text="@string/play_from_beginning"
                     android:textColor="@color/white" />
             </LinearLayout>
 

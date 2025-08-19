@@ -22,7 +22,7 @@ import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
-    private lateinit var serverDataListApdater: ServerDataListAdapter
+    private lateinit var serverDataListApdapter: ServerDataListAdapter
     private lateinit var presenter: MovieDetailPresenter
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
@@ -120,7 +120,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         //delay to simulate loading
         binding.rvListServerData.postDelayed({
-            serverDataListApdater = ServerDataListAdapter(serverData) { item ->
+            serverDataListApdapter = ServerDataListAdapter(serverData) { item ->
                 // Handle click on server data
                 Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
             }
@@ -129,7 +129,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
                 requireContext(), 3,
                 GridLayoutManager.VERTICAL, false
             )
-            binding.rvListServerData.adapter = serverDataListApdater
+            binding.rvListServerData.adapter = serverDataListApdapter
 
             binding.progressBar2.visibility = ViewGroup.GONE
         }, 1000)
