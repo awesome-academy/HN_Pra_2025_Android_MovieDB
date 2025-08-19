@@ -112,7 +112,7 @@ class WatchMoviePresenterImpl(
                 activePlayer.addListener(object : Player.Listener {
                     override fun onPlayerError(error: PlaybackException) {
                         super.onPlayerError(error)
-//                        this.onPlayerError(error.message ?: "Unknown player error")
+                        this@WatchMoviePresenterImpl.onPlayerError(error.message ?: "Unknown player error")
                         isPlayerPrepared = false
                     }
 
