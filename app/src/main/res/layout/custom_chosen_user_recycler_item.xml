@@ -9,7 +9,7 @@
         android:layout_height="@dimen/dp_150"
         android:id="@+id/imageViewChosenUserProfile"
         android:paddingTop="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10"
+        android:paddingEnd="@dimen/dp_10"
         android:src="@mipmap/ic_launcher_round"/>
 
     <ImageView
