@@ -39,8 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun setupNewestMovieAdapter() {
         newestMovieAdapter = NewestMoviePagerAdapter(
-            onWatchNowClick = { item -> onMovieClick(item) },
-            onFavouriteClick = { item -> onFavouriteClick(item) }
+            onWatchNowClick = { item -> onMovieClick(item) }
         )
         binding.newestMovieViewPager.adapter = newestMovieAdapter
         binding.newestMovieIndicator.attachTo(binding.newestMovieViewPager)
@@ -59,8 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun setupSeriesMovieAdapter() {
         seriesMovieAdapter = SeriesMovieAdapter(
-            onMovieClick = { item -> onMovieClick(item) },
-            onFavouriteClick = { item -> onFavouriteClick(item) }
+            onMovieClick = { item -> onMovieClick(item) }
         )
         binding.seriesMovieRecycler.apply {
             setHasFixedSize(true)
@@ -123,10 +121,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
     private fun onMovieClick(item: Item) {
         AppNavigator.navigateTo(NavDestination.MovieDetailScreen(item.slug), addToBackStack = true)
         Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onFavouriteClick(item: Item) {
-        Toast.makeText(requireContext(), "Favourite: ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading(isLoading: Boolean) {}
