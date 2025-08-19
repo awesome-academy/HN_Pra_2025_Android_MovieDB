@@ -116,7 +116,6 @@ class SearchUserFragment : Fragment(), SearchUserContract.View {
 //                dialogInterface.cancel()
 //            }
 //            .create()
-
         editText.setOnEditorActionListener { _, actionId, _ ->
             if (actionId == EditorInfo.IME_ACTION_SEARCH) {
                 val query = editText.text.toString().trim()
