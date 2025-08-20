@@ -6,7 +6,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.sun.moviedb.R
@@ -26,7 +25,7 @@ import com.sun.moviedb.utils.navigation.NavDestination
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
-    private lateinit var serverDataListApdapter: ServerDataListAdapter
+    private lateinit var serverDataListAdapter: ServerDataListAdapter
     private lateinit var presenter: MovieDetailPresenter
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
@@ -125,7 +124,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         //delay to simulate loading
         binding.rvListServerData.postDelayed({
-            serverDataListApdapter = ServerDataListAdapter(serverData) { item ->
+            serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
                 // Handle click on server data
                 Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
 
@@ -144,7 +143,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
                 requireContext(),
                 LinearLayoutManager.HORIZONTAL, false
             )
-            binding.rvListServerData.adapter = serverDataListApdapter
+            binding.rvListServerData.adapter = serverDataListAdapter
 
             binding.progressBar2.visibility = ViewGroup.GONE
         }, 1000)
