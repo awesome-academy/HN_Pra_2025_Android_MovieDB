@@ -12,7 +12,7 @@
     <string name="filter_empty">Chọn bộ lọc để tìm kiếm phim</string>
     <string name="apply_filter">Áp dụng bộ lọc</string>
     <string name="zero_movie">0 phim</string>
-    <string name="watch_now">WATCH NOW</string>
+    <string name="watch_now">Xem ngay</string>
 
     <string name="filter_title">Bộ lọc phim</string>
     <string name="filter_subtitle">Tìm phim yêu thích</string>
@@ -41,11 +41,11 @@
     <string name="choose_a_friend">Choose A Friend</string>
     <string name="dummy_button">Dummy Button</string>
     <string name="dummy_content">DUMMY\nCONTENT</string>
-    <string name="watch_with_friends">Chill with friends</string>
+    <string name="watch_with_friends">Xem cùng bạn bè</string>
     <string name="loading_image">Loading Image</string>
-    <string name="play_from_beginning">Play from beginning</string>
-    <string name="session_and_episodes">Session and Episodes</string>
+    <string name="play_from_beginning">Xem từ đầu</string>
+    <string name="session_and_episodes">Tập phim</string>
     <string name="ex_tap_1">01</string>
     <string name="invitation_button">Invitation Button</string>
-    <string name="title_description">Description</string>
+    <string name="title_description">Mô tả</string>
 </resources>

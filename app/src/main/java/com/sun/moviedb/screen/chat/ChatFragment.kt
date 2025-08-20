@@ -81,3 +81,4 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
             }
     }
 }
+

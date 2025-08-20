@@ -14,3 +14,4 @@ interface ChatContract {
         fun sendMessage(roomId: String, message: MessageModel)
     }
 }
+

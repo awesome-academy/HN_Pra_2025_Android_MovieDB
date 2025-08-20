@@ -25,3 +25,4 @@ class ChatPresenter : ChatContract.Presenter{
         view = null
     }
 }
+
