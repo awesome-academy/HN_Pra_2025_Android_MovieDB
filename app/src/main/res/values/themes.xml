@@ -6,4 +6,19 @@
     </style>
 
     <style name="Theme.MovieDB" parent="Base.Theme.MovieDB" />
+
+    <style name="Widget.App.SearchBar" parent="Widget.Material3.SearchBar">
+        <item name="android:textColorHint">@color/white</item>
+        <item name="materialThemeOverlay">@style/ThemeOverlay.App.SearchBar</item>
+    </style>
+
+    <style name="ThemeOverlay.App.SearchBar" parent="">
+        <item name="colorControlNormal">@color/white</item>
+        <item name="colorOnSurfaceVariant">@color/white</item>
+    </style>
+
+    <style name="ThemeOverlay.AndroidMovieDB.FullscreenContainer" parent="">
+        <item name="fullscreenBackgroundColor">@color/light_blue_600</item>
+        <item name="fullscreenTextColor">@color/light_blue_A200</item>
+    </style>
 </resources>

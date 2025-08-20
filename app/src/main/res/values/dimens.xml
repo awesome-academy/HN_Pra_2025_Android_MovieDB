@@ -9,6 +9,8 @@
     <dimen name="sp_16">16sp</dimen>
     <dimen name="sp_18">18sp</dimen>
     <dimen name="sp_20">20sp</dimen>
+    <dimen name="sp_30">30sp</dimen>
+
     <!-- DP values -->
     <dimen name="dp_0">0dp</dimen>
     <dimen name="dp_1">1dp</dimen>
@@ -35,4 +37,5 @@
     <dimen name="dp_150">150dp</dimen>
     <dimen name="dp_250">250dp</dimen>
     <dimen name="dp_400">400dp</dimen>
+
 </resources>
