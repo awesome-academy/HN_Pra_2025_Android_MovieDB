@@ -1,5 +1,6 @@
 package com.sun.moviedb.screen.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -19,6 +20,7 @@ import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
+import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
@@ -123,6 +125,12 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             serverDataListApdapter = ServerDataListAdapter(serverData) { item ->
                 // Handle click on server data
                 Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
+                    putExtra(ARG_M3U8_LINK, item)
+                }
+                startActivity(intent)
+
             }
 
             binding.rvListServerData.layoutManager = GridLayoutManager(
@@ -165,6 +173,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     private fun onWatchNowButtonClicked() {
+        val intent = Intent(requireContext(), WatchMovieActivity::class.java)
+
+
         binding.btnWatchNow.setOnClickListener {
             Toast.makeText(
                 requireContext(),
@@ -204,6 +215,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     companion object {
         const val KEY_SLUG = "slug"
+        const val ARG_M3U8_LINK = "m3u8_link"
         fun newInstance(slug: String): MovieDetailFragment {
             val fragment = MovieDetailFragment()
             val args = Bundle().apply {
