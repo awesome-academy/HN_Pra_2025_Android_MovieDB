@@ -18,10 +18,12 @@ import com.sun.moviedb.databinding.FragmentFilterBinding
 import com.sun.moviedb.screen.filter.adapter.FilterMovieAdapter
 import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.utils.LanguageMapper
+import com.sun.moviedb.utils.navigation.AppNavigator
+import com.sun.moviedb.utils.navigation.NavDestination
 
-class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
+class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterContract.FilterView {
 
-    private lateinit var presenter: FilterPresenter
+    private lateinit var presenter: FilterContract.FilterPresenter
     private lateinit var movieAdapter: FilterMovieAdapter
 
     private var categories = listOf<Category>()
@@ -58,7 +60,7 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
 
     private fun setupPresenter() {
         val repository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance())
-        presenter = FilterPresenterImpl(repository)
+        presenter = FilterPresenter(repository)
         presenter.attachView(this)
     }
 
@@ -244,7 +246,10 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterView {
     }
 
     private fun onMovieClick(item: Item) {
-        Toast.makeText(requireContext(), "Clicked on: ${item.name}", Toast.LENGTH_SHORT).show()
+        AppNavigator.navigateTo(
+            NavDestination.MovieDetailScreen(item.slug),
+            addToBackStack = true
+        )
     }
 
     override fun onDestroy() {

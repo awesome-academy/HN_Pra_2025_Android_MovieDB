@@ -17,8 +17,8 @@ import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.navigation.NavDestination
 import com.sun.moviedb.screen.search.SearchDialogFragment
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
-    private lateinit var presenter: HomePresenter
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView {
+    private lateinit var presenter: HomeContract.HomePresenter
     private lateinit var newestMovieAdapter: NewestMoviePagerAdapter
     private lateinit var seriesTabAdapter: SeriesTabAdapter
     private lateinit var seriesMovieAdapter: SeriesMovieAdapter
@@ -76,7 +76,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     override fun initData() {
         presenter =
-            HomePresenterImpl(MovieRepository.getInstance(MovieRemoteDataSource.getInstance()))
+            HomePresenter(
+                MovieRepository.getInstance(
+                    local = null,
+                    remote = MovieRemoteDataSource.getInstance()
+                )
+            )
         presenter.attachView(this)
         val series = presenter.seriesList.first()
         val page = 1
@@ -120,7 +125,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun onMovieClick(item: Item) {
         AppNavigator.navigateTo(NavDestination.MovieDetailScreen(item.slug), addToBackStack = true)
-        Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading(isLoading: Boolean) {}
