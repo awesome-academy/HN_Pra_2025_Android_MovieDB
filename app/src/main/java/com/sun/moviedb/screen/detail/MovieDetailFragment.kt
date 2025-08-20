@@ -21,6 +21,8 @@ import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
+import com.sun.moviedb.utils.navigation.AppNavigator
+import com.sun.moviedb.utils.navigation.NavDestination
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
@@ -81,6 +83,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onWatchNowButtonClicked()
         onChillWithFriendButtonClicked()
         onBackButtonClicked()
+        onInviteFriendButtonClicked()
     }
 
     private fun setUI() {
@@ -133,9 +136,13 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
             }
 
-            binding.rvListServerData.layoutManager = GridLayoutManager(
-                requireContext(), 3,
-                GridLayoutManager.VERTICAL, false
+//            binding.rvListServerData.layoutManager = GridLayoutManager(
+//                requireContext(), 3,
+//                GridLayoutManager.VERTICAL, false
+//            )
+            binding.rvListServerData.layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL, false
             )
             binding.rvListServerData.adapter = serverDataListApdapter
 
@@ -193,7 +200,16 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onBackButtonClicked() {
         binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStackImmediate()
+//          TODO: ERROR - cause app crash when back
+        //            requireActivity().supportFragmentManager.popBackStackImmediate()
+            Toast.makeText(requireContext(), "Back to previous screen", Toast.LENGTH_SHORT).show()
+        }
+    }
+
+    private fun onInviteFriendButtonClicked(){
+        binding.btnInvite.setOnClickListener {
+            AppNavigator.navigateTo(NavDestination.InviteFriendScreen, true)
+
         }
     }
 

@@ -32,6 +32,7 @@ object AppNavigator {
             is NavDestination.MovieDetailScreen -> MovieDetailFragment.newInstance(destination.slug)
             is NavDestination.SettingsScreen -> SettingsFragment()
             is NavDestination.FilterScreen -> FilterFragment()
+            is NavDestination.InviteFriendScreen -> SearchUserFragment()
 
             /* *
             * More fragments can be added here as needed.

@@ -5,5 +5,6 @@ sealed class NavDestination {
     data object NotificationScreen : NavDestination()
     data object FilterScreen : NavDestination()
     data object SettingsScreen : NavDestination()
+    data object InviteFriendScreen : NavDestination()
     data class MovieDetailScreen(val slug: String) : NavDestination()
 }

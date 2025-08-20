@@ -45,5 +45,7 @@
     <string name="loading_image">Loading Image</string>
     <string name="play_from_beginning">Play from beginning</string>
     <string name="session_and_episodes">Session and Episodes</string>
-    <string name="ex_tap_1">Tap 1</string>
+    <string name="ex_tap_1">01</string>
+    <string name="invitation_button">Invitation Button</string>
+    <string name="title_description">Description</string>
 </resources>

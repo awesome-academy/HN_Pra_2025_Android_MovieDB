@@ -60,6 +60,17 @@
                         app:srcCompat="@drawable/ic_arrow_back_24" />
 
                     <ImageView
+                        android:id="@+id/btn_invite"
+                        android:layout_width="@dimen/dp_24"
+                        android:layout_height="@dimen/dp_24"
+                        android:layout_marginEnd="@dimen/dp_24"
+                        android:contentDescription="@string/invitation_button"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/btn_share"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:srcCompat="@drawable/ic_popcorn_50" />
+
+                    <ImageView
                         android:id="@+id/btn_share"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -91,7 +102,7 @@
                         app:layout_constraintStart_toStartOf="parent">
 
                         <LinearLayout
-                            android:layout_width="@dimen/dp_50"
+                            android:layout_width="@dimen/dp_80"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
                             android:orientation="vertical">
@@ -171,29 +182,9 @@
                 </androidx.constraintlayout.widget.ConstraintLayout>
             </androidx.constraintlayout.widget.ConstraintLayout>
 
-            <TextView
-                android:id="@+id/tv_description"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_36"
-                android:textAlignment="center"
-                android:textColor="@color/white"
-                tools:text="Tuy nhiên, số phận thật trớ trêu với những bà mẹ đơn thân mạnh mẽ, dám bước tiếp nhưng lại liên tiếp đón nhận sự phản bội. Cuộc sống của hot mom nổi tiếng Singapore - Kim Lim cũng nhiều trái ngang như thế, đem đến cho cô và con trai không ít đau khổ." />
-
-            <TextView
-                android:id="@+id/tv_cate"
-                android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_marginTop="@dimen/dp_8"
-                android:layout_weight="1"
-                android:textAlignment="center"
-                android:textColor="@color/blue"
-                tools:text="Dram - Comic" />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/dp_24"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
@@ -237,44 +228,31 @@
                     tools:text="4K FHD" />
             </LinearLayout>
 
-            <LinearLayout
+            <TextView
+                android:id="@+id/tv_cate"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginHorizontal="@dimen/dp_16"
-                android:layout_marginTop="@dimen/dp_36"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
-
-                <ImageView
-                    android:id="@+id/ic_previous"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:contentDescription="@string/loading_image"
-                    app:srcCompat="@drawable/ic_skip_previous_24" />
-
-                <TextView
-                    android:id="@+id/btn_start_zero"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/dp_12"
-                    android:text="@string/play_from_beginning"
-                    android:textColor="@color/white" />
-            </LinearLayout>
+                android:layout_height="0dp"
+                android:layout_marginTop="@dimen/dp_12"
+                android:layout_weight="1"
+                android:textAlignment="center"
+                android:textColor="@color/blue"
+                android:textStyle="italic"
+                tools:text="Dram - Comic" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="@dimen/dp_8"
+                android:layout_marginTop="@dimen/dp_24"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:id="@+id/imageView"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
                     android:contentDescription="@string/loading_image"
-                    app:srcCompat="@drawable/ic_episode_24" />
+                    app:srcCompat="@drawable/ic_clapperboard_48" />
 
                 <TextView
                     android:id="@+id/btn_show_eps"
@@ -282,7 +260,9 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="@dimen/dp_12"
                     android:text="@string/session_and_episodes"
-                    android:textColor="@color/white" />
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
             </LinearLayout>
 
             <androidx.recyclerview.widget.RecyclerView
@@ -290,7 +270,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginHorizontal="16dp"
-                android:layout_marginTop="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_8"
                 android:nestedScrollingEnabled="false">
 
             </androidx.recyclerview.widget.RecyclerView>
@@ -304,8 +284,10 @@
                     android:id="@+id/rv_list_server_data"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:minHeight="100dp"
+                    android:minHeight="50dp"
                     android:nestedScrollingEnabled="false"
+                    android:paddingStart="@dimen/dp_16"
+                    android:paddingEnd="@dimen/dp_16"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -327,9 +309,72 @@
 
             <LinearLayout
                 android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="16dp"
+                android:layout_marginTop="@dimen/dp_24"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/img_descritption"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:contentDescription="@string/loading_image"
+                    app:srcCompat="@drawable/icons_playlist_50" />
+
+                <TextView
+                    android:id="@+id/tv_title_des"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:text="@string/title_description"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16"
+                    android:textStyle="bold" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/tv_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_8"
+                android:lineSpacingExtra="@dimen/dp_8"
+                android:textAlignment="textStart"
+                android:textColor="@color/white"
+                tools:text="Tuy nhiên, số phận thật trớ trêu với những bà mẹ đơn thân mạnh mẽ, dám bước tiếp nhưng lại liên tiếp đón nhận sự phản bội. Cuộc sống của hot mom nổi tiếng Singapore - Kim Lim cũng nhiều trái ngang như thế, đem đến cho cô và con trai không ít đau khổ." />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="@dimen/dp_16"
+                android:layout_marginTop="@dimen/dp_24"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <ImageView
+                    android:id="@+id/ic_previous"
+                    android:layout_width="@dimen/dp_30"
+                    android:layout_height="@dimen/dp_30"
+                    android:contentDescription="@string/loading_image"
+                    app:srcCompat="@drawable/icon8_previous_50" />
+
+                <TextView
+                    android:id="@+id/btn_start_zero"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textStyle="italic"
+                    android:layout_marginStart="@dimen/dp_12"
+                    android:text="@string/play_from_beginning"
+                    android:textColor="@color/white"
+                    android:textSize="@dimen/sp_16" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="64dp"
-                android:layout_marginBottom="80dp"
+                android:layout_marginTop="@dimen/dp_48"
+                android:layout_marginBottom="@dimen/dp_60"
                 android:gravity="center_horizontal"
                 android:orientation="horizontal">
 
