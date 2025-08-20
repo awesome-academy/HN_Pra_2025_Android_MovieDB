@@ -4,12 +4,17 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.view.View
 import android.widget.Toast
 import androidx.core.view.WindowCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.core.view.WindowInsetsControllerCompat
+import androidx.fragment.app.Fragment
 import androidx.media3.common.Player
+import androidx.media3.ui.PlayerView
 import com.sun.moviedb.databinding.ActivityWatchMovieBinding // Changed from Fragment binding
+import com.sun.moviedb.screen.chat.ChatFragment
+import com.sun.moviedb.screen.searchUser.SearchUserFragment
 import com.sun.moviedb.utils.base.BaseActivity
 
 class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovieContract.View {
@@ -20,6 +25,8 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
     private var initialPlaybackPosition = 0L
     private var initialPlayWhenReady = true
     private var activityOriginalOrientation: Int = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
+    private var currentFragmentTag: String? = null
+    private var isFragmentVisible = false
 
     companion object {
         private const val ARG_M3U8_LINK = "m3u8_link"
@@ -42,8 +49,9 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         presenter = WatchMoviePresenterImpl { this }
         presenter.attachView(this)
 
-        m3u8Link = intent.getStringExtra(ARG_M3U8_LINK)
-//        m3u8Link = "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
+//        m3u8Link = intent.getStringExtra(ARG_M3U8_LINK)
+        m3u8Link =
+            "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
 
         if (intent.extras != null && intent.extras!!.containsKey(SAVED_PLAYBACK_POSITION)) {
             initialPlaybackPosition = intent.extras!!.getLong(SAVED_PLAYBACK_POSITION, 0L)
@@ -52,12 +60,104 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         activityOriginalOrientation = requestedOrientation
 
         presenter.onActivityCreated(m3u8Link, initialPlaybackPosition, initialPlayWhenReady)
+        onGroupButtonClicked()
+        onChatButtonClicked()
+        synchronizeButtonWithPlayerState()
+        showOrHideFragment()
+
+    }
+
+    private fun showOrHideFragment() {
+        binding.containerOverlay.setOnClickListener {
+            if (isFragmentVisible) {
+                hideFragment()
+            }
+        }
+    }
+
+    private fun synchronizeButtonWithPlayerState() {
+        binding.playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
+            if (visibility == View.VISIBLE) {
+                binding.btnChat.animate().alpha(1f).setDuration(200).start()
+                binding.btnRoom.animate().alpha(1f).setDuration(200).start()
+                binding.btnRoom.visibility = View.VISIBLE
+                binding.btnChat.visibility = View.VISIBLE
+            } else {
+                binding.btnChat.animate().alpha(0f).setDuration(200).withEndAction {
+                    binding.btnChat.visibility = View.GONE
+                }.start()
+                binding.btnRoom.animate().alpha(0f).setDuration(200).withEndAction {
+                    binding.btnRoom.visibility = View.GONE
+                }.start()
+            }
+        })
+    }
+
+    private fun onChatButtonClicked() {
+        binding.btnChat.setOnClickListener {
+            toggleFragment(ChatFragment(), "CHAT")
+        }
+    }
+
+    private fun onGroupButtonClicked() {
+        binding.btnRoom.setOnClickListener {
+            toggleFragment(SearchUserFragment(), "GROUP")
+        }
+    }
+
+    private fun toggleFragment(fragment: Fragment, tag: String) {
+        val container = binding.containterRoomChat
+        val containerOverlay = binding.containerOverlay
+
+        if (currentFragmentTag == tag) {
+            // đang mở đúng fragment này → ẩn đi
+            supportFragmentManager.findFragmentByTag(tag)?.let {
+                supportFragmentManager.beginTransaction().remove(it).commit()
+            }
+            containerOverlay.visibility = View.GONE
+            containerOverlay.isClickable = false
+            container.visibility = View.GONE
+            currentFragmentTag = null
+            isFragmentVisible = false
+        } else {
+            // thay thế fragment mới
+            supportFragmentManager.beginTransaction()
+                .replace(container.id, fragment, tag)
+                .commit()
+            containerOverlay.visibility = View.VISIBLE
+            containerOverlay.isClickable = true
+            container.visibility = View.VISIBLE
+            currentFragmentTag = tag
+            isFragmentVisible = true
+        }
+    }
+
+    private fun hideFragment(){
+        val container = binding.containterRoomChat
+        val containerOverlay = binding.containerOverlay
+
+        supportFragmentManager.findFragmentById(container.id)?.let {
+            supportFragmentManager.beginTransaction().remove(it).commit()
+        }
+
+        containerOverlay.visibility = View.GONE
+        containerOverlay.isClickable = false
+        container.visibility = View.GONE
+
+        currentFragmentTag = null
+        isFragmentVisible = false
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
         val stateBundle = presenter.onSaveInstanceStateRequested()
-        outState.putLong(SAVED_PLAYBACK_POSITION, stateBundle.getLong(SAVED_PLAYBACK_POSITION, initialPlaybackPosition))
-        outState.putBoolean(SAVED_PLAY_WHEN_READY, stateBundle.getBoolean(SAVED_PLAY_WHEN_READY, initialPlayWhenReady))
+        outState.putLong(
+            SAVED_PLAYBACK_POSITION,
+            stateBundle.getLong(SAVED_PLAYBACK_POSITION, initialPlaybackPosition)
+        )
+        outState.putBoolean(
+            SAVED_PLAY_WHEN_READY,
+            stateBundle.getBoolean(SAVED_PLAY_WHEN_READY, initialPlayWhenReady)
+        )
         super.onSaveInstanceState(outState)
     }
 
@@ -112,7 +212,8 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         WindowCompat.setDecorFitsSystemWindows(window, false)
         WindowInsetsControllerCompat(window, binding.playerView).let { controller ->
             controller.hide(WindowInsetsCompat.Type.systemBars())
-            controller.systemBarsBehavior = WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
+            controller.systemBarsBehavior =
+                WindowInsetsControllerCompat.BEHAVIOR_SHOW_TRANSIENT_BARS_BY_SWIPE
         }
         supportActionBar?.hide()
     }
