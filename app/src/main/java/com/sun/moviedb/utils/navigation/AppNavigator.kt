@@ -7,6 +7,7 @@ import com.sun.moviedb.screen.detail.MovieDetailFragment
 import com.sun.moviedb.screen.filter.FilterFragment
 import com.sun.moviedb.screen.home.HomeFragment
 import com.sun.moviedb.screen.notification.NotificationFragment
+import com.sun.moviedb.screen.searchUser.SearchUserFragment
 import com.sun.moviedb.screen.settings.SettingsFragment
 
 object AppNavigator {
