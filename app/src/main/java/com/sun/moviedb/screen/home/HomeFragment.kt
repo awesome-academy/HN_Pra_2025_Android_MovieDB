@@ -2,11 +2,9 @@ package com.sun.moviedb.screen.home
 
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.sun.moviedb.data.repository.source.MovieRepository
-import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
+import com.sun.moviedb.MyApp
 import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentHomeBinding
 import com.sun.moviedb.data.model.Item
@@ -75,12 +73,10 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView 
     }
 
     override fun initData() {
+        val app = requireActivity().application as MyApp
         presenter =
             HomePresenter(
-                MovieRepository.getInstance(
-                    local = null,
-                    remote = MovieRemoteDataSource.getInstance()
-                )
+                app.movieRepository
             )
         presenter.attachView(this)
         val series = presenter.seriesList.first()
