@@ -12,4 +12,5 @@ interface ChatRepository{
 
     fun receiveMessages(roomId: String, onResult: (NetworkResult<MessageModel>) -> Unit)
     fun removeListener(roomId: String)
+    fun deleteChatNode(roomId: String, callback: (NetworkResult<Unit>) -> Unit)
 }

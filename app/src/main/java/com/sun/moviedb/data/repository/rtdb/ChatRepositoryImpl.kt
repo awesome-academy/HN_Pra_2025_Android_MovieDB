@@ -75,6 +75,22 @@ class ChatRepositoryImpl : ChatRepository{
         }
     }
 
+    override fun deleteChatNode(
+        roomId: String,
+        callback: (NetworkResult<Unit>) -> Unit
+    ) {
+        chatRef.child(roomId).removeValue{
+            error, _ ->
+            if (error != null) {
+                callback(NetworkResult.OnError(null, error.message ?: "Failed to delete chat node"))
+                Log.e(TAG, "Failed to delete chat node: ${error.message}")
+            } else {
+                callback(NetworkResult.OnSuccess(Unit))
+                Log.d(TAG, "Chat node deleted successfully")
+            }
+        }
+    }
+
     companion object{
         private const val TAG = "ChatRepositoryImpl"
         private var instance: ChatRepositoryImpl? = null
