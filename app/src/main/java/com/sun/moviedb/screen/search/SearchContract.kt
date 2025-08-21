@@ -17,7 +17,9 @@ interface SearchContract {
         fun loadMoreResults()
         fun loadLanguages()
         fun clearSearch()
+
         fun getSearchHistory()
         fun insertSearchHistory(keyword: String)
     }
 }
+

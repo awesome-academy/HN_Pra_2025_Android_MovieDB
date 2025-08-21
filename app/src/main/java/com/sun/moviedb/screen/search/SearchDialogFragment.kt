@@ -21,6 +21,7 @@ import com.sun.moviedb.databinding.FragmentSearchBottomSheetBinding
 import com.sun.moviedb.screen.search.adapter.LanguageChipAdapter
 import com.sun.moviedb.screen.search.adapter.SearchAdapter
 import com.sun.moviedb.screen.search.adapter.SearchHistoryAdapter
+
 import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.navigation.NavDestination
 
@@ -49,6 +50,7 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchContract.SearchV
         super.onViewCreated(view, savedInstanceState)
         val app = requireActivity().application as MyApp
         presenter = SearchPresenter(app.movieRepository)
+
         presenter.attachView(this)
 
         setupLanguageRecyclerView()

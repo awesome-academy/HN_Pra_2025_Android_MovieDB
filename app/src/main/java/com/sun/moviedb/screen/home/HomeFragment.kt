@@ -75,9 +75,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView 
     override fun initData() {
         val app = requireActivity().application as MyApp
         presenter =
-            HomePresenter(
-                app.movieRepository
-            )
+            HomePresenter(app.movieRepository)
         presenter.attachView(this)
         val series = presenter.seriesList.first()
         val page = 1

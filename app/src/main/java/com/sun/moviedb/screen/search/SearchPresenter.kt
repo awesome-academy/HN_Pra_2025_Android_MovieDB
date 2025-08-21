@@ -12,6 +12,7 @@ class SearchPresenter(
     private var keyword: String = ""
     private var selectedLanguage: String? = null
     private var hasMoreData: Boolean = true
+
     private val currentMovies = mutableListOf<Item>()
     private var lastLoadedPage: Int = 0
     private var isLoading: Boolean = false
@@ -35,6 +36,7 @@ class SearchPresenter(
             this.selectedLanguage = sortLang
             view?.showLoading(true)
         }
+
         repository.searchMovie(
             keyword = keyword,
             page = page,
@@ -72,6 +74,11 @@ class SearchPresenter(
 
     override fun clearSearch() {
         currentMovies.clear()
+        keyword = ""
+        selectedLanguage = null
+        hasMoreData = true
+        lastLoadedPage = 0
+        isLoading = false
         view?.showEmptyResult()
     }
 
