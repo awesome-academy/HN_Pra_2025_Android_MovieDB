@@ -3,6 +3,7 @@ package com.sun.moviedb.screen.login
 import android.util.Log
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
 import com.sun.moviedb.data.repository.auth.AuthRepository
+import com.sun.moviedb.utils.session.UserSession
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.Job
@@ -54,6 +55,7 @@ class LoginPresenterImpl(
                     onSuccess = { firebaseUser ->
                         Log.d(TAG, "Firebase Auth Successful: ${firebaseUser.displayName}")
                         view?.showLoginSuccess(firebaseUser)
+                        UserSession.updateSession(firebaseUser)
                         view?.navigateToMain()
                     },
                     onFailure = { authException ->
