@@ -46,23 +46,23 @@
     </FrameLayout>
 
     <ImageView
-        android:id="@+id/btn_chat"
-        android:layout_width="@dimen/dp_36"
-        android:layout_height="@dimen/dp_36"
-        android:layout_marginStart="16dp"
-        app:layout_constraintStart_toEndOf="@+id/btn_room"
-        app:layout_constraintTop_toTopOf="@+id/btn_room"
-        app:srcCompat="@drawable/ic_chat_48" />
-
-    <ImageView
         android:id="@+id/btn_room"
-        android:layout_width="@dimen/dp_36"
-        android:layout_height="@dimen/dp_36"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="16dp"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_24"
+        android:layout_marginTop="@dimen/dp_16"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:srcCompat="@drawable/ic_group_48" />
+
+    <ImageView
+        android:id="@+id/btn_chat"
+        android:layout_width="@dimen/dp_30"
+        android:layout_height="@dimen/dp_30"
+        android:layout_marginStart="@dimen/dp_16"
+        app:layout_constraintStart_toEndOf="@+id/btn_room"
+        app:layout_constraintTop_toTopOf="@+id/btn_room"
+        app:srcCompat="@drawable/ic_chat_48" />
 
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guideline2"

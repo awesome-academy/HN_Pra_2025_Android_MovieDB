@@ -295,11 +295,11 @@
 
                 </androidx.recyclerview.widget.RecyclerView>
 
-                <ProgressBar
+                <com.sun.moviedb.utils.custom_view.VisualizerLoadingView
                     android:id="@+id/progressBar2"
                     style="?android:attr/progressBarStyle"
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_height="@dimen/dp_24"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
@@ -414,7 +414,7 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-        <ProgressBar
+        <com.sun.moviedb.utils.custom_view.VisualizerLoadingView
             android:id="@+id/progressBar"
             style="?android:attr/progressBarStyle"
             android:layout_width="@dimen/dp_48"

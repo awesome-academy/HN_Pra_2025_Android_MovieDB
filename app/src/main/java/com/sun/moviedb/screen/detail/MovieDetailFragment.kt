@@ -122,31 +122,25 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private fun setServerDataListView(serverData: List<ServerData>) {
         binding.progressBar2.visibility = ViewGroup.VISIBLE
 
-        //delay to simulate loading
-        binding.rvListServerData.postDelayed({
-            serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
-                // Handle click on server data
-                Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
+        serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
+            // Handle click on server data
+            Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
 
-                val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
-                    putExtra(ARG_M3U8_LINK, item)
-                }
-                startActivity(intent)
-
+            val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
+                putExtra(ARG_M3U8_LINK, item)
             }
+            startActivity(intent)
 
-//            binding.rvListServerData.layoutManager = GridLayoutManager(
-//                requireContext(), 3,
-//                GridLayoutManager.VERTICAL, false
-//            )
-            binding.rvListServerData.layoutManager = LinearLayoutManager(
-                requireContext(),
-                LinearLayoutManager.HORIZONTAL, false
-            )
-            binding.rvListServerData.adapter = serverDataListAdapter
+        }
 
-            binding.progressBar2.visibility = ViewGroup.GONE
-        }, 1000)
+        binding.rvListServerData.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        binding.rvListServerData.adapter = serverDataListAdapter
+
+        binding.progressBar2.visibility = ViewGroup.GONE
+
     }
 
     private fun onStartFromBeginningButtonClicked() {
@@ -205,7 +199,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         }
     }
 
-    private fun onInviteFriendButtonClicked(){
+    private fun onInviteFriendButtonClicked() {
 
     }
 

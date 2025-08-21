@@ -99,7 +99,7 @@
         <com.sun.moviedb.utils.custom_view.VisualizerLoadingView
             android:id="@+id/series_movie_loading_view"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="24dp"
             android:layout_marginTop="@dimen/dp_20" />
 
         <androidx.recyclerview.widget.RecyclerView
