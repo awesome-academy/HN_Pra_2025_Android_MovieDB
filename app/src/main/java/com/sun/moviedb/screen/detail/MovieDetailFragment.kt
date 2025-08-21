@@ -1,11 +1,11 @@
 package com.sun.moviedb.screen.detail
 
+import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.sun.moviedb.R
@@ -19,10 +19,13 @@ import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
+import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
+import com.sun.moviedb.utils.navigation.AppNavigator
+import com.sun.moviedb.utils.navigation.NavDestination
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
-    private lateinit var serverDataListApdapter: ServerDataListAdapter
+    private lateinit var serverDataListAdapter: ServerDataListAdapter
     private lateinit var presenter: MovieDetailPresenter
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
@@ -79,6 +82,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onWatchNowButtonClicked()
         onChillWithFriendButtonClicked()
         onBackButtonClicked()
+        onInviteFriendButtonClicked()
     }
 
     private fun setUI() {
@@ -120,16 +124,26 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
         //delay to simulate loading
         binding.rvListServerData.postDelayed({
-            serverDataListApdapter = ServerDataListAdapter(serverData) { item ->
+            serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
                 // Handle click on server data
                 Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
+
+                val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
+                    putExtra(ARG_M3U8_LINK, item)
+                }
+                startActivity(intent)
+
             }
 
-            binding.rvListServerData.layoutManager = GridLayoutManager(
-                requireContext(), 3,
-                GridLayoutManager.VERTICAL, false
+//            binding.rvListServerData.layoutManager = GridLayoutManager(
+//                requireContext(), 3,
+//                GridLayoutManager.VERTICAL, false
+//            )
+            binding.rvListServerData.layoutManager = LinearLayoutManager(
+                requireContext(),
+                LinearLayoutManager.HORIZONTAL, false
             )
-            binding.rvListServerData.adapter = serverDataListApdapter
+            binding.rvListServerData.adapter = serverDataListAdapter
 
             binding.progressBar2.visibility = ViewGroup.GONE
         }, 1000)
@@ -165,6 +179,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     private fun onWatchNowButtonClicked() {
+        val intent = Intent(requireContext(), WatchMovieActivity::class.java)
+
+
         binding.btnWatchNow.setOnClickListener {
             Toast.makeText(
                 requireContext(),
@@ -182,8 +199,14 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onBackButtonClicked() {
         binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStackImmediate()
+//          TODO: ERROR - cause app crash when back
+            //            requireActivity().supportFragmentManager.popBackStackImmediate()
+            Toast.makeText(requireContext(), "Back to previous screen", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    private fun onInviteFriendButtonClicked(){
+
     }
 
 
@@ -204,6 +227,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     companion object {
         const val KEY_SLUG = "slug"
+        const val ARG_M3U8_LINK = "m3u8_link"
         fun newInstance(slug: String): MovieDetailFragment {
             val fragment = MovieDetailFragment()
             val args = Bundle().apply {
