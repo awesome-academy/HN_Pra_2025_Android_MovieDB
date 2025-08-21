@@ -1,4 +1,4 @@
-package com.sun.moviedb.screen.home.adapter
+package com.sun.moviedb.screen.search.adapter
 
 import android.view.LayoutInflater
 import android.view.View
@@ -8,20 +8,19 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.sun.moviedb.data.model.Item
-import com.sun.moviedb.databinding.ItemHomeMovieBinding
+import com.sun.moviedb.databinding.ItemSearchBinding
 import com.sun.moviedb.utils.base.BaseAdapter
 
-class SeriesMovieAdapter(
-    private val onMovieClick: ((Item) -> Unit)? = null,
-) : BaseAdapter<Item, SeriesMovieAdapter.MovieViewHolder>(DIFF_CALLBACK) {
+class SearchAdapter(
+    private val onItemClick: (Item) -> Unit = {}
+) : BaseAdapter<Item, SearchAdapter.SearchViewHolder>(DIFF_CALLBACK) {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
-        val binding =
-            ItemHomeMovieBinding.inflate(LayoutInflater.from(parent.context), parent, false)
-        return MovieViewHolder(binding)
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): SearchViewHolder {
+        val binding = ItemSearchBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+        return SearchViewHolder(binding)
     }
 
-    override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: SearchViewHolder, position: Int) {
         holder.bind(getItem(position))
     }
 
@@ -34,23 +33,23 @@ class SeriesMovieAdapter(
         }
     }
 
-    inner class MovieViewHolder(private val binding: ItemHomeMovieBinding) :
+    inner class SearchViewHolder(private val binding: ItemSearchBinding) :
         RecyclerView.ViewHolder(binding.root) {
         fun bind(item: Item) = with(binding) {
-            Glide.with(imgThumbnail.context)
-                .load(item.thumbUrl.ifEmpty { item.posterUrl })
+            Glide.with(ivPoster.context)
+                .load(item.posterUrl.ifEmpty { item.thumbUrl })
                 .centerCrop()
-                .into(imgThumbnail)
+                .into(ivPoster)
 
-            tvTimeRemaining.setTextOrGone(item.time)
             tvQuality.setTextOrGone(item.quality)
-            tvEpisodeCurrent.setTextOrGone(item.episodeCurrent)
+            tvTime.setTextOrGone(item.time)
             tvCountry.setTextOrGone(item.country.firstOrNull()?.name)
             tvYear.setTextOrGone(if (item.year > 0) item.year.toString() else null)
             tvType.setTextOrGone(item.type)
-            tvName.text = item.name.ifBlank { item.originName }
+            tvTitle.text = item.name.ifBlank { item.originName }
+            tvCategory.setTextOrGone(item.category.firstOrNull()?.name)
 
-            root.setOnClickListener { onMovieClick?.invoke(item) }
+            root.setOnClickListener { onItemClick(item) }
         }
     }
 

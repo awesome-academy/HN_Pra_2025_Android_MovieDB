@@ -1,4 +1,4 @@
-package com.sun.moviedb.screen.search
+package com.sun.moviedb.screen.search.adapter
 
 import android.view.LayoutInflater
 import android.view.View
