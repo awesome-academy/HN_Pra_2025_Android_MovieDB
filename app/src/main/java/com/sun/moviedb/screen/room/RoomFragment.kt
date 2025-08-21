@@ -27,6 +27,8 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
 
     override fun initView() {
         super.initView()
+        val searchUserBackground = binding.root.findViewById<View>(R.id.searchUserBackground)
+        searchUserBackground.setBackgroundResource(R.drawable.bg_transparent)
     }
 
     override fun initData() {
@@ -41,6 +43,9 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
 
     override fun showError(message: String) {
         TODO("Not yet implemented")
+    }
+
+    private fun setupUI(){
     }
 
 

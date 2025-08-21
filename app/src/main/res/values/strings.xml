@@ -34,9 +34,9 @@
     <string name="login_with_google">Login with Google</string>
     <string name="login">Login</string>
     <string name="movie_db">Movie DB</string>
-    <string name="invite_to_watch_party">Invite to Watch Party</string>
-    <string name="search_for_people">Search for People</string>
-    <string name="invite">Invite</string>
+    <string name="invite_to_watch_party">GỬI LỜI MỜI TỚI BẠN BÈ</string>
+    <string name="search_for_people">Tìm kiếm </string>
+    <string name="invite">Gửi</string>
     <string name="no_users_found">No User Found</string>
     <string name="choose_a_friend">Choose A Friend</string>
     <string name="dummy_button">Dummy Button</string>
@@ -48,5 +48,6 @@
     <string name="ex_tap_1">01</string>
     <string name="invitation_button">Invitation Button</string>
     <string name="title_description">Mô tả</string>
+    <string name="title_member">THÀNH VIÊN</string>
 </resources>
 
