@@ -9,6 +9,7 @@ import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import com.sun.moviedb.data.model.Room
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
+import com.sun.moviedb.utils.session.RoomSession
 
 class RoomRepositoryImpl : RoomRepository {
 
@@ -22,6 +23,7 @@ class RoomRepositoryImpl : RoomRepository {
     ) {
         val roomKey = roomRef.push().key!!
         room.roomId = roomKey
+
         roomRef.child(roomKey).setValue(room)
             .addOnSuccessListener {
                 onResult(NetworkResult.OnSuccess(Unit))
@@ -31,6 +33,11 @@ class RoomRepositoryImpl : RoomRepository {
                 onResult(NetworkResult.OnError(null, error.message ?: "Cannot add room"))
                 Log.e(TAG, "Failed to add room: $roomKey", )
             }
+
+        /* *
+        * update RoomSession with the new room
+        * */
+        RoomSession.roomId = roomKey
     }
 
     override fun getRoom(

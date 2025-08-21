@@ -408,7 +408,7 @@
         android:background="@drawable/bg_main_gradient"
         android:clickable="true"
         android:focusable="true"
-        android:visibility="gone"
+        android:visibility="invisible"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

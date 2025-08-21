@@ -27,7 +27,7 @@ class RoomAdapter(
     override fun onBindViewHolder(holder: RoomAdapter.ViewHolder, position: Int) {
         val item = items[position]
         holder.binding.apply {
-            tvMemberName.text = item.userName
+            tvMemberName.text = item.memberName
         }
         if (item.linkAvatar.isNotEmpty()) {
             Glide.with(context)
@@ -35,7 +35,7 @@ class RoomAdapter(
                 .into(holder.binding.imgAvtMember)
         }
         holder.binding.btnRemoveMember.setOnClickListener {
-            onRemoveMember(item.userId)
+            onRemoveMember(item.memberId)
         }
     }
 

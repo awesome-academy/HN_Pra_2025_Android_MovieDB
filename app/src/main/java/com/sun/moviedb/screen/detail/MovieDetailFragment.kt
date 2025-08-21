@@ -20,8 +20,8 @@ import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
-import com.sun.moviedb.utils.navigation.AppNavigator
-import com.sun.moviedb.utils.navigation.NavDestination
+import com.sun.moviedb.utils.AppLocator
+import com.sun.moviedb.utils.session.RoomSession
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
@@ -31,6 +31,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private lateinit var episodes: List<Episode>
     private var isFavourite = false
     private var slug: String = ""
+    private val TAG = "MovieDetailFragment"
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -45,7 +46,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             MovieRepository.getInstance(
                 local = null,
                 remote = MovieRemoteDataSource.getInstance(),
-            )
+            ),
+            AppLocator.roomRepository,
+            AppLocator.memberRepository
         )
         presenter.attachView(this)
 
@@ -70,8 +73,8 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     ) {
         this.movieInfo = movie
         this.episodes = episodes
-        Log.d("MovieDetailFragment", "MOvie: $movie")
-        Log.d("MovieDetailFragment", "Episodes: $episodes")
+        Log.d(TAG, "Movie: $movie")
+        Log.d(TAG, "Episodes: $episodes")
 
         showLoading(false)
 
@@ -83,6 +86,17 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onChillWithFriendButtonClicked()
         onBackButtonClicked()
         onInviteFriendButtonClicked()
+    }
+
+    override fun onAddSuccess(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showLoading2(isLoading: Boolean) {
+        if (isLoading)
+            binding.progressBar2.visibility = ViewGroup.VISIBLE
+        else
+            binding.progressBar2.visibility = ViewGroup.GONE
     }
 
     private fun setUI() {
@@ -173,8 +187,6 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     private fun onWatchNowButtonClicked() {
-        val intent = Intent(requireContext(), WatchMovieActivity::class.java)
-
 
         binding.btnWatchNow.setOnClickListener {
             Toast.makeText(
@@ -187,7 +199,25 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onChillWithFriendButtonClicked() {
         binding.btnWatchWithFriends.setOnClickListener {
+            presenter.createRoom(movieInfo)
+
+            presenter.addMember()
+
             Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
+
+            /* *
+            * Default: Watch movie from the first episode
+            * */
+            val firstEpisode = episodes.firstOrNull()
+            if (firstEpisode != null && firstEpisode.serverData.isNotEmpty()) {
+                val firstServerData = firstEpisode.serverData.firstOrNull()
+                if (firstServerData != null){
+                    val intent = Intent(requireContext(), WatchMovieActivity:: class.java).apply {
+                        putExtra(ARG_M3U8_LINK, firstServerData.linkM3u8)
+                    }
+                    startActivity(intent)
+                }
+            }
         }
     }
 
@@ -206,7 +236,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     /**
      * support to show category chip in UI
-     * get 2 first categories
+     * get 2 items of categories
      * if only one category, return that category name
      * */
     private fun getListCate(cates: List<Category> = emptyList()): String {

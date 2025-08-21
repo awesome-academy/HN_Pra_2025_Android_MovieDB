@@ -20,17 +20,21 @@ class MemberRepositoryImpl : MemberRepository {
         member: Member,
         onResult: (NetworkResult<Unit>) -> Unit
     ) {
-        val memberKey = memberRef.child(roomId).push().key!!
-        member.memberId = memberKey
+        val memberNode = memberRef.child(roomId).child(member.memberId)
 
-        memberRef.child(roomId).child(memberKey).setValue(member)
+        memberNode.setValue(member)
             .addOnSuccessListener {
                 onResult(NetworkResult.OnSuccess(Unit))
-                Log.d(TAG, "Member added successfully: $memberKey")
+                Log.d(TAG, "Member added successfully: ${member.memberId}")
+
+                /* *
+                * Ensure that the member node is removed if they disconnect
+                *  */
+                memberNode.onDisconnect().removeValue()
             }
             .addOnFailureListener { error ->
                 onResult(NetworkResult.OnError(null, error.message ?: "Cannot add member"))
-                Log.e(TAG, "Failed to add member: $memberKey", error)
+                Log.e(TAG, "Failed to add member: ${member.memberId}", error)
             }
     }
 

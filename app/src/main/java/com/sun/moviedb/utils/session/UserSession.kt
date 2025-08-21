@@ -13,6 +13,6 @@ object UserSession {
         userId = firebaseUser.uid
         userName = firebaseUser.displayName ?: ""
         linkAvatar = firebaseUser.photoUrl?.toString() ?: ""
-
     }
 }
+
