@@ -17,12 +17,16 @@ import com.sun.moviedb.data.model.Item
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.databinding.FragmentSearchBottomSheetBinding
+import com.sun.moviedb.screen.search.adapter.LanguageChipAdapter
+import com.sun.moviedb.screen.search.adapter.SearchAdapter
+import com.sun.moviedb.utils.navigation.AppNavigator
+import com.sun.moviedb.utils.navigation.NavDestination
 
-class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
+class SearchDialogFragment : BottomSheetDialogFragment(), SearchContract.SearchView {
     private var _binding: FragmentSearchBottomSheetBinding? = null
     private val binding get() = _binding!!
     private val sheetHeightRatio = 0.95f
-    private lateinit var presenter: SearchPresenter
+    private lateinit var presenter: SearchContract.SearchPresenter
     private lateinit var searchAdapter: SearchAdapter
     private lateinit var languageChipAdapter: LanguageChipAdapter
     private var currentSortLang: String? = null
@@ -39,7 +43,7 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val movieRepository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance())
-        presenter = SearchPresenterImpl(movieRepository)
+        presenter = SearchPresenter(movieRepository)
         presenter.attachView(this)
         setupLanguageRecyclerView()
         setupMovieRecyclerView()
@@ -68,7 +72,7 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
 
     private fun setupMovieRecyclerView() {
         searchAdapter = SearchAdapter { item ->
-            Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
+            onMovieClick(item)
         }
         binding.searchMovieRecyclerView.layoutManager = LinearLayoutManager(context)
         binding.searchMovieRecyclerView.adapter = searchAdapter
@@ -171,5 +175,10 @@ class SearchDialogFragment : BottomSheetDialogFragment(), SearchView {
 
     private fun getSheetHeight(): Int {
         return (resources.displayMetrics.heightPixels * sheetHeightRatio).toInt()
+    }
+
+    private fun onMovieClick(item: Item) {
+        dismiss()
+        AppNavigator.navigateTo(NavDestination.MovieDetailScreen(item.slug), addToBackStack = true)
     }
 }

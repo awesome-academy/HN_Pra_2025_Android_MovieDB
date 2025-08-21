@@ -11,7 +11,6 @@ import com.sun.moviedb.utils.base.BaseAdapter
 
 class NewestMoviePagerAdapter(
     private val onWatchNowClick: ((Item) -> Unit)? = null,
-    private val onFavouriteClick: ((Item) -> Unit)? = null
 ) : BaseAdapter<Item, NewestMoviePagerAdapter.MovieViewHolder>(DIFF_CALLBACK) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MovieViewHolder {
@@ -29,7 +28,6 @@ class NewestMoviePagerAdapter(
             binding.txtTitle.text = item.name
             binding.txtGenres.text = item.category.joinToString(" · ") { it.name }
             binding.btnWatchNow.setOnClickListener { onWatchNowClick?.invoke(item) }
-            binding.btnFavourite.setOnClickListener { onFavouriteClick?.invoke(item) }
         }
     }
 

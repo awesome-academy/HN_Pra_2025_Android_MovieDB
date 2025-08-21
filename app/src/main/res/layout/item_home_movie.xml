@@ -6,6 +6,7 @@
     android:layout_margin="@dimen/dp_4"
     app:cardCornerRadius="@dimen/dp_10"
     app:cardElevation="@dimen/dp_0"
+    app:strokeColor="#80B0B0B0"
     app:strokeWidth="@dimen/dp_1">
 
     <androidx.constraintlayout.widget.ConstraintLayout
@@ -22,47 +23,46 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
-        <TextView
-            android:id="@+id/tvEpisode"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp_8"
-            android:layout_marginVertical="@dimen/dp_4"
-            android:ellipsize="end"
-            android:maxWidth="@dimen/dp_100"
-            android:maxLines="2"
-            android:textColor="@color/white"
-            android:textSize="@dimen/sp_14"
-            android:textStyle="bold"
-            app:layout_constraintEnd_toStartOf="@+id/tvTimeRemaining"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvTimeRemaining"
-            android:layout_width="0dp"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="@dimen/dp_8"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:background="@drawable/bg_rounded_tag"
             android:ellipsize="end"
             android:gravity="end"
-            android:maxWidth="@dimen/dp_100"
-            android:maxLines="2"
-            android:paddingHorizontal="@dimen/dp_8"
-            android:paddingVertical="@dimen/dp_4"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:paddingVertical="@dimen/dp_2"
             android:textColor="@color/white"
-            android:textSize="@dimen/sp_14"
+            android:textSize="@dimen/sp_10"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_chainStyle="spread_inside"
-            app:layout_constraintStart_toEndOf="@+id/tvEpisode"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <TextView
+            android:id="@+id/tvEpisodeCurrent"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginTop="@dimen/dp_8"
+            android:background="@drawable/bg_rounded_tag"
+            android:paddingHorizontal="@dimen/dp_6"
+            android:paddingVertical="@dimen/dp_2"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_10"
+            android:textStyle="bold"
+            app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <TextView
             android:id="@+id/tvQuality"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/dp_8"
-            android:layout_marginVertical="@dimen/dp_4"
+            android:layout_marginStart="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_4"
             android:background="@color/quality_bg"
             android:paddingHorizontal="@dimen/dp_8"
             android:paddingVertical="@dimen/dp_4"
@@ -72,36 +72,79 @@
             app:layout_constraintBottom_toTopOf="@id/bottomBar"
             app:layout_constraintStart_toStartOf="parent" />
 
+        <TextView
+            android:id="@+id/tvCountry"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dp_8"
+            android:layout_marginBottom="@dimen/dp_4"
+            android:background="@drawable/bg_country_tag"
+            android:paddingHorizontal="@dimen/dp_8"
+            android:paddingVertical="@dimen/dp_4"
+            android:textColor="@android:color/white"
+            android:textSize="@dimen/sp_10"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/bottomBar"
+            app:layout_constraintEnd_toEndOf="parent" />
+
+
         <LinearLayout
             android:id="@+id/bottomBar"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:background="#CC1A237E"
-            android:gravity="center_vertical"
-            android:orientation="horizontal"
+            android:background="@drawable/bg_bottom_gradient"
+            android:orientation="vertical"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent">
 
             <TextView
                 android:id="@+id/tvName"
-                android:layout_width="0dp"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/dp_20"
-                android:layout_weight="1"
+                android:layout_marginVertical="@dimen/dp_10"
                 android:ellipsize="end"
-                android:maxLines="1"
-                android:paddingHorizontal="@dimen/dp_16"
-                android:textColor="#7FC6FF"
+                android:maxLines="2"
+                android:layout_marginHorizontal="@dimen/dp_8"
+                android:shadowColor="#80000000"
+                android:shadowDx="1"
+                android:shadowDy="1"
+                android:shadowRadius="3"
+                android:textColor="@android:color/white"
                 android:textSize="@dimen/sp_15"
                 android:textStyle="bold" />
 
-            <ImageView
-                android:id="@+id/ivFavourite"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginEnd="@dimen/dp_12"
-                android:src="@drawable/ic_heart_outline" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_marginHorizontal="@dimen/dp_8"
+                android:layout_marginBottom="@dimen/dp_8">
+
+                <TextView
+                    android:id="@+id/tvYear"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/dp_8"
+                    android:background="@drawable/bg_rounded_tag"
+                    android:paddingHorizontal="@dimen/dp_6"
+                    android:paddingVertical="@dimen/dp_2"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tvType"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/bg_type_tag"
+                    android:paddingHorizontal="@dimen/dp_6"
+                    android:paddingVertical="@dimen/dp_2"
+                    android:textColor="@android:color/white"
+                    android:textSize="@dimen/sp_10"
+                    android:layout_alignParentEnd="true"
+                    android:textStyle="bold" />
+            </RelativeLayout>
         </LinearLayout>
 
     </androidx.constraintlayout.widget.ConstraintLayout>

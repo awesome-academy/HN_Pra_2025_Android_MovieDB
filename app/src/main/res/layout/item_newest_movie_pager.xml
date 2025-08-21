@@ -29,6 +29,7 @@
             android:layout_height="wrap_content"
             android:textColor="#FFFFFF"
             android:textSize="@dimen/sp_20"
+            android:textAlignment="center"
             android:textStyle="bold"
             tools:text="Thiên Sứ Ma Quỷ" />
 
@@ -65,15 +66,6 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
 
-            <ImageView
-                android:id="@+id/btnFavourite"
-                android:layout_width="@dimen/dp_30"
-                android:layout_height="@dimen/dp_30"
-                android:layout_marginStart="@dimen/dp_20"
-                android:src="@drawable/ic_heart_outline"
-                app:layout_constraintBottom_toBottomOf="@id/btnWatchNow"
-                app:layout_constraintStart_toEndOf="@id/btnWatchNow"
-                app:layout_constraintTop_toTopOf="@id/btnWatchNow" />
         </androidx.constraintlayout.widget.ConstraintLayout>
     </LinearLayout>
 </FrameLayout>

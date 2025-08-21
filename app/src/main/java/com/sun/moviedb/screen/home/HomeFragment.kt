@@ -17,8 +17,8 @@ import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.navigation.NavDestination
 import com.sun.moviedb.screen.search.SearchDialogFragment
 
-class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
-    private lateinit var presenter: HomePresenter
+class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView {
+    private lateinit var presenter: HomeContract.HomePresenter
     private lateinit var newestMovieAdapter: NewestMoviePagerAdapter
     private lateinit var seriesTabAdapter: SeriesTabAdapter
     private lateinit var seriesMovieAdapter: SeriesMovieAdapter
@@ -39,8 +39,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun setupNewestMovieAdapter() {
         newestMovieAdapter = NewestMoviePagerAdapter(
-            onWatchNowClick = { item -> onMovieClick(item) },
-            onFavouriteClick = { item -> onFavouriteClick(item) }
+            onWatchNowClick = { item -> onMovieClick(item) }
         )
         binding.newestMovieViewPager.adapter = newestMovieAdapter
         binding.newestMovieIndicator.attachTo(binding.newestMovieViewPager)
@@ -59,8 +58,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun setupSeriesMovieAdapter() {
         seriesMovieAdapter = SeriesMovieAdapter(
-            onMovieClick = { item -> onMovieClick(item) },
-            onFavouriteClick = { item -> onFavouriteClick(item) }
+            onMovieClick = { item -> onMovieClick(item) }
         )
         binding.seriesMovieRecycler.apply {
             setHasFixedSize(true)
@@ -78,7 +76,12 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     override fun initData() {
         presenter =
-            HomePresenterImpl(MovieRepository.getInstance(MovieRemoteDataSource.getInstance()))
+            HomePresenter(
+                MovieRepository.getInstance(
+                    local = null,
+                    remote = MovieRemoteDataSource.getInstance()
+                )
+            )
         presenter.attachView(this)
         val series = presenter.seriesList.first()
         val page = 1
@@ -122,11 +125,6 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeView {
 
     private fun onMovieClick(item: Item) {
         AppNavigator.navigateTo(NavDestination.MovieDetailScreen(item.slug), addToBackStack = true)
-        Toast.makeText(requireContext(), "Clicked: ${item.name}", Toast.LENGTH_SHORT).show()
-    }
-
-    private fun onFavouriteClick(item: Item) {
-        Toast.makeText(requireContext(), "Favourite: ${item.name}", Toast.LENGTH_SHORT).show()
     }
 
     override fun showLoading(isLoading: Boolean) {}
