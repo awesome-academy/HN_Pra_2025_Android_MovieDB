@@ -2,6 +2,8 @@ package com.sun.moviedb.data.repository.source.local.entity
 
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.sun.moviedb.data.model.Category
+import com.sun.moviedb.data.model.Country
 import com.sun.moviedb.data.model.Movie
 
 @Entity(tableName = "favorite_movies")
@@ -50,8 +52,8 @@ data class FavoriteMovieEntity(
             type = this.type ?: "",
             quality = this.quality ?: "",
             time = this.time ?: "",
-            category = if (this.category != null) listOf(com.sun.moviedb.data.model.Category(name = this.category)) else emptyList(),
-            country = if (this.country != null) listOf(com.sun.moviedb.data.model.Country(name = this.country)) else emptyList()
+            category = if (this.category != null) listOf(Category(name = this.category)) else emptyList(),
+            country = if (this.country != null) listOf(Country(name = this.country)) else emptyList()
         )
     }
 }

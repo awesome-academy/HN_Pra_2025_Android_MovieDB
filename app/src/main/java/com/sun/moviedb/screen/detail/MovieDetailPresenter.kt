@@ -1,6 +1,5 @@
 package com.sun.moviedb.screen.detail
 
-import android.util.Log
 import com.sun.moviedb.data.model.Movie
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.firebase.entity.MovieFirebaseEntity
