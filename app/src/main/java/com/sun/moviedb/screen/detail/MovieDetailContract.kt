@@ -8,12 +8,13 @@ import com.sun.moviedb.utils.base.BaseView
 interface MovieDetailContract {
     interface View : BaseView {
         fun onGetDetailSuccess(movie: Movie, episodes: List<Episode>)
+        fun onCheckFavorite(isFavorite: Boolean)
+        fun onMovieToFirebaseSuccess(message : String)
     }
 
     interface Presenter : BasePresenter<View> {
         fun getDetail(slug: String)
-        fun onFavClicked(movie: Movie, isFavourite: Boolean)
+        fun onFavClicked(movie: Movie, isFavourite: Boolean, userId: String)
+        fun checkFavorite(movieId: String, userId: String)
     }
 }
-
-
