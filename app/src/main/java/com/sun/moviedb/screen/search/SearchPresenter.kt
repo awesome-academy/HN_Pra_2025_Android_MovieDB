@@ -59,26 +59,26 @@ class SearchPresenter(
                         view?.showSearchResults(currentMovies.toList())
                     }
                 }
-
                 is NetworkResult.OnError -> {
-                    if (page == 1) view?.showError(result.message)
-                    else view?.showLoadMoreError()
+                    view?.showError(result.message)
                 }
             }
         }
     }
 
     override fun loadMoreResults() {
-        if (!hasMoreData || isLoading) return
-        searchMovie(keyword, selectedLanguage, lastLoadedPage + 1)
+        if (hasMoreData && !isLoading) {
+            searchMovie(keyword, selectedLanguage, lastLoadedPage + 1)
+        }
     }
 
     override fun clearSearch() {
+        currentMovies.clear()
         keyword = ""
         selectedLanguage = null
-        lastLoadedPage = 0
         hasMoreData = true
-        currentMovies.clear()
+        lastLoadedPage = 0
+        isLoading = false
         view?.showEmptyResult()
     }
 
@@ -87,9 +87,20 @@ class SearchPresenter(
         view?.showLanguages(languages)
     }
 
+    override fun getSearchHistory() {
+        repository.getSearchHistory { keywords ->
+            val recentKeywords = if (keywords.size > 10) keywords.take(10) else keywords
+            view?.showSearchHistory(recentKeywords)
+        }
+    }
+
+    override fun insertSearchHistory(keyword: String) {
+        repository.insertSearchHistory(keyword)
+    }
+
     companion object {
-        private const val DEFAULT_SORT_FIELD = "time"
-        private const val DEFAULT_SORT_TYPE = "desc"
         private const val DEFAULT_PAGE_SIZE = 20
+        private const val DEFAULT_SORT_FIELD = "createdAt"
+        private const val DEFAULT_SORT_TYPE = "desc"
     }
 }

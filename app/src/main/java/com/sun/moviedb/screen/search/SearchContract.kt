@@ -9,7 +9,7 @@ interface SearchContract {
         fun showSearchResults(items: List<Item>)
         fun showLanguages(languages: List<String>)
         fun showEmptyResult()
-        fun showLoadMoreError()
+        fun showSearchHistory(keywords: List<String>)
     }
 
     interface SearchPresenter : BasePresenter<SearchView> {
@@ -17,7 +17,9 @@ interface SearchContract {
         fun loadMoreResults()
         fun loadLanguages()
         fun clearSearch()
+
+        fun getSearchHistory()
+        fun insertSearchHistory(keyword: String)
     }
 }
-
 

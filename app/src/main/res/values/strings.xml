@@ -23,6 +23,7 @@
     <string name="filter_year">Năm phát hành</string>
     <string name="clear_filter">Xóa bộ lọc</string>
     <string name="search_result">Kết quả tìm kiếm</string>
+    <string name="search_history">Lịch sử tìm kiếm</string>
     <string name="loading_more_movies">Đang tải thêm phim...</string>
     <string name="no_result">Không tìm thấy kết quả phù hợp</string>
     <string name="loading">Đang tải...</string>

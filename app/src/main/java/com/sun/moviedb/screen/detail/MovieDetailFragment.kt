@@ -1,24 +1,23 @@
 package com.sun.moviedb.screen.detail
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
+import com.google.firebase.auth.FirebaseAuth
 import com.sun.moviedb.R
 import com.sun.moviedb.data.model.Category
 import com.sun.moviedb.data.model.Episode
 import com.sun.moviedb.data.model.Movie
 import com.sun.moviedb.data.model.ServerData
-import com.sun.moviedb.data.repository.source.MovieRepository
-import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
+import com.sun.moviedb.MyApp
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
@@ -29,6 +28,10 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private var isFavourite = false
     private var slug: String = ""
 
+    private val userId: String by lazy {
+        FirebaseAuth.getInstance().currentUser?.uid ?: ""
+    }
+
     override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
@@ -38,13 +41,10 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     override fun initData() {
         super.initData()
-        presenter = MovieDetailPresenter(
-            MovieRepository.getInstance(
-                local = null,
-                remote = MovieRemoteDataSource.getInstance(),
-            )
-        )
+        val app = requireActivity().application as MyApp
+        presenter = MovieDetailPresenter(app.movieRepository)
         presenter.attachView(this)
+
 
         showLoading(true)
         slug = arguments?.getString(KEY_SLUG) ?: ""
@@ -67,11 +67,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     ) {
         this.movieInfo = movie
         this.episodes = episodes
-        Log.d("MovieDetailFragment", "MOvie: $movie")
-        Log.d("MovieDetailFragment", "Episodes: $episodes")
-
         showLoading(false)
-
         setUI()
         setEpsListView()
         onStartFromBeginningButtonClicked()
@@ -79,6 +75,23 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onWatchNowButtonClicked()
         onChillWithFriendButtonClicked()
         onBackButtonClicked()
+
+        presenter.checkFavorite(movieInfo.id, userId)
+    }
+
+    override fun onCheckFavorite(isFavorite: Boolean) {
+        isFavourite = isFavorite
+        updateFavoriteIcon(isFavourite)
+    }
+
+    override fun onMovieToFirebaseSuccess(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    private fun updateFavoriteIcon(isFav: Boolean) {
+        binding.btnFav.setImageResource(
+            if (isFav) R.drawable.ic_favorite_red_24 else R.drawable.ic_favorite_24
+        )
     }
 
     private fun setUI() {
@@ -147,20 +160,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onFavoriteButtonClicked() {
         binding.btnFav.setOnClickListener {
-            Toast.makeText(
-                requireContext(),
-                "Add ${movieInfo.name} to favorite",
-                Toast.LENGTH_SHORT
-            ).show()
-            isFavourite = !isFavourite
-            if (isFavourite) {
-                binding.btnFav.setImageResource(R.drawable.ic_favorite_red_24)
-                presenter.onFavClicked(movieInfo, isFavourite)
-            } else {
-                binding.btnFav.setImageResource(R.drawable.ic_favorite_24)
-                presenter.onFavClicked(movieInfo, isFavourite)
-            }
-
+            presenter.onFavClicked(movieInfo, isFavourite, userId)
         }
     }
 
@@ -213,5 +213,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             return fragment
         }
     }
-}
 
+    override fun onDestroy() {
+        presenter.detachView()
+        super.onDestroy()
+    }
+}

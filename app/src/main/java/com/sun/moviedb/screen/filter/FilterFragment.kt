@@ -8,12 +8,11 @@ import android.widget.Toast
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.GridLayoutManager
+import com.sun.moviedb.MyApp
 import com.sun.moviedb.R
 import com.sun.moviedb.data.model.Category
 import com.sun.moviedb.data.model.Country
 import com.sun.moviedb.data.model.Item
-import com.sun.moviedb.data.repository.source.MovieRepository
-import com.sun.moviedb.data.repository.source.remote.MovieRemoteDataSource
 import com.sun.moviedb.databinding.FragmentFilterBinding
 import com.sun.moviedb.screen.filter.adapter.FilterMovieAdapter
 import com.sun.moviedb.utils.base.BaseFragment
@@ -59,7 +58,8 @@ class FilterFragment : BaseFragment<FragmentFilterBinding>(), FilterContract.Fil
     }
 
     private fun setupPresenter() {
-        val repository = MovieRepository.getInstance(MovieRemoteDataSource.getInstance())
+        val app = requireActivity().application as MyApp
+        val repository = app.movieRepository
         presenter = FilterPresenter(repository)
         presenter.attachView(this)
     }
