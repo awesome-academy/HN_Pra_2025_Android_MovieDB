@@ -10,6 +10,7 @@ object UserSession {
     fun updateSession(firebaseUser: FirebaseUser?){
         if (firebaseUser == null)
             return
+        userId = firebaseUser.uid
         userName = firebaseUser.displayName ?: ""
         linkAvatar = firebaseUser.photoUrl?.toString() ?: ""
     }

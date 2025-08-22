@@ -90,9 +90,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
         binding.rvLayoutChat.scrollToPosition(messageList.size - 1)
     }
 
-    override fun showLoading(isLoading: Boolean) {
-        binding.progressBar5.visibility = if (isLoading) View.VISIBLE else View.GONE
-    }
+    override fun showLoading(isLoading: Boolean) {}
 
     override fun showError(message: String) {
         Toast.makeText(requireContext(), "$TAG: $message", Toast.LENGTH_SHORT).show()
