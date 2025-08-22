@@ -1,24 +1,18 @@
 package com.sun.moviedb.screen.chat
 
-import android.os.Bundle
 import android.util.Log
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.google.firebase.Firebase
-import com.google.firebase.auth.FirebaseAuth
-import com.sun.moviedb.R
 import com.sun.moviedb.data.model.MessageModel
 import com.sun.moviedb.data.repository.rtdb.ChatRepository
 import com.sun.moviedb.data.repository.rtdb.ChatRepositoryImpl
 import com.sun.moviedb.databinding.FragmentChatBinding
 import com.sun.moviedb.screen.chat.adapter.ChatAdapter
 import com.sun.moviedb.utils.base.BaseFragment
-import kotlin.text.clear
-import kotlin.toString
+import com.sun.moviedb.utils.session.RoomSession
+import com.sun.moviedb.utils.session.UserSession
 
 class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
 
@@ -26,13 +20,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
     private lateinit var presenter: ChatContract.Presenter
     private lateinit var adapter: ChatAdapter
     private var messageList = mutableListOf<MessageModel>()
-    private var roomId: String = "B64pKEV0PxWFTXOiCXSFCek82z53_PgfNZMdZATUusKY8EAHDykGwlAP2"
+    private var roomId: String = RoomSession.roomId ?: ""
     private val TAG = "ChatFragment"
-
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-
-    }
 
     override fun getViewBinding(
         inflater: LayoutInflater,
@@ -57,7 +46,8 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
         presenter = ChatPresenter(chatRepository)
         presenter.attachView(this)
         // Load messages
-        presenter.receiveMessages(roomId)
+        if (roomId.isNotEmpty())
+            presenter.receiveMessages(roomId)
 
         // Initialize adapter
         adapter = ChatAdapter(messageList)
@@ -72,24 +62,21 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
 
     private fun setupUI() {
         binding.btnSendMessage.setOnClickListener {
-            var message = binding.edtMessage.text.toString().trim()
+            val message = binding.edtMessage.text.toString().trim()
 
             Log.d(TAG, "message: $message")
             if (message.isNotEmpty()) {
-
-                val userId = FirebaseAuth.getInstance().currentUser?.uid
-                if (userId == null)
-                    showError("User not authenticated")
-                else {
-                    val messageModel = MessageModel(
-                        senderId = userId,
-                        senderName = "User 1",
-                        content = message,
-                        createAt = System.currentTimeMillis()
-                    )
+                val messageModel = MessageModel(
+                    senderId = UserSession.userId ?: "",
+                    senderName = UserSession.userName ?: "Unknown",
+                    content = message,
+                    linkAvt = UserSession.linkAvatar ?: "",
+                    createAt = System.currentTimeMillis()
+                )
+                if (roomId.isNotEmpty())
                     presenter.sendMessage(roomId, messageModel)
-                    binding.edtMessage.text.clear() // Clear the input field after sending
-                }
+                binding.edtMessage.text.clear() // Clear the input field after sending
+
             } else {
                 showError("Message cannot be empty")
             }
@@ -110,13 +97,5 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
         Toast.makeText(requireContext(), "$TAG: $message", Toast.LENGTH_SHORT).show()
     }
 
-
-    companion object {
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            ChatFragment().apply {
-
-            }
-    }
 }
 

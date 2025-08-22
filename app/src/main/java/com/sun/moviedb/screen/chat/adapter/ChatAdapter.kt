@@ -4,6 +4,8 @@ import android.content.Context
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
 import com.sun.moviedb.data.model.MessageModel
 import com.sun.moviedb.databinding.ViewholderChatFrameReceiverBinding
@@ -67,6 +69,12 @@ class ChatAdapter (val items: MutableList<MessageModel>) : RecyclerView.Adapter<
         RecyclerView.ViewHolder(binding.root) {
         fun bind(msg: MessageModel) {
             binding.tvChatSender.text = msg.content
+            if (msg.linkAvt.isNotEmpty()){
+                Glide.with(binding.root.context)
+                    .load(msg.linkAvt)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgSenderAvt)
+            }
         }
     }
 
@@ -75,6 +83,12 @@ class ChatAdapter (val items: MutableList<MessageModel>) : RecyclerView.Adapter<
         RecyclerView.ViewHolder(binding.root) {
         fun bind(msg: MessageModel) {
             binding.tvChatReceiver.text = msg.content
+            if (msg.linkAvt.isNotEmpty()){
+                Glide.with(binding.root.context)
+                    .load(msg.linkAvt)
+                    .apply(RequestOptions.circleCropTransform())
+                    .into(binding.imgReceiverAvt)
+            }
         }
     }
 

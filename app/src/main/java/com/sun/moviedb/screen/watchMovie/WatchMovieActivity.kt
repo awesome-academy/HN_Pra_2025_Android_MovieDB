@@ -15,6 +15,7 @@ import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
 import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.databinding.ActivityWatchMovieBinding // Changed from Fragment binding
+import com.sun.moviedb.screen.chat.ChatFragment
 import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.utils.AppLocator
 import com.sun.moviedb.utils.base.BaseActivity
@@ -59,9 +60,9 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
         roomId = intent.getStringExtra(ARG_ROOM_ID)
 
-//        m3u8Link = intent.getStringExtra(ARG_M3U8_LINK)
-        m3u8Link =
-            "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
+        m3u8Link = intent.getStringExtra(ARG_M3U8_LINK)
+//        m3u8Link =
+//            "https://devstreaming-cdn.apple.com/videos/streaming/examples/bipbop_16x9/bipbop_16x9_variant.m3u8"
 
         if (intent.extras != null && intent.extras!!.containsKey(SAVED_PLAYBACK_POSITION)) {
             initialPlaybackPosition = intent.extras!!.getLong(SAVED_PLAYBACK_POSITION, 0L)
@@ -218,7 +219,10 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     private fun onChatButtonClicked() {
         binding.btnChat.setOnClickListener {
-
+            roomId?.let {
+                val chatFragment = ChatFragment()
+                toggleFragment(chatFragment, CHAT_FRAGMENT_TAG)
+            }
         }
     }
 
