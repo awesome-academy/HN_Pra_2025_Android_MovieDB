@@ -9,22 +9,23 @@ class ChatPresenter (private val chatRepository: ChatRepository) : ChatContract.
 
     override fun receiveMessages(roomId: String) {
         try {
+            view?.showLoading(true)
             chatRepository.receiveMessages(roomId) { result ->
                 when (result) {
                     is NetworkResult.OnSuccess<*> -> {
                         @Suppress("UNCHECKED_CAST")
-                        view?.addMessages(result.data as MessageModel) // Load messages into the view
+                        view?.addMessages(result.data as MessageModel)
                     }
 
                     is NetworkResult.OnError -> view?.showError(result.message)
                 }
+                view?.showLoading(false)
             }
 
-            // Handle the received message here, e.g., update the UI
         } catch (e: Exception) {
             view?.showError(
                 e.message ?: "Error to load all messages"
-            ) // Show error if receiving message fails
+            )
         }
     }
 

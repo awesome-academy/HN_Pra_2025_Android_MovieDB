@@ -38,6 +38,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>() {
 
             if (input.isNotEmpty()) {
                 goRoom(input)
+                binding.editTextText.text.clear()
             } else {
                 binding.editTextText.error = "Please enter a room ID"
             }

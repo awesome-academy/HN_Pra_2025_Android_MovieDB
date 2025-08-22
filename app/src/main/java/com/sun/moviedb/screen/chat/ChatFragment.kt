@@ -2,6 +2,7 @@ package com.sun.moviedb.screen.chat
 
 import android.util.Log
 import android.view.LayoutInflater
+import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -75,7 +76,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
                 )
                 if (roomId.isNotEmpty())
                     presenter.sendMessage(roomId, messageModel)
-                binding.edtMessage.text.clear() // Clear the input field after sending
+                binding.edtMessage.text.clear()
 
             } else {
                 showError("Message cannot be empty")
@@ -90,7 +91,7 @@ class ChatFragment : BaseFragment<FragmentChatBinding>(), ChatContract.View {
     }
 
     override fun showLoading(isLoading: Boolean) {
-        TODO("Not yet implemented")
+        binding.progressBar5.visibility = if (isLoading) View.VISIBLE else View.GONE
     }
 
     override fun showError(message: String) {

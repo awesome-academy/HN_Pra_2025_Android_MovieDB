@@ -9,8 +9,7 @@ object UserSession {
 
     fun updateSession(firebaseUser: FirebaseUser?){
         if (firebaseUser == null)
-            throw IllegalArgumentException("FirebaseUser cannot be null")
-        userId = firebaseUser.uid
+            return
         userName = firebaseUser.displayName ?: ""
         linkAvatar = firebaseUser.photoUrl?.toString() ?: ""
     }

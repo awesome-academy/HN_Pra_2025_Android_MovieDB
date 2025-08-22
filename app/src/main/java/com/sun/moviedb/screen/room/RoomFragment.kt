@@ -3,7 +3,6 @@ package com.sun.moviedb.screen.room
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sun.moviedb.R
 import com.sun.moviedb.data.model.Member
@@ -48,7 +47,7 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>() {
 
         roomAdapter = RoomAdapter { choosenMember ->
             val currentRoomId = RoomSession.roomId
-            if (currentRoomId== null)
+            if (currentRoomId == null)
                 throw Exception("Room Id is null, please set it before removing member in HomeFragment")
             presenter!!.removeChoosenMember(currentRoomId, choosenMember)
             roomAdapter.removeItem(choosenMember)

@@ -273,3 +273,4 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         super.onDestroy()
     }
 }
+

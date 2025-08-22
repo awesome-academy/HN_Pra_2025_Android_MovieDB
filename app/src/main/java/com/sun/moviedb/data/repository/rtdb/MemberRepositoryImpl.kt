@@ -131,12 +131,12 @@ class MemberRepositoryImpl : MemberRepository {
         private const val membersPath = "members"
         private const val createAtPath = "createAt"
 
-        private var intance: MemberRepositoryImpl? = null
+        private var instance: MemberRepositoryImpl? = null
         fun getInstance(): MemberRepositoryImpl {
-            if (intance == null) {
-                intance = MemberRepositoryImpl()
+            if (instance == null) {
+                instance = MemberRepositoryImpl()
             }
-            return intance!!
+            return instance!!
         }
     }
 }

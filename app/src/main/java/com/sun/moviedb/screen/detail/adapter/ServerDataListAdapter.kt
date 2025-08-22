@@ -1,12 +1,9 @@
 package com.sun.moviedb.screen.detail.adapter
 
 import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
-import androidx.core.text.isDigitsOnly
 import androidx.recyclerview.widget.RecyclerView
-import com.google.firebase.logger.Logger
 import com.sun.moviedb.data.model.ServerData
 import com.sun.moviedb.databinding.ViewholderEpsItemBinding
 
