@@ -3,6 +3,7 @@ package com.sun.moviedb.utils.navigation
 import android.view.View
 import androidx.fragment.app.FragmentManager
 import com.google.android.material.bottomnavigation.BottomNavigationView
+import com.sun.moviedb.screen.chat.ChatFragment
 import com.sun.moviedb.screen.detail.MovieDetailFragment
 import com.sun.moviedb.screen.filter.FilterFragment
 import com.sun.moviedb.screen.home.HomeFragment
@@ -32,6 +33,8 @@ object AppNavigator {
             is NavDestination.MovieDetailScreen -> MovieDetailFragment.newInstance(destination.slug)
             is NavDestination.SettingsScreen -> SettingsFragment()
             is NavDestination.FilterScreen -> FilterFragment()
+            is NavDestination.InviteFriendScreen -> SearchUserFragment()
+            is NavDestination.ChatScreen -> ChatFragment()
 
             /* *
             * More fragments can be added here as needed.

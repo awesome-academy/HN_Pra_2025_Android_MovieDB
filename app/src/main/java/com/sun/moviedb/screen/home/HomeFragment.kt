@@ -33,6 +33,14 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView 
         setupSeriesTabAdapter()
         setupSeriesMovieAdapter()
         setupSearchClick()
+
+    }
+
+    private fun onMessageClick() {
+        binding.btnMessage.setOnClickListener {
+            AppNavigator.navigateTo(NavDestination.ChatScreen, addToBackStack = true)
+            Toast.makeText(requireContext(), "Message clicked", Toast.LENGTH_SHORT).show()
+        }
     }
 
     private fun setupNewestMovieAdapter() {
@@ -83,6 +91,7 @@ class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView 
         seriesTabAdapter.setSelectedTab(series)
         presenter.loadNewestMovies()
         presenter.loadSeriesMovies(series, page)
+        onMessageClick()
     }
 
     override fun showNewestMovies(items: List<Item>) {

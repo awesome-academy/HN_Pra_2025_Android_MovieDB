@@ -14,6 +14,7 @@ import com.google.firebase.auth.FirebaseAuth
 import com.sun.moviedb.screen.login.LoginActivity
 import com.sun.moviedb.R
 import com.sun.moviedb.screen.MainActivity
+import com.sun.moviedb.utils.session.UserSession
 
 class SplashActivity : AppCompatActivity() {
     var logoText: TextView? = null
@@ -46,6 +47,7 @@ class SplashActivity : AppCompatActivity() {
                 if (auth.currentUser == null) {
                     intent = Intent(this, LoginActivity::class.java)
                 } else {
+                    UserSession.updateSession(auth.currentUser!!)
                     Log.e("check", auth.currentUser!!.email.toString())
                     intent = Intent(this, MainActivity::class.java)
                 }

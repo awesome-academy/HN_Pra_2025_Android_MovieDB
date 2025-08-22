@@ -29,7 +29,13 @@ class ServerDataListAdapter(
 
     override fun onBindViewHolder(holder: ServerDataListAdapter.ViewHolder, position: Int) {
         val item = items[position]
-        holder.binding.tvEpsItem.text = item.name
+        val number = extractString(item.name)
+        if (number != null){
+            holder.binding.tvEpsItem.text = number.toString()
+        }
+        else {
+            holder.binding.tvEpsItem.text = item.name
+        }
         holder.binding.tvEpsItem.setOnClickListener {
             onClick(item.linkM3u8)
         }
@@ -37,8 +43,12 @@ class ServerDataListAdapter(
 
     override fun getItemCount(): Int = items.size
 
+    private fun extractString (input: String) : Int?{
+        val numberString = input.filter { it.isDigit() }
+        return numberString.toIntOrNull()
+    }
+
     inner class ViewHolder(val binding: ViewholderEpsItemBinding) :
         RecyclerView.ViewHolder(binding.root)
 }
-
 
