@@ -8,7 +8,6 @@ import com.sun.moviedb.data.repository.rtdb.RoomRepository
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
 import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
-import com.sun.moviedb.utils.session.RoomSession
 import com.sun.moviedb.utils.session.UserSession
 
 class MovieDetailPresenter
@@ -55,7 +54,7 @@ class MovieDetailPresenter
     override fun createRoom(movie: Movie) {
         val userID = UserSession.userId.run {
             if (this.isNullOrEmpty()) {
-                throw IllegalStateException("Current user not found")
+                throw Exception("Current user not found")
             } else this
         }
         val room = Room(
@@ -83,18 +82,12 @@ class MovieDetailPresenter
 
     }
 
-    override fun addMember() {
+    override fun addCurrentMember(roomId: String) {
         mView?.showLoading2(true)
 
         val userID = UserSession.userId.run {
             if (this.isNullOrEmpty()) {
-                throw IllegalStateException("Current user not found")
-            } else this
-        }
-
-        val roomId = RoomSession.roomId.run {
-            if (this.isNullOrEmpty()) {
-                throw IllegalStateException("Room ID is not set")
+                throw Exception("Current user not found")
             } else this
         }
 
@@ -108,16 +101,19 @@ class MovieDetailPresenter
 
         memberRepository.addMember(roomId, member) { result ->
             when (result) {
-                is NetworkResult.OnSuccess -> {
-                    mView?.onAddSuccess("Member added successfully")
-                }
+                is NetworkResult.OnSuccess -> {}
                 is NetworkResult.OnError -> {
                     mView?.showError(result.message)
                 }
             }
             mView?.showLoading2(false)
-
         }
+    }
+
+    override fun removeMemberListener(roomId: String) {
+        memberRepository.removeChildEventListener(roomId)
+        memberRepository.removeValueEventListener(roomId)
+//        roomRepository.removeListener(roomId)
     }
 }
 

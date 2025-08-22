@@ -201,7 +201,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         binding.btnWatchWithFriends.setOnClickListener {
             presenter.createRoom(movieInfo)
 
-            presenter.addMember()
+            presenter.addCurrentMember(RoomSession.roomId!!)
 
             Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
 
@@ -211,9 +211,11 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
             val firstEpisode = episodes.firstOrNull()
             if (firstEpisode != null && firstEpisode.serverData.isNotEmpty()) {
                 val firstServerData = firstEpisode.serverData.firstOrNull()
-                if (firstServerData != null){
-                    val intent = Intent(requireContext(), WatchMovieActivity:: class.java).apply {
+                if (firstServerData != null) {
+                    val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
                         putExtra(ARG_M3U8_LINK, firstServerData.linkM3u8)
+                        putExtra(ARG_ROOM_ID, RoomSession.roomId)
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
                     startActivity(intent)
                 }
@@ -221,18 +223,23 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         }
     }
 
+    override fun onStop() {
+        super.onStop()
+
+//        RoomSession.roomId?.let {
+//            presenter.removeMemberListener(it)
+//            Log.d(TAG, "onStop: Removing member listener for roomId: ${RoomSession.roomId}")
+//        }
+    }
+
     private fun onBackButtonClicked() {
         binding.btnBack.setOnClickListener {
-//          TODO: ERROR - cause app crash when back
-            //            requireActivity().supportFragmentManager.popBackStackImmediate()
+            requireActivity().supportFragmentManager.popBackStackImmediate()
             Toast.makeText(requireContext(), "Back to previous screen", Toast.LENGTH_SHORT).show()
         }
     }
 
-    private fun onInviteFriendButtonClicked() {
-
-    }
-
+    private fun onInviteFriendButtonClicked() {}
 
     /**
      * support to show category chip in UI
@@ -250,8 +257,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     companion object {
-        const val KEY_SLUG = "slug"
-        const val ARG_M3U8_LINK = "m3u8_link"
+        private const val KEY_SLUG = "slug"
+        private const val ARG_M3U8_LINK = "m3u8_link"
+        const val ARG_ROOM_ID = "room_id"
         fun newInstance(slug: String): MovieDetailFragment {
             val fragment = MovieDetailFragment()
             val args = Bundle().apply {

@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.ActivityInfo
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.Toast
 import androidx.core.view.WindowCompat
@@ -12,10 +13,12 @@ import androidx.core.view.WindowInsetsControllerCompat
 import androidx.fragment.app.Fragment
 import androidx.media3.common.Player
 import androidx.media3.ui.PlayerView
+import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.databinding.ActivityWatchMovieBinding // Changed from Fragment binding
 import com.sun.moviedb.screen.room.RoomFragment
-import com.sun.moviedb.screen.searchUser.SearchUserFragment
+import com.sun.moviedb.utils.AppLocator
 import com.sun.moviedb.utils.base.BaseActivity
+import com.sun.moviedb.utils.session.UserSession
 
 class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovieContract.View {
 
@@ -27,11 +30,16 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
     private var activityOriginalOrientation: Int = ActivityInfo.SCREEN_ORIENTATION_UNSPECIFIED
     private var currentFragmentTag: String? = null
     private var isFragmentVisible = false
+    private var roomId: String? = null
+    private val TAG = "WatchMovieActivity"
 
     companion object {
         private const val ARG_M3U8_LINK = "m3u8_link"
+        const val ARG_ROOM_ID = "room_id"
         private const val SAVED_PLAYBACK_POSITION = "playbackPosition"
         private const val SAVED_PLAY_WHEN_READY = "playWhenReady"
+        private const val CHAT_FRAGMENT_TAG = "CHAT_FRAGMENT"
+        private const val ROOM_FRAGMENT_TAG = "ROOM_FRAGMENT"
 
         fun newIntent(context: Context, m3u8Link: String): Intent {
             val intent = Intent(context, WatchMovieActivity::class.java)
@@ -46,8 +54,10 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     override fun initData() {
         super.initData()
-        presenter = WatchMoviePresenterImpl { this }
+        presenter = WatchMoviePresenterImpl({ this }, AppLocator.memberRepository)
         presenter.attachView(this)
+
+        roomId = intent.getStringExtra(ARG_ROOM_ID)
 
 //        m3u8Link = intent.getStringExtra(ARG_M3U8_LINK)
         m3u8Link =
@@ -65,7 +75,6 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         onChatButtonClicked()
         synchronizeButtonWithPlayerState()
         showOrHideFragment()
-
     }
 
     override fun onSaveInstanceState(outState: Bundle) {
@@ -90,6 +99,10 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
     override fun onStart() {
         super.onStart()
         presenter.onStart()
+        roomId?.let {
+            presenter.updateRoomId(it)
+            presenter.observeMembers(it)
+        }
     }
 
     override fun onResume() {
@@ -106,6 +119,7 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     override fun onStop() {
         super.onStop()
+//        presenter.removeMemberListener(roomId ?: return)
         presenter.onStop()
     }
 
@@ -158,6 +172,24 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
     override fun popView() {
         finish()
     }
+
+    override fun showAddedMember(memberName: String) {
+        Log.d(TAG, "showAddedMember: $memberName")
+        Toast.makeText(this, "$memberName has joined the room", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showLeftMember(memberName: String) {
+        Log.d(TAG, "showLeftMember: $memberName")
+        Toast.makeText(this, "$memberName has left the room", Toast.LENGTH_SHORT).show()
+    }
+
+    override fun updateMemberList(members: List<Member>) {
+        val roomFragment = supportFragmentManager.findFragmentByTag(ROOM_FRAGMENT_TAG)
+        if (roomFragment is RoomFragment) {
+            roomFragment.updateMembers(members) // viết hàm này trong RoomFragment
+        }
+    }
+
     private fun showOrHideFragment() {
         binding.containerOverlay.setOnClickListener {
             if (isFragmentVisible) {
@@ -192,16 +224,19 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     private fun onGroupButtonClicked() {
         binding.btnRoom.setOnClickListener {
-            toggleFragment(RoomFragment(), "GROUP")
+            roomId?.let {
+                val fragment = RoomFragment()
+                fragment.setPresenter(presenter)
+                toggleFragment(fragment, ROOM_FRAGMENT_TAG) }
         }
     }
 
-    private fun toggleFragment(fragment: Fragment, tag: String) {
+    private fun toggleFragment(fragment: Fragment, tagFragment: String) {
         val container = binding.containterRoomChat
         val containerOverlay = binding.containerOverlay
 
-        if (currentFragmentTag == tag) {
-            supportFragmentManager.findFragmentByTag(tag)?.let {
+        if (currentFragmentTag == tagFragment) {
+            supportFragmentManager.findFragmentByTag(tagFragment)?.let {
                 supportFragmentManager.beginTransaction().remove(it).commit()
             }
             containerOverlay.visibility = View.GONE
@@ -211,12 +246,12 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
             isFragmentVisible = false
         } else {
             supportFragmentManager.beginTransaction()
-                .replace(container.id, fragment, tag)
+                .replace(container.id, fragment, tagFragment)
                 .commit()
             containerOverlay.visibility = View.VISIBLE
             containerOverlay.isClickable = true
             container.visibility = View.VISIBLE
-            currentFragmentTag = tag
+            currentFragmentTag = tagFragment
             isFragmentVisible = true
         }
     }

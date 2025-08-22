@@ -1,28 +1,34 @@
 package com.sun.moviedb.screen.room
 
-import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.sun.moviedb.R
+import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.databinding.FragmentRoomBinding
+import com.sun.moviedb.screen.room.adapter.RoomAdapter
+import com.sun.moviedb.screen.watchMovie.WatchMovieContract
 import com.sun.moviedb.utils.base.BaseFragment
+import com.sun.moviedb.utils.session.RoomSession
 
-class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
+class RoomFragment : BaseFragment<FragmentRoomBinding>() {
 
-    private lateinit var presenter: RoomPrensenter
+    private lateinit var roomAdapter: RoomAdapter
+    private val memberList = mutableListOf<Member>()
+
+    private var presenter: WatchMovieContract.Presenter? = null
+
+    fun setPresenter(presenter: WatchMovieContract.Presenter) {
+        this.presenter = presenter
+    }
 
     override fun getViewBinding(
         inflater: LayoutInflater,
         container: ViewGroup?
     ): FragmentRoomBinding {
         return FragmentRoomBinding.inflate(inflater, container, false)
-    }
-
-    override fun onDestroyView() {
-        super.onDestroyView()
-        presenter.detachView()
     }
 
     override fun initView() {
@@ -33,32 +39,39 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
 
     override fun initData() {
         super.initData()
-        presenter = RoomPrensenter()
-        presenter.attachView(this)
+        setupUI()
     }
 
-    override fun showLoading(isLoading: Boolean) {
-        TODO("Not yet implemented")
+    private fun setupUI() {
+        if (presenter == null)
+            throw Exception("Presenter is null, please set it before using RoomFragment")
+
+        roomAdapter = RoomAdapter { choosenMember ->
+            val currentRoomId = RoomSession.roomId
+            if (currentRoomId== null)
+                throw Exception("Room Id is null, please set it before removing member in HomeFragment")
+            presenter!!.removeChoosenMember(currentRoomId, choosenMember)
+            roomAdapter.removeItem(choosenMember)
+        }
+
+        /*
+        * get current list of members if exists
+        * */
+        roomAdapter.setItems(presenter!!.getCachedMembers())
+
+        binding.rvListMember.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL, false
+        )
+        binding.rvListMember.adapter = roomAdapter
+
     }
 
-    override fun showError(message: String) {
-        TODO("Not yet implemented")
+    fun updateMembers(members: List<Member>) {
+        memberList.clear()
+        memberList.addAll(members)
+        roomAdapter.setItems(memberList)
     }
 
-    private fun setupUI(){
-    }
-
-
-    companion object {
-
-        @JvmStatic
-        fun newInstance(param1: String, param2: String) =
-            RoomFragment().apply {
-//                arguments = Bundle().apply {
-//                    putString(ARG_PARAM1, param1)
-//                    putString(ARG_PARAM2, param2)
-//                }
-            }
-    }
 }
 

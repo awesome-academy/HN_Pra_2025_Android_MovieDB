@@ -37,7 +37,7 @@ class RoomRepositoryImpl : RoomRepository {
         /* *
         * update RoomSession with the new room
         * */
-        RoomSession.roomId = roomKey
+        RoomSession.updateRoomId(roomKey)
     }
 
     override fun getRoom(

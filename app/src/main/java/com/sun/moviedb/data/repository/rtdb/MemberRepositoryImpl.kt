@@ -5,14 +5,17 @@ import com.google.firebase.Firebase
 import com.google.firebase.database.ChildEventListener
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.ValueEventListener
 import com.google.firebase.database.database
 import com.google.firebase.database.getValue
 import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
+import com.sun.moviedb.utils.MemberListener
 
 class MemberRepositoryImpl : MemberRepository {
     private val memberRef = Firebase.database.reference.child(membersPath)
-    private var memberListener: ChildEventListener? = null
+    private val childListeners = mutableMapOf<String, ChildEventListener>()
+    private val valueListeners = mutableMapOf<String, ValueEventListener>()
     private val TAG = "MemberRepositoryImpl"
 
     override fun addMember(
@@ -25,7 +28,7 @@ class MemberRepositoryImpl : MemberRepository {
         memberNode.setValue(member)
             .addOnSuccessListener {
                 onResult(NetworkResult.OnSuccess(Unit))
-                Log.d(TAG, "Member added successfully: ${member.memberId}")
+                Log.d(TAG, "Member added successfully on addMember(): ${member.memberName} (${member.memberId}) into ($roomId)")
 
                 /* *
                 * Ensure that the member node is removed if they disconnect
@@ -46,97 +49,87 @@ class MemberRepositoryImpl : MemberRepository {
         memberRef.child(roomId).child(memberId).removeValue()
             .addOnSuccessListener {
                 onResult(NetworkResult.OnSuccess(Unit))
-                Log.d(TAG, "Member removed successfully: $memberId")
+                Log.d(TAG, "Member removed successfully: $memberId from ($roomId)")
             }
             .addOnFailureListener { error ->
-                onResult(NetworkResult.OnError(null, error.message ?: "Cannot remove member"))
-                Log.e(TAG, "Failed to remove member: $memberId", error)
+                onResult(NetworkResult.OnError(null, error.message ?: "Cannot remove member from ($roomId)"))
+                Log.e(TAG, "Failed to remove member: ($memberId) from ($roomId)", error)
             }
     }
 
-    override fun getMembers(
+    override fun listenMemberChanged(
         roomId: String,
-        onResult: (NetworkResult<Member>) -> Unit
+        onResult: (MemberListener<Member>) -> Unit
     ) {
-        memberListener = object : ChildEventListener{
+        val child = object : ChildEventListener{
             override fun onChildAdded(
                 snapshot: DataSnapshot,
                 previousChildName: String?
             ) {
-                if (!snapshot.exists()) {
-                    onResult(NetworkResult.OnError(null, "No members found"))
-                    Log.d(TAG, "No members found for room: $roomId")
-                    return
-                }
+                try {
+                    snapshot.getValue<Member>()?.let { item ->
+                        val memberId = snapshot.key
+                        onResult(MemberListener.OnJoin(item))
+                        Log.d(TAG, "New member added on ChildAdded():${item.memberName} ($memberId) from ($roomId)")
+                    }
 
-                val member = snapshot.getValue<Member>()
-                if (member == null) {
-                    onResult(NetworkResult.OnError(null, "Failed to parse member data"))
-                    Log.d(TAG, "Failed to parse member data for room: $roomId")
-                    return
-                }
-
-                onResult(NetworkResult.OnSuccess(member))
-            }
-
-            override fun onChildChanged(
-                snapshot: DataSnapshot,
-                previousChildName: String?
-            ) {
-                val member = snapshot.getValue<Member>()
-                if (member != null) {
-                    onResult(NetworkResult.OnSuccess(member))
-                    Log.d(TAG, "Member updated: ${member.memberId}")
-                } else {
-                    onResult(NetworkResult.OnError(null, "Failed to parse updated member data"))
-                    Log.d(TAG, "Failed to parse updated member data for: ${snapshot.key}")
+                } catch (e: Exception) {
+                    onResult(MemberListener.OnError(null, e.message ?: "Error to load all members from ($roomId)"))
+                    Log.e(TAG, "Error receiving members from ($roomId): ${e.message}")
                 }
             }
+
+            override fun onChildChanged(snapshot: DataSnapshot, previousChildName: String?) {}
 
             override fun onChildRemoved(snapshot: DataSnapshot) {
-                val memberId = snapshot.key
-                if (memberId != null) {
-                    onResult(NetworkResult.OnError(null, "Member removed: $memberId"))
-                    Log.d(TAG, "Member leaved: $memberId")
-                } else {
-                    onResult(NetworkResult.OnError(null, "Member ID not found"))
-                    Log.d(TAG, "Member ID not found for removal")
+                try {
+                    snapshot.getValue<Member>()?.let {
+                        onResult(MemberListener.OnLeave(it ))
+                        Log.d(TAG, "Member left: ${it.memberName} (${it.memberId}) from ($roomId)")
+                    }
+                }catch (e: Exception){
+                    onResult(MemberListener.OnError(null, "Failed to parse leaved member data from ($roomId)"))
+                    Log.e(TAG, "Failed to left the member from ($roomId)")
                 }
             }
 
             override fun onChildMoved(snapshot: DataSnapshot, previousChildName: String?) {}
 
             override fun onCancelled(error: DatabaseError) {}
-
         }
 
-        memberRef.addChildEventListener(memberListener!!)
+        val value = object : ValueEventListener{
+            override fun onDataChange(snapshot: DataSnapshot) {
+                val list = snapshot.children.mapNotNull { it.getValue(Member::class.java) }
+                onResult(MemberListener.onListChanged(list))
+            }
+
+            override fun onCancelled(error: DatabaseError) {}
+        }
+
+        memberRef.child(roomId).addChildEventListener(child)
+        memberRef.child(roomId).addValueEventListener(value)
+        childListeners[roomId] = child
+        valueListeners[roomId] = value
     }
 
-    override fun deleteMemberNode(
-        roomId: String,
-        onResult: (NetworkResult<Unit>) -> Unit
-    ) {
-        memberRef.child(roomId).removeValue()
-            .addOnSuccessListener {
-                onResult(NetworkResult.OnSuccess(Unit))
-                Log.d(TAG, "MemberNode removed successfully: $roomId")
-            }
-            .addOnFailureListener { error ->
-                onResult(NetworkResult.OnError(null, error.message ?: "Cannot remove membernode"))
-                Log.e(TAG, "Failed to remove member node: $roomId", error)
-            }
+    override fun removeChildEventListener(roomId: String) {
+        childListeners.remove(roomId)?.let { listener ->
+            memberRef.child(roomId).removeEventListener(listener)
+            Log.d(TAG, "ChildEventListener removed for room: $roomId")
+        }
     }
 
-    override fun removeListener(roomId: String) {
-        memberListener?.let {
-            memberRef.child(roomId).removeEventListener(it)
-            memberListener = null
+    override fun removeValueEventListener(roomId: String) {
+        valueListeners.remove(roomId)?.let { listener ->
+            memberRef.child(roomId).removeEventListener(listener)
+            Log.d(TAG, "ValueEventListener removed for room: $roomId")
         }
     }
 
     companion object{
         private const val membersPath = "members"
+        private const val createAtPath = "createAt"
 
         private var intance: MemberRepositoryImpl? = null
         fun getInstance(): MemberRepositoryImpl {
