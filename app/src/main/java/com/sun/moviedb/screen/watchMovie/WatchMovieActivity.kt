@@ -231,7 +231,8 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
             roomId?.let {
                 val fragment = RoomFragment()
                 fragment.setPresenter(presenter)
-                toggleFragment(fragment, ROOM_FRAGMENT_TAG) }
+                toggleFragment(fragment, ROOM_FRAGMENT_TAG)
+            }
         }
     }
 
@@ -260,7 +261,7 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         }
     }
 
-    private fun hideFragment(){
+    private fun hideFragment() {
         val container = binding.containterRoomChat
         val containerOverlay = binding.containerOverlay
 

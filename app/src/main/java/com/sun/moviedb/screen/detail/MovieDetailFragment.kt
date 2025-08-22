@@ -208,20 +208,30 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         binding.btnWatchWithFriends.setOnClickListener {
             presenter.createRoom(movieInfo)
 
-            presenter.addCurrentMember(RoomSession.roomId!!)
-
-            Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
+            if (RoomSession.roomId != null)
+                presenter.addCurrentMember(RoomSession.roomId!!)
+            else {
+                Log.d(TAG, "Room ID is null -> Fail to create new Room")
+                Toast.makeText(
+                    requireContext(),
+                    "Room ID is null -> Fail to create new Room",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
 
             /* *
             * Default: Watch movie from the first episode
             * */
+
             val firstEpisode = episodes.firstOrNull()
             if (firstEpisode != null && firstEpisode.serverData.isNotEmpty()) {
                 val firstServerData = firstEpisode.serverData.firstOrNull()
-                if (firstServerData != null) {
+                val roomId = RoomSession.roomId ?: ""
+                if (firstServerData != null && roomId.isNotEmpty()) {
                     val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
                         putExtra(ARG_M3U8_LINK, firstServerData.linkM3u8)
-                        putExtra(ARG_ROOM_ID, RoomSession.roomId)
+                        putExtra(ARG_ROOM_ID, roomId)
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
                     startActivity(intent)
