@@ -12,10 +12,16 @@ import androidx.media3.common.util.UnstableApi
 import androidx.media3.datasource.DefaultHttpDataSource
 import androidx.media3.exoplayer.ExoPlayer
 import androidx.media3.exoplayer.hls.HlsMediaSource
+import com.sun.moviedb.data.model.Member
+import com.sun.moviedb.data.repository.rtdb.MemberRepository
+import com.sun.moviedb.data.repository.source.remote.NetworkResult
+import com.sun.moviedb.utils.MemberListener
+import com.sun.moviedb.utils.session.RoomSession
 
 @OptIn(UnstableApi::class)
 class WatchMoviePresenterImpl(
-    private val contextProvider: () -> Context
+    private val contextProvider: () -> Context,
+    private val memberRepository: MemberRepository
 ) : WatchMovieContract.Presenter {
 
     private var view: WatchMovieContract.View? = null
@@ -27,6 +33,12 @@ class WatchMoviePresenterImpl(
 
     private var isPlayerPrepared = false
     private var isSurfaceReady = false
+
+    private val cachedMembers = mutableListOf<Member>()
+    private var roomId: String? = null
+
+    private var observingRoomId: String? = null
+    private var isListening = false
 
     override fun attachView(view: WatchMovieContract.View) {
         this.view = view
@@ -159,5 +171,56 @@ class WatchMoviePresenterImpl(
 
         if (playbackState == Player.STATE_ENDED) {
         }
+    }
+
+    override fun observeMembers(roomId: String) {
+        if (isListening && observingRoomId == roomId) {
+            // đã attach rồi, bỏ qua
+            return
+        }
+        observingRoomId = roomId
+        isListening = true
+
+        memberRepository.listenMemberChanged(roomId){ result ->
+            when(result){
+                is MemberListener.OnError -> view?.showPlayerError(result.message)
+                is MemberListener.OnJoin<Member> -> view?.showAddedMember(result.data.memberName)
+                is MemberListener.OnLeave<Member> -> view?.showLeftMember(result.data.memberName)
+                is MemberListener.onListChanged<Member> -> {
+                    cachedMembers.clear()
+                    cachedMembers.addAll(result.data)
+                    view?.updateMemberList(result.data)
+                }
+            }
+        }
+    }
+
+    override fun getCachedMembers(): List<Member> = cachedMembers
+
+    override fun removeChoosenMember(
+        roomId: String,
+        member: Member
+    ) {
+        memberRepository.removeMember(roomId, member.memberId) { result ->
+            when (result) {
+                is NetworkResult.OnError -> view?.showPlayerError(result.message)
+                is NetworkResult.OnSuccess<Unit> -> {
+                    view?.showLeftMember("Removed member: ${member.memberName}")
+                }
+            }
+        }
+    }
+
+    override fun updateRoomId(roomId: String) {
+        this.roomId = roomId
+        RoomSession.updateRoomId(roomId)
+    }
+
+    override fun removeMemberListener(roomId: String) {
+        memberRepository.removeChildEventListener(roomId)
+        memberRepository.removeValueEventListener(roomId)
+
+        isListening = false
+        observingRoomId = null
     }
 }

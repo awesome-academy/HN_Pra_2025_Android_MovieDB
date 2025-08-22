@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="utf-8"?>
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".screen.room.RoomFragment"
+    android:background="@drawable/bg_frame_chat">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+        <FrameLayout
+            android:id="@+id/container_search_user"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <include layout="@layout/fragment_search_user"/>
+
+        </FrameLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="2dp"
+            android:background="@color/white"
+            android:layout_marginTop="@dimen/dp_50"
+            android:layout_marginVertical="8dp" />
+
+        <TextView
+            android:id="@+id/tv_title_member"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_member"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            android:textSize="@dimen/sp_20"
+            android:layout_marginTop="@dimen/dp_8"
+            android:textColor="@color/white"/>
+
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/rv_list_member"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:minHeight="@dimen/dp_250"
+                android:nestedScrollingEnabled="false"
+                android:padding="@dimen/dp_16"
+                android:paddingBottom="@dimen/dp_80"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+            </androidx.recyclerview.widget.RecyclerView>
+
+            <com.sun.moviedb.utils.custom_view.VisualizerLoadingView
+                android:id="@+id/progressBar3"
+                style="?android:attr/progressBarStyle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:visibility="gone"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent" />
+
+        </androidx.constraintlayout.widget.ConstraintLayout>
+
+        <Button
+            android:id="@+id/btn_out_room"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/bg_btn_watch"
+            android:textColor="@color/white"
+            android:layout_marginHorizontal="@dimen/dp_16"
+            android:layout_marginBottom="@dimen/dp_50"
+            android:text="@string/out_room" />
+
+    </LinearLayout>
+</ScrollView>

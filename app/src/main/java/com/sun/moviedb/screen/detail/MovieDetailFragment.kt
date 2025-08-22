@@ -1,10 +1,11 @@
 package com.sun.moviedb.screen.detail
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -18,15 +19,19 @@ import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 import com.sun.moviedb.MyApp
+import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
+import com.sun.moviedb.utils.AppLocator
+import com.sun.moviedb.utils.session.RoomSession
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
-    private lateinit var serverDataListApdapter: ServerDataListAdapter
+    private lateinit var serverDataListAdapter: ServerDataListAdapter
     private lateinit var presenter: MovieDetailPresenter
     private lateinit var movieInfo: Movie
     private lateinit var episodes: List<Episode>
     private var isFavourite = false
     private var slug: String = ""
+    private val TAG = "MovieDetailFragment"
 
     private val userId: String by lazy {
         FirebaseAuth.getInstance().currentUser?.uid ?: ""
@@ -41,8 +46,14 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     override fun initData() {
         super.initData()
+
         val app = requireActivity().application as MyApp
-        presenter = MovieDetailPresenter(app.movieRepository)
+
+        presenter = MovieDetailPresenter(
+            app.movieRepository,
+            AppLocator.roomRepository,
+            AppLocator.memberRepository
+        )
         presenter.attachView(this)
 
 
@@ -67,6 +78,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     ) {
         this.movieInfo = movie
         this.episodes = episodes
+        Log.d(TAG, "Movie: $movie")
+        Log.d(TAG, "Episodes: $episodes")
+
         showLoading(false)
         setUI()
         setEpsListView()
@@ -75,8 +89,19 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         onWatchNowButtonClicked()
         onChillWithFriendButtonClicked()
         onBackButtonClicked()
-
+        onInviteFriendButtonClicked()
         presenter.checkFavorite(movieInfo.id, userId)
+    }
+
+    override fun onAddSuccess(message: String) {
+        Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+    }
+
+    override fun showLoading2(isLoading: Boolean) {
+        if (isLoading)
+            binding.progressBar2.visibility = ViewGroup.VISIBLE
+        else
+            binding.progressBar2.visibility = ViewGroup.GONE
     }
 
     override fun onCheckFavorite(isFavorite: Boolean) {
@@ -131,21 +156,25 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private fun setServerDataListView(serverData: List<ServerData>) {
         binding.progressBar2.visibility = ViewGroup.VISIBLE
 
-        //delay to simulate loading
-        binding.rvListServerData.postDelayed({
-            serverDataListApdapter = ServerDataListAdapter(serverData) { item ->
-                // Handle click on server data
-                Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
+        serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
+            // Handle click on server data
+            Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
+
+            val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
+                putExtra(ARG_M3U8_LINK, item)
             }
+            startActivity(intent)
 
-            binding.rvListServerData.layoutManager = GridLayoutManager(
-                requireContext(), 3,
-                GridLayoutManager.VERTICAL, false
-            )
-            binding.rvListServerData.adapter = serverDataListApdapter
+        }
 
-            binding.progressBar2.visibility = ViewGroup.GONE
-        }, 1000)
+        binding.rvListServerData.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.HORIZONTAL, false
+        )
+        binding.rvListServerData.adapter = serverDataListAdapter
+
+        binding.progressBar2.visibility = ViewGroup.GONE
+
     }
 
     private fun onStartFromBeginningButtonClicked() {
@@ -165,6 +194,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     private fun onWatchNowButtonClicked() {
+
         binding.btnWatchNow.setOnClickListener {
             Toast.makeText(
                 requireContext(),
@@ -176,20 +206,52 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onChillWithFriendButtonClicked() {
         binding.btnWatchWithFriends.setOnClickListener {
-            Toast.makeText(requireContext(), "Chill with friend", Toast.LENGTH_SHORT).show()
+            presenter.createRoom(movieInfo)
+
+            if (RoomSession.roomId != null)
+                presenter.addCurrentMember(RoomSession.roomId!!)
+            else {
+                Log.d(TAG, "Room ID is null -> Fail to create new Room")
+                Toast.makeText(
+                    requireContext(),
+                    "Room ID is null -> Fail to create new Room",
+                    Toast.LENGTH_SHORT
+                ).show()
+                return@setOnClickListener
+            }
+
+            /* *
+            * Default: Watch movie from the first episode
+            * */
+
+            val firstEpisode = episodes.firstOrNull()
+            if (firstEpisode != null && firstEpisode.serverData.isNotEmpty()) {
+                val firstServerData = firstEpisode.serverData.firstOrNull()
+                val roomId = RoomSession.roomId ?: ""
+                if (firstServerData != null && roomId.isNotEmpty()) {
+                    val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
+                        putExtra(ARG_M3U8_LINK, firstServerData.linkM3u8)
+                        putExtra(ARG_ROOM_ID, roomId)
+                        flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
+                    }
+                    startActivity(intent)
+                }
+            }
         }
     }
 
     private fun onBackButtonClicked() {
         binding.btnBack.setOnClickListener {
             requireActivity().supportFragmentManager.popBackStackImmediate()
+            Toast.makeText(requireContext(), "Back to previous screen", Toast.LENGTH_SHORT).show()
         }
     }
 
+    private fun onInviteFriendButtonClicked() {}
 
     /**
      * support to show category chip in UI
-     * get 2 first categories
+     * get 2 items of categories
      * if only one category, return that category name
      * */
     private fun getListCate(cates: List<Category> = emptyList()): String {
@@ -203,7 +265,9 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     }
 
     companion object {
-        const val KEY_SLUG = "slug"
+        private const val KEY_SLUG = "slug"
+        private const val ARG_M3U8_LINK = "m3u8_link"
+        const val ARG_ROOM_ID = "room_id"
         fun newInstance(slug: String): MovieDetailFragment {
             val fragment = MovieDetailFragment()
             val args = Bundle().apply {
@@ -219,3 +283,4 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         super.onDestroy()
     }
 }
+
