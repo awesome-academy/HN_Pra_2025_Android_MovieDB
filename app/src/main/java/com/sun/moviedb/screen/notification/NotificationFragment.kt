@@ -6,6 +6,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.core.view.ViewCompat
+import androidx.core.view.WindowInsetsCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.sun.moviedb.data.model.Member
@@ -155,6 +157,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), Notifi
     }
 
     private fun setupUI() {
+        setupStatusBarPadding()
         adapter = NotificationAdapter(fakeNotifications){roomId, movieSlug ->
             Log.d(TAG, "Notification clicked: Room ID = $roomId, Movie Slug = $movieSlug")
             Toast.makeText(requireContext(), "Clicked on room: $roomId & movieSlug: $movieSlug", Toast.LENGTH_SHORT).show()
@@ -186,6 +189,14 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), Notifi
             flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
         }
         startActivity(intent)
+    }
+
+    private fun setupStatusBarPadding() {
+        ViewCompat.setOnApplyWindowInsetsListener(binding.root) { v, insets ->
+            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
+            v.setPadding(systemBars.left, systemBars.top, systemBars.right, 0)
+            insets
+        }
     }
 
     private fun goRoom(roomId: String){
