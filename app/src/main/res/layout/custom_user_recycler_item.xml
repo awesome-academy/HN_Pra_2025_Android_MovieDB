@@ -7,12 +7,12 @@
     android:background="?android:attr/selectableItemBackground"
     android:gravity="center_vertical"
     android:orientation="horizontal"
-    android:padding="@dimen/dp_16"> <!-- For click feedback -->
+    android:padding="@dimen/dp_8"> <!-- For click feedback -->
 
     <ImageView
         android:id="@+id/imageViewUserProfile"
-        android:layout_width="40dp"
-        android:layout_height="40dp"
+        android:layout_width="@dimen/dp_32"
+        android:layout_height="@dimen/dp_32"
         android:src="@mipmap/ic_launcher_round" />
 
     <TextView
@@ -22,7 +22,7 @@
         android:layout_marginStart="16dp"
         android:layout_weight="1"
         android:textColor="@color/white"
-        android:textSize="16sp"
+        android:textSize="@dimen/sp_14"
         tools:text="Username Example" />
 
 </LinearLayout>

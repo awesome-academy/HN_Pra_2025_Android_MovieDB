@@ -7,6 +7,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.firebase.auth.FirebaseAuth
+import com.sun.moviedb.R
 import com.sun.moviedb.data.model.MessageModel
 import com.sun.moviedb.databinding.ViewholderChatFrameReceiverBinding
 import com.sun.moviedb.databinding.ViewholderChatFrameSenderBinding
@@ -72,6 +73,8 @@ class ChatAdapter (val items: MutableList<MessageModel>) : RecyclerView.Adapter<
             if (msg.linkAvt.isNotEmpty()){
                 Glide.with(binding.root.context)
                     .load(msg.linkAvt)
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.mipmap.ic_launcher_round)
                     .apply(RequestOptions.circleCropTransform())
                     .into(binding.imgSenderAvt)
             }
@@ -86,6 +89,8 @@ class ChatAdapter (val items: MutableList<MessageModel>) : RecyclerView.Adapter<
             if (msg.linkAvt.isNotEmpty()){
                 Glide.with(binding.root.context)
                     .load(msg.linkAvt)
+                    .placeholder(R.mipmap.ic_launcher_round)
+                    .error(R.mipmap.ic_launcher_round)
                     .apply(RequestOptions.circleCropTransform())
                     .into(binding.imgReceiverAvt)
             }

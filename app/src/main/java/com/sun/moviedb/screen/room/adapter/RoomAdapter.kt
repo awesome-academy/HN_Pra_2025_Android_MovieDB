@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
+import com.sun.moviedb.R
 import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.databinding.ViewholderMemberItemBinding
 import com.sun.moviedb.utils.session.UserSession
@@ -51,6 +52,8 @@ class RoomAdapter(
         if (item.linkAvatar.isNotEmpty()) {
             Glide.with(context)
                 .load(item.linkAvatar)
+                .placeholder(R.mipmap.ic_launcher_round)
+                .error(R.mipmap.ic_launcher_round)
                 .apply(RequestOptions.circleCropTransform())
                 .into(holder.binding.imgAvtMember)
         }
