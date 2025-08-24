@@ -12,12 +12,13 @@ import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
 import com.sun.moviedb.utils.session.UserSession
 
 class MovieDetailPresenter
-    internal constructor(
-        private val mMovieRepository: MovieRepository?,
-        private val roomRepository: RoomRepository,
-        private val memberRepository: MemberRepository
-    ) : MovieDetailContract.Presenter{
-        private var mView: MovieDetailContract.View? = null
+internal constructor(
+    private val mMovieRepository: MovieRepository?,
+    private val roomRepository: RoomRepository,
+    private val memberRepository: MemberRepository
+) : MovieDetailContract.Presenter {
+    private var mView: MovieDetailContract.View? = null
+
 
     override fun attachView(view: MovieDetailContract.View) {
         this.mView = view
@@ -85,12 +86,13 @@ class MovieDetailPresenter
         )
 
         mView?.showLoading2(true)
-        roomRepository.addRoom(room){ result ->
-            when(result){
+        roomRepository.addRoom(room) { result ->
+            when (result) {
                 is NetworkResult.OnSuccess -> {
                     // Room created successfully
                     mView?.onAddSuccess("Room created successfully")
                 }
+
                 is NetworkResult.OnError -> {
                     // Failed to create room
                     mView?.showError(result.message)
@@ -128,6 +130,21 @@ class MovieDetailPresenter
             }
             mView?.showLoading2(false)
         }
+    }
+
+    override fun deleteCurrentMember(roomId: String) {
+        mView?.showLoading2(true)
+        val currentUserId = UserSession.userId ?: ""
+        if (currentUserId.isNotEmpty())
+            memberRepository.removeMember(roomId, currentUserId) { result ->
+                when (result) {
+                    is NetworkResult.OnSuccess -> {}
+                    is NetworkResult.OnError -> {
+                        mView?.showError(result.message)
+                    }
+                }
+                mView?.showLoading2(false)
+            }
     }
 
     override fun removeMemberListener(roomId: String) {

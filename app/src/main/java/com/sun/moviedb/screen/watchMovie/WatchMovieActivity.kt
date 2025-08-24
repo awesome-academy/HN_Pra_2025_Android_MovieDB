@@ -170,7 +170,12 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     override fun getOriginalOrientation(): Int = this.activityOriginalOrientation
 
-    override fun popView() {
+    override fun popView(data: Bundle?) {
+        if (data != null && data.containsKey("message")) {
+            // Show toast message before finishing the activity
+            val message = data.getString("message", "")
+            Toast.makeText(this, message, Toast.LENGTH_SHORT).show()
+        }
         finish()
     }
 
@@ -273,16 +278,18 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
     }
 
     private fun hideFragment() {
-        val container = binding.containterRoomChat
+        val container1 = binding.containterRoomChat
+        val container2 = binding.containerSearchUser
         val containerOverlay = binding.containerOverlay
 
-        supportFragmentManager.findFragmentById(container.id)?.let {
+        supportFragmentManager.findFragmentById(container1.id)?.let {
             supportFragmentManager.beginTransaction().remove(it).commit()
         }
 
         containerOverlay.visibility = View.GONE
         containerOverlay.isClickable = false
-        container.visibility = View.GONE
+        container1.visibility = View.GONE
+        container2.visibility = View.GONE
 
         currentFragmentTag = null
         isFragmentVisible = false

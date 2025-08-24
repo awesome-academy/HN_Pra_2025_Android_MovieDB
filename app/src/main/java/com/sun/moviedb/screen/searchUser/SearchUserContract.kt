@@ -5,7 +5,7 @@ import com.sun.moviedb.utils.base.BasePresenter
 import com.sun.moviedb.utils.base.BaseView
 
 interface SearchUserContract {
-    interface View: BaseView {
+    interface View : BaseView {
         fun showLoading()
         fun hideLoading()
         fun displaySearchableUsers(users: List<User>)
@@ -22,7 +22,7 @@ interface SearchUserContract {
         fun updateInviteButton(count: Int, isEnabled: Boolean)
     }
 
-    interface Presenter: BasePresenter<SearchUserContract.View> {
+    interface Presenter : BasePresenter<View> {
         fun loadInitialUsers()
         fun searchUsers(query: String)
         fun selectUser(user: User)

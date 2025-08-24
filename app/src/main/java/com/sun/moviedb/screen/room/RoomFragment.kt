@@ -53,7 +53,7 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
         roomAdapter = RoomAdapter { choosenMember ->
             if (roomId.isEmpty())
                 throw Exception("Room Id is empty, please set it before removing member in HomeFragment")
-            watchPresenter!!.removeChoosenMember(roomId, choosenMember)
+            watchPresenter!!.removeChosenMember(roomId, choosenMember)
             roomAdapter.removeItem(choosenMember)
         }
 
@@ -88,7 +88,7 @@ class RoomFragment : BaseFragment<FragmentRoomBinding>(), RoomContract.View {
                 Activity.RESULT_OK,
                 Intent()
                     .putExtra(HAS_ROOM, true)
-                    .putExtra(MESSAGE_AFTER_LEFT_ROOM, "You have left the room")
+                    .putExtra(MESSAGE_AFTER_LEFT_ROOM, "Bạn đã rời khỏi phòng")
             )
             requireActivity().finish()
         }

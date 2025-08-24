@@ -16,7 +16,7 @@ interface WatchMovieContract {
         fun getInitialPlayWhenReady(): Boolean
         fun setOriginalOrientation(orientation: Int)
         fun getOriginalOrientation(): Int
-        fun popView()
+        fun popView(data: Bundle?)
 
         fun showAddedMember(memberName: String)
         fun showLeftMember(memberName: String)
@@ -26,7 +26,12 @@ interface WatchMovieContract {
     interface Presenter {
         fun attachView(view: View)
         fun detachView()
-        fun onActivityCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean)
+        fun onActivityCreated(
+            m3u8Link: String?,
+            savedPlaybackPosition: Long,
+            savedPlayWhenReady: Boolean
+        )
+
         fun onStart()
         fun onResume()
         fun onPause(currentPosition: Long, currentPlayWhenReady: Boolean)
@@ -36,7 +41,7 @@ interface WatchMovieContract {
         fun onPlaybackStateChanged(playbackState: Int, playWhenReady: Boolean)
         fun observeMembers(roomId: String)
         fun getCachedMembers(): List<Member>
-        fun removeChoosenMember(roomId: String, member: Member)
+        fun removeChosenMember(roomId: String, member: Member)
         fun updateRoomId(roomId: String)
 
         fun removeMemberListener(roomId: String)
