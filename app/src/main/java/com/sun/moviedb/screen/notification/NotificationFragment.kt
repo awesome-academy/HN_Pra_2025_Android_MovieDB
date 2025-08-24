@@ -7,15 +7,14 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.data.model.NotificationModel
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
-import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentNotificationBinding
 import com.sun.moviedb.screen.notification.adapter.NotificationAdapter
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
+import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.utils.session.UserSession
 
 class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),

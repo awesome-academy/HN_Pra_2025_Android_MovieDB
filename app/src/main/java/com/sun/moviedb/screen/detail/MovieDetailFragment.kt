@@ -11,19 +11,19 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
+import com.sun.moviedb.MyApp
 import com.sun.moviedb.R
 import com.sun.moviedb.data.model.Category
 import com.sun.moviedb.data.model.Episode
 import com.sun.moviedb.data.model.Movie
 import com.sun.moviedb.data.model.ServerData
-import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
-import com.sun.moviedb.MyApp
 import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
+import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.utils.session.RoomSession
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
@@ -37,11 +37,12 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private val watchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){ result ->
-        if (result.resultCode == Activity.RESULT_OK){
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
             val left = result.data?.getBooleanExtra(RoomFragment.HAS_ROOM, false) ?: false
-            if (left){
-                val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM) ?: "Bạn đã rời phòng"
+            if (left) {
+                val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM)
+                    ?: "Bạn đã rời phòng"
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 /**
                  * clear room session, clear current member node

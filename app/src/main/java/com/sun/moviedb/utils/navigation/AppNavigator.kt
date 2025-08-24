@@ -57,9 +57,9 @@ object AppNavigator {
         fragmentManager?.addOnBackStackChangedListener {
             val currentFragment = fragmentManager?.findFragmentById(containerId)
             val isVisibleBottomBar = currentFragment is HomeFragment ||
-                        currentFragment is NotificationFragment ||
-                        currentFragment is SettingsFragment ||
-                        currentFragment is FilterFragment
+                    currentFragment is NotificationFragment ||
+                    currentFragment is SettingsFragment ||
+                    currentFragment is FilterFragment
             bottomNavView?.visibility = if (isVisibleBottomBar) View.VISIBLE else View.GONE
         }
     }

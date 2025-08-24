@@ -6,15 +6,15 @@ import android.widget.Toast
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sun.moviedb.MyApp
-import com.sun.moviedb.utils.base.BaseFragment
-import com.sun.moviedb.databinding.FragmentHomeBinding
 import com.sun.moviedb.data.model.Item
+import com.sun.moviedb.databinding.FragmentHomeBinding
 import com.sun.moviedb.screen.home.adapter.NewestMoviePagerAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesMovieAdapter
 import com.sun.moviedb.screen.home.adapter.SeriesTabAdapter
+import com.sun.moviedb.screen.search.SearchDialogFragment
+import com.sun.moviedb.utils.base.BaseFragment
 import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.navigation.NavDestination
-import com.sun.moviedb.screen.search.SearchDialogFragment
 
 class HomeFragment : BaseFragment<FragmentHomeBinding>(), HomeContract.HomeView {
     private lateinit var presenter: HomeContract.HomePresenter
