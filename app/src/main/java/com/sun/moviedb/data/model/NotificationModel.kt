@@ -22,7 +22,7 @@ sealed class NotificationModel {
         val senderAvatar: String = "",
         val movieId: String = "",
         val movieSlug: String = "",
-        ) : NotificationModel()
+    ) : NotificationModel()
 
     data class System(
         override val id: String = "",

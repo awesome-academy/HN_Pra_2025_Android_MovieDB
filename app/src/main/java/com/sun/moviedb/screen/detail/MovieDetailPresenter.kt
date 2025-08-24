@@ -136,8 +136,8 @@ internal constructor(
         mView?.showLoading2(true)
         val currentUserId = UserSession.userId ?: ""
         if (currentUserId.isNotEmpty())
-            memberRepository.removeMember(roomId, currentUserId){ result ->
-                when(result) {
+            memberRepository.removeMember(roomId, currentUserId) { result ->
+                when (result) {
                     is NetworkResult.OnSuccess -> {}
                     is NetworkResult.OnError -> {
                         mView?.showError(result.message)

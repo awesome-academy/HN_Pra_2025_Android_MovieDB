@@ -120,7 +120,7 @@ class SearchUserPresenterImpl(
     override fun deselectUser(user: User) {
         val removedFromChosen = currentChosenUsers.removeAll { it.id == user.id }
         if (removedFromChosen) {
-            if (!currentSearchableUsers.any { it.id == user.id}) {
+            if (!currentSearchableUsers.any { it.id == user.id }) {
                 currentSearchableUsers.add(0, user)
             }
 
@@ -142,7 +142,8 @@ class SearchUserPresenterImpl(
 
     override fun onInviteClicked() {
         if (currentChosenUsers.isNotEmpty()) {
-            val userDisplayNames = currentChosenUsers.joinToString { it.username ?: it.email ?: it.id }
+            val userDisplayNames =
+                currentChosenUsers.joinToString { it.username ?: it.email ?: it.id }
             Log.i(TAG, "Invite button clicked. Chosen users: $userDisplayNames")
             view?.showError("Invite functionality for: $userDisplayNames (Not implemented yet)")
         }

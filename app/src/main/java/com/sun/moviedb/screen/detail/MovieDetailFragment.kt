@@ -24,8 +24,8 @@ import com.sun.moviedb.MyApp
 import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
-import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.session.RoomSession
+import com.sun.moviedb.utils.navigation.AppNavigator
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
     private lateinit var epsListAdapter: EpsListAdapter
@@ -38,11 +38,12 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private val watchLauncher = registerForActivityResult(
         ActivityResultContracts.StartActivityForResult()
-    ){ result ->
-        if (result.resultCode == Activity.RESULT_OK){
+    ) { result ->
+        if (result.resultCode == Activity.RESULT_OK) {
             val left = result.data?.getBooleanExtra(RoomFragment.HAS_ROOM, false) ?: false
-            if (left){
-                val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM) ?: "Bạn đã rời phòng"
+            if (left) {
+                val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM)
+                    ?: "Bạn đã rời phòng"
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 /**
                  * clear room session, clear current member node
