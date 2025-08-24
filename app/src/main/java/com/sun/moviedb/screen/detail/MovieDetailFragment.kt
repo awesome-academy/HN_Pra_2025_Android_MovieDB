@@ -7,7 +7,6 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
@@ -22,7 +21,6 @@ import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 import com.sun.moviedb.MyApp
-import com.sun.moviedb.data.model.Room
 import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
@@ -46,8 +44,11 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
                 val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM) ?: "Bạn đã rời phòng"
                 Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
                 /**
-                 * clear room session
+                 * clear room session, clear current member node
                  * */
+                var currentRoomId = RoomSession.roomId ?: ""
+                if (currentRoomId.isNotEmpty())
+                    presenter.deleteCurrentMember(currentRoomId)
                 RoomSession.roomId = null
             }
         }

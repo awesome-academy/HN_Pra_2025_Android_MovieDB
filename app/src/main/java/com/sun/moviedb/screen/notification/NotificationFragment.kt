@@ -18,14 +18,15 @@ import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
 import com.sun.moviedb.utils.session.UserSession
 
-class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), NotificationContract.View {
+class NotificationFragment : BaseFragment<FragmentNotificationBinding>(),
+    NotificationContract.View {
 
     private lateinit var presenter: NotificationContract.Presenter
     private lateinit var adapter: NotificationAdapter
     val now = System.currentTimeMillis()
     private val TAG = "NotificationFragment"
 
-    val fakeNotifications = mutableListOf(
+    private val fakeNotifications = mutableListOf(
         NotificationModel.Invite(
             id = "invite_1",
             title = "Mời bạn tham gia xem phim",
@@ -155,12 +156,18 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), Notifi
     }
 
     private fun setupUI() {
-        adapter = NotificationAdapter(fakeNotifications){roomId, movieSlug ->
+        adapter = NotificationAdapter(fakeNotifications) { roomId, movieSlug ->
             Log.d(TAG, "Notification clicked: Room ID = $roomId, Movie Slug = $movieSlug")
-            Toast.makeText(requireContext(), "Clicked on room: $roomId & movieSlug: $movieSlug", Toast.LENGTH_SHORT).show()
+            Toast.makeText(
+                requireContext(),
+                "Clicked on room: $roomId & movieSlug: $movieSlug",
+                Toast.LENGTH_SHORT
+            ).show()
         }
-        binding.rvListNotifications.layoutManager = LinearLayoutManager(requireContext(),
-            LinearLayoutManager.VERTICAL, false)
+        binding.rvListNotifications.layoutManager = LinearLayoutManager(
+            requireContext(),
+            LinearLayoutManager.VERTICAL, false
+        )
         binding.rvListNotifications.adapter = adapter
 
 
@@ -188,7 +195,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), Notifi
         startActivity(intent)
     }
 
-    private fun goRoom(roomId: String){
+    private fun goRoom(roomId: String) {
         val member = Member(
             memberId = UserSession.userId ?: "knot",
             memberName = UserSession.userName ?: "Unknown",
@@ -222,7 +229,7 @@ class NotificationFragment : BaseFragment<FragmentNotificationBinding>(), Notifi
         Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
     }
 
-    companion object{
+    companion object {
         private const val KEY_SLUG = "slug"
         private const val ARG_M3U8_LINK = "m3u8_link"
         const val ARG_ROOM_ID = "room_id"

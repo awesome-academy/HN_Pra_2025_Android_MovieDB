@@ -17,6 +17,7 @@ import com.sun.moviedb.data.repository.rtdb.MemberRepository
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
 import com.sun.moviedb.utils.MemberListener
 import com.sun.moviedb.utils.session.RoomSession
+import com.sun.moviedb.utils.session.UserSession
 
 @OptIn(UnstableApi::class)
 class WatchMoviePresenterImpl(
@@ -49,14 +50,18 @@ class WatchMoviePresenterImpl(
         this.view = null
     }
 
-    override fun onActivityCreated(m3u8Link: String?, savedPlaybackPosition: Long, savedPlayWhenReady: Boolean) {
+    override fun onActivityCreated(
+        m3u8Link: String?,
+        savedPlaybackPosition: Long,
+        savedPlayWhenReady: Boolean
+    ) {
         currentM3u8Link = m3u8Link
         playbackPosition = savedPlaybackPosition
         playWhenReady = savedPlayWhenReady
 
         if (currentM3u8Link == null) {
             view?.showPlayerError("No video link provided.")
-            view?.popView()
+            view?.popView(null)
             return
         }
     }
@@ -94,7 +99,7 @@ class WatchMoviePresenterImpl(
         if (currentM3u8Link == null) {
             Log.e("WatchMoviePresenter", "Attempted to initialize player with null M3U8 link.")
             view?.showPlayerError("Video link is missing.")
-            view?.popView()
+            view?.popView(null)
             return
         }
 
@@ -181,11 +186,24 @@ class WatchMoviePresenterImpl(
         observingRoomId = roomId
         isListening = true
 
-        memberRepository.listenMemberChanged(roomId){ result ->
-            when(result){
+        memberRepository.listenMemberChanged(roomId) { result ->
+            when (result) {
                 is MemberListener.OnError -> view?.showPlayerError(result.message)
                 is MemberListener.OnJoin<Member> -> view?.showAddedMember(result.data.memberName)
-                is MemberListener.OnLeave<Member> -> view?.showLeftMember(result.data.memberName)
+                is MemberListener.OnLeave<Member> -> {
+                    val currentUser = UserSession.userId
+
+                    if (currentUser == result.data.memberId) {
+                        // nếu là current user thì xóa player và thoát
+                        releaseActualPlayer()
+                        val data = Bundle().apply {
+                            putString("message", "Bạn đã bị mời ra khỏi phòng")
+                        }
+                        view?.popView(data)
+                    } else
+                        view?.showLeftMember(result.data.memberName)
+                }
+
                 is MemberListener.onListChanged<Member> -> {
                     cachedMembers.clear()
                     cachedMembers.addAll(result.data)
@@ -197,7 +215,7 @@ class WatchMoviePresenterImpl(
 
     override fun getCachedMembers(): List<Member> = cachedMembers
 
-    override fun removeChoosenMember(
+    override fun removeChosenMember(
         roomId: String,
         member: Member
     ) {
