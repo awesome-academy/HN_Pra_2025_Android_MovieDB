@@ -51,5 +51,6 @@
     <string name="title_description">Mô tả</string>
     <string name="title_member">THÀNH VIÊN</string>
     <string name="out_room">Rời phòng</string>
+    <string name="title_notification">Notification</string>
 </resources>
 

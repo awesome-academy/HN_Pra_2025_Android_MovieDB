@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.sun.moviedb.data.model.MessageModel
+import com.sun.moviedb.data.model.NotificationModel
 import com.sun.moviedb.data.repository.rtdb.ChatRepository
 import com.sun.moviedb.data.repository.rtdb.ChatRepositoryImpl
 import com.sun.moviedb.databinding.FragmentChatBinding
