@@ -5,16 +5,16 @@
     android:id="@+id/relativeLayoutChosenUserItem">
 
     <ImageView
-        android:layout_width="@dimen/dp_60"
-        android:layout_height="@dimen/dp_60"
         android:id="@+id/imageViewChosenUserProfile"
+        android:layout_width="@dimen/dp_40"
+        android:layout_height="@dimen/dp_40"
         android:paddingTop="@dimen/dp_10"
-        android:paddingRight="@dimen/dp_10"
-        android:src="@mipmap/ic_launcher_round"/>
+        android:paddingRight="@dimen/dp_6"
+        android:src="@mipmap/ic_launcher_round" />
 
     <ImageView
-        android:layout_width="@dimen/dp_20"
-        android:layout_height="@dimen/dp_20"
-        android:src="@drawable/outline_close_24"
-        android:layout_alignParentRight="true"/>
+        android:layout_width="@dimen/dp_16"
+        android:layout_height="@dimen/dp_16"
+        android:layout_alignParentRight="true"
+        android:src="@drawable/baseline_close_24" />
 </RelativeLayout>
