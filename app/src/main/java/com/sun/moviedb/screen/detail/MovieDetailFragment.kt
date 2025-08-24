@@ -26,6 +26,7 @@ import com.sun.moviedb.data.model.Room
 import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
+import com.sun.moviedb.utils.navigation.AppNavigator
 import com.sun.moviedb.utils.session.RoomSession
 
 class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDetailContract.View {
@@ -266,8 +267,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
     private fun onBackButtonClicked() {
         binding.btnBack.setOnClickListener {
-            requireActivity().supportFragmentManager.popBackStackImmediate()
-            Toast.makeText(requireContext(), "Back to previous screen", Toast.LENGTH_SHORT).show()
+            AppNavigator.safeBack()
         }
     }
 

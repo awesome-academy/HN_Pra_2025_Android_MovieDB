@@ -91,6 +91,7 @@ class AuthRepositoryImpl(private val context: Context) : AuthRepository {
             firebaseAuth.signOut()
             googleSignInClient.signOut().await()
             Result.success(Unit)
+
         } catch (e: Exception) {
             Result.failure(e)
         }
