@@ -1,11 +1,14 @@
 package com.sun.moviedb.screen.detail
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.bumptech.glide.Glide
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +22,8 @@ import com.sun.moviedb.databinding.FragmentMovieDetailBinding
 import com.sun.moviedb.screen.detail.adapter.EpsListAdapter
 import com.sun.moviedb.screen.detail.adapter.ServerDataListAdapter
 import com.sun.moviedb.MyApp
+import com.sun.moviedb.data.model.Room
+import com.sun.moviedb.screen.room.RoomFragment
 import com.sun.moviedb.screen.watchMovie.WatchMovieActivity
 import com.sun.moviedb.utils.AppLocator
 import com.sun.moviedb.utils.session.RoomSession
@@ -31,6 +36,24 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
     private lateinit var episodes: List<Episode>
     private var isFavourite = false
     private var slug: String = ""
+
+    private val watchLauncher = registerForActivityResult(
+        ActivityResultContracts.StartActivityForResult()
+    ){ result ->
+        if (result.resultCode == Activity.RESULT_OK){
+            val left = result.data?.getBooleanExtra(RoomFragment.HAS_ROOM, false) ?: false
+            if (left){
+                val message = result.data?.getStringExtra(RoomFragment.MESSAGE_AFTER_LEFT_ROOM) ?: "Bạn đã rời phòng"
+                Toast.makeText(requireContext(), message, Toast.LENGTH_SHORT).show()
+                /**
+                 * clear room session
+                 * */
+                RoomSession.roomId = null
+            }
+        }
+
+    }
+
     private val TAG = "MovieDetailFragment"
 
     private val userId: String by lazy {
@@ -162,6 +185,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
 
             val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
                 putExtra(ARG_M3U8_LINK, item)
+                flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
             }
             startActivity(intent)
 
@@ -234,7 +258,7 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
                         putExtra(ARG_ROOM_ID, roomId)
                         flags = Intent.FLAG_ACTIVITY_CLEAR_TOP or Intent.FLAG_ACTIVITY_SINGLE_TOP
                     }
-                    startActivity(intent)
+                    watchLauncher.launch(intent)
                 }
             }
         }

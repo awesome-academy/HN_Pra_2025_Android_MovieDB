@@ -17,9 +17,9 @@ import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.databinding.ActivityWatchMovieBinding // Changed from Fragment binding
 import com.sun.moviedb.screen.chat.ChatFragment
 import com.sun.moviedb.screen.room.RoomFragment
+import com.sun.moviedb.screen.searchUser.SearchUserFragment
 import com.sun.moviedb.utils.AppLocator
 import com.sun.moviedb.utils.base.BaseActivity
-import com.sun.moviedb.utils.session.UserSession
 
 class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovieContract.View {
 
@@ -201,7 +201,7 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
 
     private fun synchronizeButtonWithPlayerState() {
         binding.playerView.setControllerVisibilityListener(PlayerView.ControllerVisibilityListener { visibility ->
-            if (visibility == View.VISIBLE) {
+            if (visibility == View.VISIBLE && roomId != null) {
                 binding.btnChat.animate().alpha(1f).setDuration(200).start()
                 binding.btnRoom.animate().alpha(1f).setDuration(200).start()
                 binding.btnRoom.visibility = View.VISIBLE
@@ -230,14 +230,21 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
         binding.btnRoom.setOnClickListener {
             roomId?.let {
                 val fragment = RoomFragment()
-                fragment.setPresenter(presenter)
+                fragment.setWatchPresenter(presenter)
                 toggleFragment(fragment, ROOM_FRAGMENT_TAG)
             }
+            /* *
+            * show RoomFragment
+            * */
+            supportFragmentManager.beginTransaction()
+                .replace(binding.containerSearchUser.id, SearchUserFragment())
+                .commit()
         }
     }
 
     private fun toggleFragment(fragment: Fragment, tagFragment: String) {
-        val container = binding.containterRoomChat
+        val container1 = binding.containterRoomChat
+        val container2 = binding.containerSearchUser
         val containerOverlay = binding.containerOverlay
 
         if (currentFragmentTag == tagFragment) {
@@ -246,16 +253,20 @@ class WatchMovieActivity : BaseActivity<ActivityWatchMovieBinding>(), WatchMovie
             }
             containerOverlay.visibility = View.GONE
             containerOverlay.isClickable = false
-            container.visibility = View.GONE
+            container1.visibility = View.GONE
+            container2.visibility = View.GONE
             currentFragmentTag = null
             isFragmentVisible = false
         } else {
             supportFragmentManager.beginTransaction()
-                .replace(container.id, fragment, tagFragment)
+                .replace(container1.id, fragment, tagFragment)
                 .commit()
             containerOverlay.visibility = View.VISIBLE
             containerOverlay.isClickable = true
-            container.visibility = View.VISIBLE
+            container1.visibility = View.VISIBLE
+            if (tagFragment == CHAT_FRAGMENT_TAG)
+                container2.visibility = View.GONE
+            else container2.visibility = View.VISIBLE
             currentFragmentTag = tagFragment
             isFragmentVisible = true
         }
