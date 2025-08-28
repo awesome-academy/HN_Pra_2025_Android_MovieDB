@@ -20,6 +20,9 @@ interface SearchUserContract {
         fun hideChosenUsersEmpty()
         fun displayError(message: String)
         fun updateInviteButton(count: Int, isEnabled: Boolean)
+        fun showInviteSentSuccess(count: Int)
+        fun showInviteSentError(message: String)
+        fun showSendingInvitesLoading(isLoading: Boolean)
     }
 
     interface Presenter : BasePresenter<View> {

@@ -201,6 +201,22 @@ class SearchUserFragment : BaseFragment<FragmentSearchUserBinding>(), SearchUser
             if (isEnabled && count > 0) "Invite ($count)" else getString(R.string.invite)
     }
 
+    override fun showInviteSentSuccess(count: Int) {
+        Toast.makeText(context, "$count invites sent successfully!", Toast.LENGTH_LONG).show()
+    }
+
+    override fun showInviteSentError(message: String) {
+        Toast.makeText(context, "Error sending invites: $message", Toast.LENGTH_LONG).show()
+    }
+
+    override fun showSendingInvitesLoading(isLoading: Boolean) {
+        binding.inviteButtonWatchParty.isEnabled = !isLoading
+        if (isLoading) {
+            binding.inviteButtonWatchParty.text = "Sending..."
+        }
+    }
+
+
     override fun showLoading(isLoading: Boolean) {
         if (isLoading) {
             binding.progressBarSearch.visibility = View.VISIBLE

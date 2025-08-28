@@ -3,12 +3,13 @@ package com.sun.moviedb.screen.detail
 import com.sun.moviedb.data.model.Member
 import com.sun.moviedb.data.model.Movie
 import com.sun.moviedb.data.model.Room
-import com.sun.moviedb.data.repository.rtdb.MemberRepository
-import com.sun.moviedb.data.repository.rtdb.RoomRepository
+import com.sun.moviedb.data.repository.rtdb.member.MemberRepository
+import com.sun.moviedb.data.repository.rtdb.room.RoomRepository
 import com.sun.moviedb.data.repository.source.MovieRepository
 import com.sun.moviedb.data.repository.source.firebase.entity.MovieFirebaseEntity
 import com.sun.moviedb.data.repository.source.remote.NetworkResult
 import com.sun.moviedb.data.repository.source.remote.dto.MovieDetailResponse
+import com.sun.moviedb.utils.session.RoomSession
 import com.sun.moviedb.utils.session.UserSession
 
 class MovieDetailPresenter
@@ -84,6 +85,8 @@ internal constructor(
             createAt = System.currentTimeMillis(),
             createBy = userID
         )
+
+        RoomSession.updateRoomName(room.roomName)
 
         mView?.showLoading2(true)
         roomRepository.addRoom(room) { result ->
