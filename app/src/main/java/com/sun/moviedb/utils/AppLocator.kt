@@ -1,9 +1,9 @@
 package com.sun.moviedb.utils
 
-import com.sun.moviedb.data.repository.rtdb.MemberRepository
-import com.sun.moviedb.data.repository.rtdb.MemberRepositoryImpl
-import com.sun.moviedb.data.repository.rtdb.RoomRepository
-import com.sun.moviedb.data.repository.rtdb.RoomRepositoryImpl
+import com.sun.moviedb.data.repository.rtdb.member.MemberRepository
+import com.sun.moviedb.data.repository.rtdb.member.MemberRepositoryImpl
+import com.sun.moviedb.data.repository.rtdb.room.RoomRepository
+import com.sun.moviedb.data.repository.rtdb.room.RoomRepositoryImpl
 
 object AppLocator {
     val roomRepository: RoomRepository by lazy {

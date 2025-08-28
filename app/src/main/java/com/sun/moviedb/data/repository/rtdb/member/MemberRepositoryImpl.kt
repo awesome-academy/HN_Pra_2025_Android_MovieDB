@@ -1,4 +1,4 @@
-package com.sun.moviedb.data.repository.rtdb
+package com.sun.moviedb.data.repository.rtdb.member
 
 import android.util.Log
 import com.google.firebase.Firebase

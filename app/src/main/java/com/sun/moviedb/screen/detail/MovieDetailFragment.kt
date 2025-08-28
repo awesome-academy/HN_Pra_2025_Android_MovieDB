@@ -185,7 +185,6 @@ class MovieDetailFragment : BaseFragment<FragmentMovieDetailBinding>(), MovieDet
         serverDataListAdapter = ServerDataListAdapter(serverData) { item ->
             // Handle click on server data
             Toast.makeText(requireContext(), "Link m3u8: $item", Toast.LENGTH_SHORT).show()
-
             val intent = Intent(requireContext(), WatchMovieActivity::class.java).apply {
                 putExtra(ARG_M3U8_LINK, item)
                 flags = Intent.FLAG_ACTIVITY_SINGLE_TOP or Intent.FLAG_ACTIVITY_CLEAR_TOP
